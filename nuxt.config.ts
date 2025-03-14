@@ -15,7 +15,6 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@nuxt/test-utils',
     '@pinia/nuxt',
-    '@pinia/nuxt',
   ],
   vite: {
     plugins: [

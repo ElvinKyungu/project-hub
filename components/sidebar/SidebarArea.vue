@@ -111,7 +111,7 @@ const menuGroups = ref([
 
 <template>
   <aside
-    class="absolute left-0 top-0 z-sidebar flex h-screen w-80 flex-col overflow-y-hidden bg-[#222] duration-300 ease-linear lg:static lg:translate-x-0"
+    class="absolute left-0 top-0 z-sidebar flex h-screen w-80 flex-col overflow-y-hidden bg-[#222] text-white duration-300 ease-linear lg:static lg:translate-x-0"
     :class="{
       'translate-x-0': sidebarStore.isSidebarOpen,
       '-translate-x-full': !sidebarStore.isSidebarOpen,
@@ -122,7 +122,7 @@ const menuGroups = ref([
       class="flex relative z-40 items-center justify-between gap-2 px-5 pt-5 lg:pt-6"
     >
       <router-link to="/" class="text-4xl text-primary lg:text-center">
-        <i class="pi pi-bolt text-4xl"></i> SaaS BOLT
+        <i class="pi pi-bolt text-4xl"></i>Project Hub
       </router-link>
       <button
         class="block lg:hidden"

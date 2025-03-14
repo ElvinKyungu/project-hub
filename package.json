@@ -19,6 +19,7 @@
     "@nuxt/ui": "3.0.0",
     "@pinia/nuxt": "0.10.1",
     "@tailwindcss/vite": "^4.0.14",
+    "@vueuse/core": "^13.0.0",
     "@vueuse/nuxt": "13.0.0",
     "eslint": "^9.0.0",
     "gsap": "^3.12.7",

@@ -3,77 +3,83 @@ import { useSidebarStore } from '@/stores/sidebar'
 
 const { toggleSidebar } = useSidebarStore()
 
-const items = [
-    { label: 'Profile', icon: 'pi pi-user', command: () => { console.log('Profile Clicked'); } },
-    { label: 'Settings', icon: 'pi pi-cog', command: () => { console.log('Settings Clicked'); } },
-    { separator: true },
-    { label: 'Logout', icon: 'pi pi-sign-out', command: () => { console.log('Logout Clicked'); } }
+const menuItems = [
+  { label: 'Profile', icon: 'uil:user', command: () => console.log('Profile Clicked') },
+  { label: 'Settings', icon: 'uil:cog', command: () => console.log('Settings Clicked') },
+  { separator: true },
+  { label: 'Logout', icon: 'uil:sign-out-alt', command: () => console.log('Logout Clicked') }
 ]
 
 const notifications = [
-    { label: 'New comment on your post', icon: 'pi pi-comment' },
-    { label: 'New follower', icon: 'pi pi-user-plus' },
-    { label: 'System update available', icon: 'pi pi-refresh' }
+  { label: 'New comment on your post', icon: 'uil:comment-alt' },
+  { label: 'New follower', icon: 'uil:user-plus' },
+  { label: 'System update available', icon: 'uil:sync' }
 ]
 
+const isNotifOpen = ref(false);
+const isProfileOpen = ref(false);
 
+const notifRef = ref(null)
+const profileRef = ref(null)
+
+onClickOutside(notifRef, () => isNotifOpen.value = false)
+onClickOutside(profileRef, () => isProfileOpen.value = false)
+
+const toggleNotif = useToggle(isNotifOpen)
+const toggleProfile = useToggle(isProfileOpen)
 </script>
 
 <template>
-  <header
-    class="sticky top-0 z-999 flex w-full bg-[#222] drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none"
-  >
-    <div
-      class="flex flex-grow items-center justify-between py-5 px-4 shadow-2 md:px-6 2xl:px-11"
-    >
-      <!-- Logo et bouton menu -->
-      <div class="flex items-center gap-2 sm:gap-4 lg:hidden">
-        <button
-          class="z-99999 block rounded-sm border border-stroke p-1.5 shadow-sm dark:border-strokedark dark:bg-boxdark lg:hidden"
-          @click="toggleSidebar"
-        >
-          <span class="pi pi-bars"></span>
-        </button>
-        <router-link class="block flex-shrink-0 lg:hidden" to="/">
-          <img src="" alt="Logo"/>
-        </router-link>
+  <UContainer class="sticky top-0 z-50 bg-[#222] text-white shadow-md w-full">
+    <div class="flex items-center justify-between py-4 px-6">
+      <div class="flex items-center gap-4">
+        <UButton variant="ghost" class="lg:hidden" @click="toggleSidebar">
+          <UIcon name="uil:bars" class="w-6 h-6" />
+        </UButton>
+        <NuxtLink to="/">
+          <NuxtImg src="/logo.png" alt="Logo" width="120" height="40" class="h-10" />
+        </NuxtLink>
       </div>
 
-      <!-- Recherche -->
-      <div class="hidden sm:block">
-        <form>
-          <div class="relative">
-            <button class="absolute top-1/2 left-0 -translate-y-1/2">
-              <i class="pi pi-search text-gray-400"></i>
-            </button>
-            <input
-              type="text"
-              placeholder="Type to search..."
-              class="w-full xl:w-125 bg-transparent pr-4 pl-9 focus:outline-none"
-            />
-          </div>
-        </form>
+      <div class="hidden sm:flex flex-grow max-w-md relative border border-gray-700 rounded-full px-6 py-2">
+        <UInput placeholder="Rechercher..." class="w-full outline-none focus:border-none border-none" variant="outline"/>
+        <UIcon name="uil:search" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-lg text-gray-400" />
       </div>
 
-      <div class="flex items-center gap-3 2xl:gap-7">
-        <Avatar
-          image="https://media.licdn.com/dms/image/v2/D4D03AQE3ZDtlH0Vedw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1728655288833?e=1734566400&v=beta&t=Mb1_0Vqg8hPQMuMM404Y7D-RgnQCAQaFRdDPjjMPUYk"
-          shape="circle"
-          @click="$refs.menu?.toggle($event)" 
-          class="cursor-pointer "
-        />
-        <Menu :model="items" popup ref="menu" class="custom-menu"/>
-        <Button icon="pi pi-bell" class="p-button-text custom-bell-icon" @click="$refs.notificationMenu?.toggle($event)" />
-        <Menu :model="notifications" popup ref="notificationMenu" class="custom-menu" />
+      <div class="flex items-center gap-4">
+        <!-- Notifications -->
+        <div ref="notifRef" class="relative">
+          <UButton @click="toggleNotif()">
+            <UIcon name="uil:bell" class="text-2xl cursor-pointer" />
+          </UButton>
+          <UCard v-if="isNotifOpen" class="absolute right-0 mt-2 w-64 bg-[#333] shadow-lg rounded-lg">
+            <template v-for="(notif, index) in notifications" :key="index">
+              <div class="flex items-center gap-2 p-3 border-b border-gray-600 cursor-pointer last:border-none">
+                <UIcon :name="notif.icon" class="w-7 h-7 text-white" />
+                <span class="text-sm">{{ notif.label }}</span>
+              </div>
+            </template>
+          </UCard>
+        </div>
+
+        <!-- Profil -->
+        <div ref="profileRef" class="relative">
+          <NuxtImg 
+            src="https://avatars.githubusercontent.com/u/85198945?s=400&u=3ee49fab21f5101e3c3ffb96791e135d64290163&v=4" 
+            class="cursor-pointer rounded-full w-8 h-8" 
+            @click="toggleProfile()"
+          />
+          <UCard v-if="isProfileOpen" class="absolute right-0 mt-2 w-48 bg-[#333] shadow-lg rounded-lg">
+            <template v-for="(item, index) in menuItems" :key="index">
+              <div v-if="item.separator" class="border-t border-gray-600 my-2"/>
+              <UButton v-else variant="ghost" class="w-full flex items-center gap-2 py-1 cursor-pointer" @click="item.command">
+                <UIcon :name="item.icon" class="w-5 h-5 text-white" />
+                <span class="text-sm">{{ item.label }}</span>
+              </UButton>
+            </template>
+          </UCard>
+        </div>
       </div>
     </div>
-  </header>
+  </UContainer>
 </template>
-<style>
-.custom-menu {
-  min-width: 250px;
-}
-.custom-bell-icon i {
-  font-size: 24px; 
-}
-</style>
