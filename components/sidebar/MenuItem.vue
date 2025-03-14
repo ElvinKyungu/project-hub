@@ -124,14 +124,14 @@ function checkActiveRoute(item) {
       name="layout-submenu"
     >
       <ul v-show="root ? true : isActiveMenu" class="layout-submenu ">
-        <app-menu-item
+        <!-- <app-menu-item
           v-for="(child, i) in item.items"
           :key="child"
           :index="i"
           :item="child"
           :parentItemKey="itemKey"
           :root="false"
-        ></app-menu-item>
+        ></app-menu-item> -->
       </ul>
     </Transition>
   </li>

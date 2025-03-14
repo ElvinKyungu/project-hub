@@ -1,109 +1,40 @@
 <script setup lang="ts">
 import { useSidebarStore } from '@/stores/sidebar'
-const target = ref(null)
+import { onClickOutside } from '@vueuse/core'
 
-const sidebarStore = useSidebarStore();
+const target = ref(null)
+const sidebarStore = useSidebarStore()
 
 onClickOutside(target, () => {
-  sidebarStore.isSidebarOpen = false;
+  sidebarStore.isSidebarOpen = false
 })
 
 const menuGroups = ref([
   {
     label: 'Home',
-    items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/dashboard/' }],
+    items: [{ label: 'Dashboard', icon: 'uil:home', to: '/dashboard/' }],
   },
   {
     label: 'Pages',
-    icon: 'pi pi-fw pi-briefcase',
+    icon: 'uil:briefcase',
     to: '/pages',
     items: [
-      {
-        label: 'Landing',
-        icon: 'pi pi-fw pi-globe',
-        to: '/landing',
-      },
+      { label: 'Landing', icon: 'uil:globe', to: '/landing' },
       {
         label: 'Auth',
-        icon: 'pi pi-fw pi-user',
+        icon: 'uil:user',
         items: [
-          {
-            label: 'Login',
-            icon: 'pi pi-fw pi-sign-in',
-            to: '/auth/login',
-          },
-          {
-            label: 'profile',
-            icon: 'pi pi-fw pi-user',
-            to: '/dashboard/profile',
-          },
-          {
-            label: 'Access Denied',
-            icon: 'pi pi-fw pi-lock',
-            to: '/auth/access',
-          },
-          {
-            label: 'List',
-            icon: 'pi pi-fw pi-list',
-            to: '/dashboard/product/',
-          },
+          { label: 'Login', icon: 'uil:sign-in-alt', to: '/auth/login' },
+          { label: 'Profile', icon: 'uil:user', to: '/dashboard/profile' },
+          { label: 'Access Denied', icon: 'uil:lock', to: '/auth/access' },
+          { label: 'List', icon: 'uil:list-ul', to: '/dashboard/product/' },
         ],
       },
-      {
-        label: 'Crud',
-        icon: 'pi pi-fw pi-pencil',
-        to: '/pages/crud',
-      },
-      {
-        label: 'Not Found',
-        icon: 'pi pi-fw pi-exclamation-circle',
-        to: '/pages/notfound',
-      },
-      {
-        label: 'Empty',
-        icon: 'pi pi-fw pi-circle-off',
-        to: '/pages/empty',
-      },
-      {
-        label: 'Github',
-        icon: 'pi pi-fw pi-github',
-        to: '/pages/empty',
-      },
-      {
-        label: 'Table',
-        icon: 'pi pi-fw pi-table',
-        to: '/pages/empty',
-      },
-      {
-        label: 'Images',
-        icon: 'pi pi-fw pi-image',
-        to: '/pages/empty',
-      },
-      {
-        label: 'File',
-        icon: 'pi pi-fw pi-file',
-        to: '/pages/empty',
-      },
-      {
-        label: 'Timeline',
-        icon: 'pi pi-fw pi-calendar',
-        to: '/pages/empty',
-      },
-      {
-        label: 'Free block',
-        icon: 'pi pi-fw pi-eye',
-        to: '/pages/empty',
-      },
-      {
-        label: 'All block',
-        icon: 'pi pi-fw pi-globe',
-        to: '/pages/empty',
-      },
-      {
-        label: 'Figma',
-        icon: 'pi pi-fw pi-pencil',
-        to: '/pages/empty',
-      },
+      { label: 'Crud', icon: 'uil:edit', to: '/pages/crud' },
+      { label: 'Not Found', icon: 'uil:exclamation-circle', to: '/pages/notfound' },
+      { label: 'Table', icon: 'uil:table', to: '/pages/table' },
+      { label: 'Images', icon: 'uil:image', to: '/pages/images' },
+      { label: 'File', icon: 'uil:file-alt', to: '/pages/file' },
     ],
   },
 ])
@@ -112,39 +43,34 @@ const menuGroups = ref([
 <template>
   <aside
     ref="target"
-    class="absolute left-0 top-0 z-sidebar flex h-screen w-80 flex-col overflow-y-hidden bg-[#222] text-white duration-300 ease-linear lg:static lg:translate-x-0"
-    :class="{
-      'translate-x-0': sidebarStore.isSidebarOpen,
-      '-translate-x-full': !sidebarStore.isSidebarOpen,
-    }"
+    class="absolute left-0 top-0 z-sidebar flex h-screen w-80 flex-col overflow-y-hidden bg-gray-900 text-white duration-300 ease-in-out lg:static lg:translate-x-0"
+    :class="{ 'translate-x-0': sidebarStore.isSidebarOpen, '-translate-x-full': !sidebarStore.isSidebarOpen }"
   >
-    <div
-      class="flex relative z-40 items-center justify-between gap-2 px-5 pt-5 lg:pt-6"
-    >
-      <NuxtLink to="/" class="text-xl -space-x-7 text-primary lg:text-center flex justify-start items-center">
-        <NuxtImg src="https://nuxt.com/assets/design-kit/icon-green.svg" alt="Logo" width="120" height="40" class="h-10" />
-        <p class="mt-1">Project Hub</p>
+    <div class="flex items-center justify-between px-5 py-5">
+      <NuxtLink to="/" class="flex items-center gap-2 text-primary text-lg">
+        <NuxtImg src="/logo.png" alt="Logo" width="40" height="40" class="h-10" />
+        <span>Project Hub</span>
       </NuxtLink>
-      <button
-        class="block lg:hidden"
-        @click="sidebarStore.isSidebarOpen = false"
-      >
-        <i class="pi pi-arrow-left"></i>
-      </button>
+      <UButton icon="uil:times" variant="ghost" class="lg:hidden" @click="sidebarStore.isSidebarOpen = false" />
     </div>
-    <div
-      class="custom-scrollbar flex relative z-40 flex-col px-3 lg:mt-9 lg:px-5 overflow-y-auto duration-300 ease-linear"
-    >
-      <nav class="">
-        <ul class="layout-menu">
-          <div v-for="(item, i) in menuGroups" :key="item.label">
-            <MenuItem :item="item" :index="i" />
-          </div>
+    <div class="flex flex-col px-5 overflow-y-auto">
+      <nav>
+        <ul>
+          <li v-for="(group, i) in menuGroups" :key="i" class="mb-4">
+            <p class="text-sm font-semibold uppercase text-gray-400">{{ group.label }}</p>
+            <ul>
+              <li v-for="(item, j) in group.items" :key="j" class="py-2 flex items-center gap-3 cursor-pointer hover:bg-gray-800 rounded px-3">
+                <UIcon :name="item.icon" class="w-5 h-5" />
+                <NuxtLink :to="item.to" class="flex-1">{{ item.label }}</NuxtLink>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
     </div>
   </aside>
 </template>
+
 <style>
 .z-sidebar {
   z-index: 999;
