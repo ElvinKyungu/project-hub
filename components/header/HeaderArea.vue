@@ -30,7 +30,7 @@ const toggleProfile = useToggle(isProfileOpen)
 </script>
 
 <template>
-  <UContainer class="sticky top-0 z-50 bg-[#222] text-white shadow-md w-full">
+  <UContainer class="sticky top-0 z-50 bg-primary text-white shadow-md w-full">
     <div class="flex items-center justify-between py-4 px-6">
       <div class="flex items-center gap-4">
         <UButton variant="ghost" class="lg:hidden" @click="toggleSidebar">

@@ -1,6 +1,9 @@
 @import './layout/layout.scss';
 @import "tailwindcss";
 
+@theme{
+  --color-primary: #101828;
+}
 @layer base {
   body {
     @apply relative z-[1] text-base font-normal;
