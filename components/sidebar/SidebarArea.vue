@@ -111,19 +111,20 @@ const menuGroups = ref([
 
 <template>
   <aside
+    ref="target"
     class="absolute left-0 top-0 z-sidebar flex h-screen w-80 flex-col overflow-y-hidden bg-[#222] text-white duration-300 ease-linear lg:static lg:translate-x-0"
     :class="{
       'translate-x-0': sidebarStore.isSidebarOpen,
       '-translate-x-full': !sidebarStore.isSidebarOpen,
     }"
-    ref="target"
   >
     <div
       class="flex relative z-40 items-center justify-between gap-2 px-5 pt-5 lg:pt-6"
     >
-      <router-link to="/" class="text-4xl text-primary lg:text-center">
-        <i class="pi pi-bolt text-4xl"></i>Project Hub
-      </router-link>
+      <NuxtLink to="/" class="text-xl -space-x-7 text-primary lg:text-center flex justify-start items-center">
+        <NuxtImg src="https://nuxt.com/assets/design-kit/icon-green.svg" alt="Logo" width="120" height="40" class="h-10" />
+        <p class="mt-1">Project Hub</p>
+      </NuxtLink>
       <button
         class="block lg:hidden"
         @click="sidebarStore.isSidebarOpen = false"
@@ -137,7 +138,7 @@ const menuGroups = ref([
       <nav class="">
         <ul class="layout-menu">
           <div v-for="(item, i) in menuGroups" :key="item.label">
-            <SidebarAppMenuItem :item="item" :index="i" />
+            <MenuItem :item="item" :index="i" />
           </div>
         </ul>
       </nav>

@@ -36,9 +36,7 @@ const toggleProfile = useToggle(isProfileOpen)
         <UButton variant="ghost" class="lg:hidden" @click="toggleSidebar">
           <UIcon name="uil:bars" class="w-6 h-6" />
         </UButton>
-        <NuxtLink to="/">
-          <NuxtImg src="/logo.png" alt="Logo" width="120" height="40" class="h-10" />
-        </NuxtLink>
+        <UIcon name="uil:bars" class="text-2xl" />
       </div>
 
       <div class="hidden sm:flex flex-grow max-w-md relative border border-gray-700 rounded-full px-6 py-2">
