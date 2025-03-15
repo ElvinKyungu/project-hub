@@ -28,7 +28,7 @@ const getTagBgClass = (tag: string) => {
 </script>
 <template>
   <div 
-    class="flex justify-between text-white rounded-md p-3  transition-colors"
+    class="flex justify-between text-white hover:bg-white/5 rounded-md p-3  transition-colors"
   >
     <div class="flex items-center gap-4">
       <div class="flex items-center col-span-1 sm:col-span-2 gap-2">
