@@ -236,14 +236,17 @@ function openAssigneeModal(task) {
     <main class="p-4">
       <TaskSection title="In Progress" :count="inProgressTasks.length">
         <h1 class="text-xl text-white flex items-center gap-2">
-          <IconsTaskStatus/>
+          <IconsTaskStatus
+            stroke-color="#facc15"
+            transform-status="rotate(-90 7 7)"
+          />
           <span>In progress {{ inProgressTasks.length }}</span>
         </h1>
         <TasksTaskItem 
           v-for="task in inProgressTasks" 
           :key="task.id" 
           :task="task" 
-          :displayMode="displayMode"
+          :display-mode="displayMode"
           @open-assignee="openAssigneeModal(task)"
         />
       </TaskSection>
