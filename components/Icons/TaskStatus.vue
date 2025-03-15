@@ -1,4 +1,4 @@
-<script setup lang="">
+<script setup lang="ts">
 defineProps({
   strokeColor: {
     type: String,

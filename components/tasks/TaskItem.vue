@@ -1,5 +1,5 @@
-<script setup>
-const props = defineProps({
+<script setup lang="ts">
+defineProps({
   task: {
     type: Object,
     required: true
@@ -8,60 +8,9 @@ const props = defineProps({
     type: String,
     default: 'list'
   }
-});
-console.log(props);
+})
 
 defineEmits(['open-assignee']);
-
-// Return appropriate icon based on task state
-function getStateIcon(state) {
-  switch (state) {
-    case 'in-progress':
-      return 'i-heroicons-play-circle';
-    case 'review':
-      return 'i-heroicons-document-magnifying-glass';
-    case 'completed':
-      return 'i-heroicons-check-circle';
-    default:
-      return 'i-heroicons-circle';
-  }
-}
-
-// Return appropriate color based on task state
-function getStateColor(state) {
-  switch (state) {
-    case 'in-progress':
-      return 'yellow-500';
-    case 'review':
-      return 'green-500';
-    case 'completed':
-      return 'blue-500';
-    default:
-      return 'gray-500';
-  }
-}
-
-// Return appropriate color based on tag
-function getTagColor(tag) {
-  switch (tag) {
-    case 'Bug':
-      return 'red';
-    case 'Testing':
-      return 'blue';
-    case 'Documentation':
-      return 'purple';
-    case 'Performance':
-      return 'orange';
-    case 'Accessibility':
-      return 'teal';
-    case 'Design':
-      return 'pink';
-    case 'Refactor':
-      return 'yellow';
-    default:
-      return 'gray';
-  }
-}
 </script>
 <template>
   <div 
@@ -71,17 +20,23 @@ function getTagColor(tag) {
       'block': displayMode === 'grid'
     }"
   >
-    <!-- Left side with icons - Always visible -->
-    <div class="flex items-center col-span-1 sm:col-span-2 gap-2">
-      <UIcon :name="getStateIcon(task.state)" :class="`text-${getStateColor(task.state)}`" />
-      <span class="text-gray-500">{{ task.id }}</span>
+    <div class="flex items-center gap-2">
+      <!-- Left side with icons - Always visible -->
+      <div class="flex items-center col-span-1 sm:col-span-2 gap-2">
+        <IconsTaskLevel
+          :first-fill-opacity="task.iconLevelOpacity.firstFillOpacity"
+          :second-fill-opacity="task.iconLevelOpacity.secondFillOpacity"
+          :third-fill-opacity="task.iconLevelOpacity.thirdFillOpacity"
+        />
+        <span class="text-gray-500">{{ task.id }}</span>
+      </div>
+      
+      
+      <div class="col-span-1 sm:col-span-4 font-medium">{{ task.name }}</div>
     </div>
     
-    <!-- Task name - Always visible -->
-    <div class="col-span-1 sm:col-span-4 font-medium">{{ task.name }}</div>
-    
     <!-- Tags - Hidden on mobile -->
-    <div class="hidden sm:flex col-span-2 gap-1">
+    <!-- <div class="hidden sm:flex col-span-2 gap-1">
       <UBadge 
         v-for="tag in task.tags" 
         :key="tag" 
@@ -90,8 +45,8 @@ function getTagColor(tag) {
         size="xs"
       >
         {{ tag }}
-      </UBadge>
-    </div>
+      </UBadge> 
+    </div>-->
     
     <!-- Component - Hidden on mobile -->
     <div class="hidden sm:block col-span-2 text-sm">
