@@ -4,6 +4,8 @@ import DefaultLayout from '~/layouts/DefaultLayout.vue'
 
 <template>
   <DefaultLayout>
-    <Tasks />
+    <div class="">
+      <Tasks />
+    </div>
   </DefaultLayout>
 </template>

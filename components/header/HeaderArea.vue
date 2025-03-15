@@ -50,9 +50,9 @@ const toggleProfile = useToggle(isProfileOpen)
           <UButton @click="toggleNotif()">
             <UIcon name="uil:bell" class="text-2xl cursor-pointer" />
           </UButton>
-          <UCard v-if="isNotifOpen" class="absolute right-0 mt-2 w-64 bg-[#333] shadow-lg rounded-lg">
+          <UCard v-if="isNotifOpen" class="absolute right-0 mt-2 w-64 bg-primary shadow-bordercolor/20 border border-bordercolor shadow-lg rounded-lg">
             <template v-for="(notif, index) in notifications" :key="index">
-              <div class="flex items-center gap-2 p-3 border-b border-gray-600 cursor-pointer last:border-none">
+              <div class="flex items-center gap-2 p-3 border-b border-bordercolor cursor-pointer last:border-none">
                 <UIcon :name="notif.icon" class="w-7 h-7 text-white" />
                 <span class="text-sm">{{ notif.label }}</span>
               </div>
@@ -67,7 +67,7 @@ const toggleProfile = useToggle(isProfileOpen)
             class="cursor-pointer rounded-full w-8 h-8" 
             @click="toggleProfile()"
           />
-          <UCard v-if="isProfileOpen" class="absolute right-0 mt-2 w-48 bg-[#333] shadow-lg rounded-lg">
+          <UCard v-if="isProfileOpen" class="absolute right-0 mt-2 w-48 bg-primary shadow-bordercolor/20 border border-bordercolor shadow-lg rounded-lg">
             <template v-for="(item, index) in menuItems" :key="index">
               <div v-if="item.separator" class="border-t border-gray-600 my-2"/>
               <UButton v-else variant="ghost" class="w-full flex items-center gap-2 py-1 cursor-pointer" @click="item.command">

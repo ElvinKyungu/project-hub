@@ -220,15 +220,16 @@ function openAssigneeModal(task) {
 </script>
 <template>
   <div class="task-management-app">
-    <header class="flex justify-between items-center p-4 border-b">
+    <header class="flex justify-between items-center p-4 border-b border-bordercolor text-white">
       <div class="flex items-center gap-4">
-        <UButton icon="i-heroicons-funnel" variant="ghost" @click="filterOpen = true">
-          Filter
+        <UButton class="flex gap-3 cursor-pointer items-center" variant="ghost" @click="filterOpen = true">
+          <UIcon name="uil:filter" class="text-2xl" />
+          <span class="text-base">Filter</span>
         </UButton>
       </div>
-      <div>
-        <UButton icon="i-heroicons-squares-2x2" variant="ghost" @click="displayMode = 'grid'" :class="{ 'text-primary': displayMode === 'grid' }" />
-        <UButton icon="i-heroicons-list-bullet" variant="ghost" @click="displayMode = 'list'" :class="{ 'text-primary': displayMode === 'list' }" />
+      <div class="flex gap-3 items-center">
+        <UIcon name="uil:grid" class="text-2xl cursor-pointer text-gray-400" :class="{ 'text-white': displayMode === 'grid' }" @click="displayMode = 'grid'" />
+        <UIcon name="uil:list-ul" class="text-2xl cursor-pointer text-gray-400" variant="ghost" :class="{ 'text-white': displayMode === 'list' }" @click="displayMode = 'list'" />
       </div>
     </header>
 
@@ -264,8 +265,7 @@ function openAssigneeModal(task) {
       </TaskSection>
     </main>
 
-    <!-- Filter Modal -->
-    <UModal v-model="filterOpen">
+    <!-- <UModal v-model="filterOpen">
       <UCard>
         <template #header>
           <div class="text-xl font-bold">Filter Tasks</div>
@@ -284,15 +284,15 @@ function openAssigneeModal(task) {
         </div>
         <template #footer>
           <div class="flex justify-end gap-2">
-            <UButton @click="resetFilters" variant="ghost">Reset</UButton>
-            <UButton @click="applyFilters" color="primary">Apply</UButton>
+            <UButton variant="ghost" @click="resetFilters">Reset</UButton>
+            <UButton color="primary" @click="applyFilters">Apply</UButton>
           </div>
         </template>
       </UCard>
-    </UModal>
+    </UModal> -->
 
     <!-- Assignee Modal -->
-    <UModal v-model="assigneeModalOpen">
+    <!-- <UModal v-model="assigneeModalOpen">
       <UCard>
         <template #header>
           <div class="text-xl font-bold">Assign Task</div>
@@ -310,7 +310,7 @@ function openAssigneeModal(task) {
           </div>
         </template>
       </UCard>
-    </UModal>
+    </UModal> -->
   </div>
 </template>
 

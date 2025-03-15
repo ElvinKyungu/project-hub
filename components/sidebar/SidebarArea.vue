@@ -43,7 +43,7 @@ const menuGroups = ref([
 <template>
   <aside
     ref="target"
-    class="absolute left-0 top-0 z-sidebar flex h-screen w-80 flex-col overflow-y-hidden bg-primary text-white duration-300 ease-in-out lg:static lg:translate-x-0"
+    class="absolute left-0 top-0 z-sidebar flex h-screen w-80 flex-col overflow-y-hidden bg-primary text-white border-r border-bordercolor duration-300 ease-in-out lg:static lg:translate-x-0"
     :class="{ 'translate-x-0': sidebarStore.isSidebarOpen, '-translate-x-full': !sidebarStore.isSidebarOpen }"
   >
     <div class="flex items-center justify-between px-5 py-5">

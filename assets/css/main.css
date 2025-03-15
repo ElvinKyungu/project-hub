@@ -3,6 +3,8 @@
 
 @theme{
   --color-primary: #101828;
+  --color-secondary: #201828;
+  --color-bordercolor: #364153;
 }
 @layer base {
   body {
