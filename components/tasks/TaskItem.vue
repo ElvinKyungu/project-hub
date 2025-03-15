@@ -1,59 +1,5 @@
-<!-- components/TaskItem.vue -->
-<template>
-  <div 
-    class="task-item border rounded-md p-3 hover:border-primary transition-colors"
-    :class="{
-      'grid grid-cols-1 sm:grid-cols-12 items-center gap-2': displayMode === 'list',
-      'block': displayMode === 'grid'
-    }"
-  >
-    <!-- Left side with icons - Always visible -->
-    <div class="flex items-center col-span-1 sm:col-span-2 gap-2">
-      <UIcon :name="getStateIcon(task.state)" :class="`text-${getStateColor(task.state)}`" />
-      <span class="text-gray-500">{{ task.id }}</span>
-    </div>
-    
-    <!-- Task name - Always visible -->
-    <div class="col-span-1 sm:col-span-4 font-medium">{{ task.name }}</div>
-    
-    <!-- Tags - Hidden on mobile -->
-    <div class="hidden sm:flex col-span-2 gap-1">
-      <UBadge 
-        v-for="tag in task.tags" 
-        :key="tag" 
-        :color="getTagColor(tag)" 
-        variant="subtle" 
-        size="xs"
-      >
-        {{ tag }}
-      </UBadge>
-    </div>
-    
-    <!-- Component - Hidden on mobile -->
-    <div class="hidden sm:block col-span-2 text-sm">
-      <UIcon v-if="task.component" name="i-heroicons-puzzle-piece" class="mr-1" />
-      <span>{{ task.component }}</span>
-    </div>
-    
-    <!-- Due date - Hidden on mobile -->
-    <div class="hidden sm:block col-span-1 text-sm text-gray-500">{{ task.dueDate }}</div>
-    
-    <!-- Assignee - Always visible -->
-    <div class="col-span-1 flex justify-end">
-      <UAvatar 
-        v-if="task.assignee" 
-        :src="task.assignee.avatar" 
-        size="sm" 
-        class="cursor-pointer hover:ring-2 hover:ring-primary"
-        @click="$emit('open-assignee', task)"
-      />
-    </div>
-  </div>
-</template>
-
 <script setup>
-
-defineProps({
+const props = defineProps({
   task: {
     type: Object,
     required: true
@@ -63,6 +9,7 @@ defineProps({
     default: 'list'
   }
 });
+console.log(props);
 
 defineEmits(['open-assignee']);
 
@@ -116,6 +63,57 @@ function getTagColor(tag) {
   }
 }
 </script>
+<template>
+  <div 
+    class="task-item text-white rounded-md p-3  transition-colors"
+    :class="{
+      'grid grid-cols-1 sm:grid-cols-12 items-center gap-2': displayMode === 'list',
+      'block': displayMode === 'grid'
+    }"
+  >
+    <!-- Left side with icons - Always visible -->
+    <div class="flex items-center col-span-1 sm:col-span-2 gap-2">
+      <UIcon :name="getStateIcon(task.state)" :class="`text-${getStateColor(task.state)}`" />
+      <span class="text-gray-500">{{ task.id }}</span>
+    </div>
+    
+    <!-- Task name - Always visible -->
+    <div class="col-span-1 sm:col-span-4 font-medium">{{ task.name }}</div>
+    
+    <!-- Tags - Hidden on mobile -->
+    <div class="hidden sm:flex col-span-2 gap-1">
+      <UBadge 
+        v-for="tag in task.tags" 
+        :key="tag" 
+        :color="getTagColor(tag)" 
+        variant="subtle" 
+        size="xs"
+      >
+        {{ tag }}
+      </UBadge>
+    </div>
+    
+    <!-- Component - Hidden on mobile -->
+    <div class="hidden sm:block col-span-2 text-sm">
+      <UIcon v-if="task.component" name="i-heroicons-puzzle-piece" class="mr-1" />
+      <span>{{ task.component }}</span>
+    </div>
+    
+    <!-- Due date - Hidden on mobile -->
+    <div class="hidden sm:block col-span-1 text-sm text-gray-500">{{ task.dueDate }}</div>
+    
+    <!-- Assignee - Always visible -->
+    <div class="col-span-1 flex justify-end">
+      <UAvatar 
+        v-if="task.assignee" 
+        :src="task.assignee.avatar" 
+        size="sm" 
+        class="cursor-pointer hover:ring-2 hover:ring-primary"
+        @click="$emit('open-assignee', task)"
+      />
+    </div>
+  </div>
+</template>
 
 <style scoped>
 /* Grid layout styles */

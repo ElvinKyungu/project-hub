@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useSidebarStore } from '@/stores/sidebar'
-import { onClickOutside } from '@vueuse/core'
 
 const target = ref(null)
 const sidebarStore = useSidebarStore()
@@ -12,29 +11,29 @@ onClickOutside(target, () => {
 const menuGroups = ref([
   {
     label: 'Home',
-    items: [{ label: 'Dashboard', icon: 'uil:home', to: '/dashboard/' }],
+    items: [{ label: 'Dashboard', icon: 'uil:home', to: '/' }],
   },
   {
     label: 'Pages',
     icon: 'uil:briefcase',
     to: '/pages',
     items: [
-      { label: 'Landing', icon: 'uil:globe', to: '/landing' },
+      { label: 'Landing', icon: 'uil:globe', to: '/' },
       {
         label: 'Auth',
         icon: 'uil:user',
         items: [
-          { label: 'Login', icon: 'uil:sign-in-alt', to: '/auth/login' },
-          { label: 'Profile', icon: 'uil:user', to: '/dashboard/profile' },
-          { label: 'Access Denied', icon: 'uil:lock', to: '/auth/access' },
-          { label: 'List', icon: 'uil:list-ul', to: '/dashboard/product/' },
+          { label: 'Login', icon: 'uil:sign-in-alt', to: '/' },
+          { label: 'Profile', icon: 'uil:user', to: '/' },
+          { label: 'Access Denied', icon: 'uil:lock', to: '/' },
+          { label: 'List', icon: 'uil:list-ul', to: '/' },
         ],
       },
-      { label: 'Crud', icon: 'uil:edit', to: '/pages/crud' },
-      { label: 'Not Found', icon: 'uil:exclamation-circle', to: '/pages/notfound' },
-      { label: 'Table', icon: 'uil:table', to: '/pages/table' },
-      { label: 'Images', icon: 'uil:image', to: '/pages/images' },
-      { label: 'File', icon: 'uil:file-alt', to: '/pages/file' },
+      { label: 'Crud', icon: 'uil:edit', to: '/' },
+      { label: 'Not Found', icon: 'uil:exclamation-circle', to: '/' },
+      { label: 'Table', icon: 'uil:table', to: '/' },
+      { label: 'Images', icon: 'uil:image', to: '/' },
+      { label: 'File', icon: 'uil:file-alt', to: '/' },
     ],
   },
 ])

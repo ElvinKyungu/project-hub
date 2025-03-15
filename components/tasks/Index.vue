@@ -235,7 +235,11 @@ function openAssigneeModal(task) {
 
     <main class="p-4">
       <TaskSection title="In Progress" :count="inProgressTasks.length">
-        <TaskItem 
+        <h1 class="text-xl text-white flex items-center gap-2">
+          <IconsTaskStatus/>
+          <span>In progress {{ inProgressTasks.length }}</span>
+        </h1>
+        <TasksTaskItem 
           v-for="task in inProgressTasks" 
           :key="task.id" 
           :task="task" 
@@ -244,8 +248,8 @@ function openAssigneeModal(task) {
         />
       </TaskSection>
 
-      <TaskSection title="Technical Review" :count="technicalReviewTasks.length">
-        <TaskItem 
+      <!-- <TaskSection title="Technical Review" :count="technicalReviewTasks.length">
+        <TasksTaskItem 
           v-for="task in technicalReviewTasks" 
           :key="task.id" 
           :task="task" 
@@ -255,17 +259,17 @@ function openAssigneeModal(task) {
       </TaskSection>
 
       <TaskSection title="Completed" :count="completedTasks.length">
-        <TaskItem 
+        <TasksTaskItem 
           v-for="task in completedTasks" 
           :key="task.id" 
           :task="task" 
           :displayMode="displayMode"
           @open-assignee="openAssigneeModal(task)"
         />
-      </TaskSection>
+      </TaskSection> -->
     </main>
 
-    <!-- <UModal v-model="filterOpen">
+    <UModal v-model="filterOpen">
       <UCard>
         <template #header>
           <div class="text-xl font-bold">Filter Tasks</div>
@@ -289,10 +293,10 @@ function openAssigneeModal(task) {
           </div>
         </template>
       </UCard>
-    </UModal> -->
+    </UModal>
 
     <!-- Assignee Modal -->
-    <!-- <UModal v-model="assigneeModalOpen">
+    <UModal v-model="assigneeModalOpen">
       <UCard>
         <template #header>
           <div class="text-xl font-bold">Assign Task</div>
@@ -310,7 +314,7 @@ function openAssigneeModal(task) {
           </div>
         </template>
       </UCard>
-    </UModal> -->
+    </UModal>
   </div>
 </template>
 
