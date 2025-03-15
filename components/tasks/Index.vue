@@ -28,7 +28,12 @@ const filters = ref({
 
 const tasks = ref([
   { 
-    id: 'LNUI-508', 
+    id: 'ElvinCODE-508',
+    iconLevelOpacity:{
+      firstFillOpacity: '0.2',
+      secondFillOpacity: '0.7',
+      thirdFillOpacity: '0.7'
+    },
     name: 'Update Modal animations', 
     state: 'in-progress',
     tags: ['Testing'],
@@ -37,7 +42,12 @@ const tasks = ref([
     assignee: { id: 1, avatar: '/avatar1.png' }
   },
   { 
-    id: 'LNUI-512', 
+    id: 'ElvinCODE-512',
+    iconLevelOpacity:{
+      firstFillOpacity: '0.2',
+      secondFillOpacity: '0.7',
+      thirdFillOpacity: '0.7'
+    },
     name: 'Enhance Breadcrumb navigation usability', 
     state: 'in-progress',
     tags: ['Performance'],
@@ -46,7 +56,12 @@ const tasks = ref([
     assignee: { id: 2, avatar: '/avatar2.png' }
   },
   { 
-    id: 'LNUI-520', 
+    id: 'ElvinCODE-520',
+    iconLevelOpacity:{
+      firstFillOpacity: '0.2',
+      secondFillOpacity: '0.7',
+      thirdFillOpacity: '0.7'
+    },
     name: 'Enhance Loading indicator performance', 
     state: 'in-progress',
     tags: ['Testing'],
@@ -55,7 +70,12 @@ const tasks = ref([
     assignee: { id: 3, avatar: '/avatar3.png' }
   },
   { 
-    id: 'LNUI-524', 
+    id: 'ElvinCODE-524',
+    iconLevelOpacity:{
+      firstFillOpacity: '0.2',
+      secondFillOpacity: '0.7',
+      thirdFillOpacity: '0.7'
+    },
     name: 'Implement Search bar with auto-complete', 
     state: 'in-progress',
     tags: ['Performance'],
@@ -64,7 +84,12 @@ const tasks = ref([
     assignee: { id: 4, avatar: '/avatar4.png' }
   },
   { 
-    id: 'LNUI-415', 
+    id: 'ElvinCODE-415',
+    iconLevelOpacity:{
+      firstFillOpacity: '0.2',
+      secondFillOpacity: '0.7',
+      thirdFillOpacity: '0.7'
+    },
     name: 'Design new modal system with focus trapping', 
     state: 'review',
     tags: ['Documentation'],
@@ -73,7 +98,12 @@ const tasks = ref([
     assignee: { id: 5, avatar: '/avatar5.png' }
   },
   { 
-    id: 'LNUI-501', 
+    id: 'ElvinCODE-501',
+    iconLevelOpacity:{
+      firstFillOpacity: '0.2',
+      secondFillOpacity: '0.7',
+      thirdFillOpacity: '0.7'
+    },
     name: 'Enhance responsiveness of Navbar', 
     state: 'review',
     tags: ['Refactor'],
@@ -82,7 +112,12 @@ const tasks = ref([
     assignee: { id: 2, avatar: '/avatar2.png' }
   },
   { 
-    id: 'LNUI-505', 
+    id: 'ElvinCODE-505',
+    iconLevelOpacity:{
+      firstFillOpacity: '0.2',
+      secondFillOpacity: '0.7',
+      thirdFillOpacity: '0.7'
+    },
     name: 'Improve Tooltip interactivity', 
     state: 'review',
     tags: ['Accessibility'],
@@ -91,7 +126,12 @@ const tasks = ref([
     assignee: { id: 3, avatar: '/avatar3.png' }
   },
   { 
-    id: 'LNUI-513', 
+    id: 'ElvinCODE-513',
+    iconLevelOpacity:{
+      firstFillOpacity: '0.2',
+      secondFillOpacity: '0.7',
+      thirdFillOpacity: '0.7'
+    },
     name: 'Refactor Accordion for smoother transitions', 
     state: 'review',
     tags: ['Documentation'],
@@ -100,7 +140,12 @@ const tasks = ref([
     assignee: { id: 5, avatar: '/avatar5.png' }
   },
   { 
-    id: 'LNUI-517', 
+    id: 'ElvinCODE-517',
+    iconLevelOpacity:{
+      firstFillOpacity: '0.2',
+      secondFillOpacity: '0.7',
+      thirdFillOpacity: '0.7'
+    },
     name: 'Improve Color scheme consistency', 
     state: 'review',
     tags: ['Performance'],
@@ -109,7 +154,12 @@ const tasks = ref([
     assignee: { id: 2, avatar: '/avatar2.png' }
   },
   { 
-    id: 'LNUI-525', 
+    id: 'ElvinCODE-525',
+    iconLevelOpacity:{
+      firstFillOpacity: '0.2',
+      secondFillOpacity: '0.7',
+      thirdFillOpacity: '0.7'
+    },
     name: 'Update Alert system for critical notifications', 
     state: 'review',
     tags: ['Testing'],
@@ -118,7 +168,12 @@ const tasks = ref([
     assignee: { id: 5, avatar: '/avatar5.png' }
   },
   { 
-    id: 'LNUI-204', 
+    id: 'ElvinCODE-204',
+    iconLevelOpacity:{
+      firstFillOpacity: '0.2',
+      secondFillOpacity: '0.7',
+      thirdFillOpacity: '0.7'
+    },
     name: 'Optimize animations for smoother UI transitions', 
     state: 'completed',
     tags: ['Bug'],
@@ -127,7 +182,12 @@ const tasks = ref([
     assignee: { id: 1, avatar: '/avatar1.png' }
   },
   { 
-    id: 'LNUI-502', 
+    id: 'ElvinCODE-502',
+    iconLevelOpacity:{
+      firstFillOpacity: '0.2',
+      secondFillOpacity: '0.7',
+      thirdFillOpacity: '0.7'
+    },
     name: 'Optimize loading time of Footer', 
     state: 'completed',
     tags: ['Performance'],
@@ -136,7 +196,12 @@ const tasks = ref([
     assignee: { id: 2, avatar: '/avatar2.png' }
   },
   { 
-    id: 'LNUI-506', 
+    id: 'ElvinCODE-506',
+    iconLevelOpacity:{
+      firstFillOpacity: '0.2',
+      secondFillOpacity: '0.7',
+      thirdFillOpacity: '0.7'
+    },
     name: 'Redesign Dropdown for mobile devices', 
     state: 'completed',
     tags: ['Testing'],
@@ -145,7 +210,12 @@ const tasks = ref([
     assignee: { id: 1, avatar: '/avatar1.png' }
   },
   { 
-    id: 'LNUI-510', 
+    id: 'ElvinCODE-510',
+    iconLevelOpacity:{
+      firstFillOpacity: '0.2',
+      secondFillOpacity: '0.7',
+      thirdFillOpacity: '0.7'
+    },
     name: 'Streamline Input component styling', 
     state: 'completed',
     tags: ['Testing'],
@@ -154,7 +224,12 @@ const tasks = ref([
     assignee: { id: 4, avatar: '/avatar4.png' }
   },
   { 
-    id: 'LNUI-514', 
+    id: 'ElvinCODE-514',
+    iconLevelOpacity:{
+      firstFillOpacity: '0.2',
+      secondFillOpacity: '0.7',
+      thirdFillOpacity: '0.7'
+    },
     name: 'Implement Carousel with lazy loading', 
     state: 'completed',
     tags: ['Design'],
@@ -163,7 +238,12 @@ const tasks = ref([
     assignee: { id: 1, avatar: '/avatar1.png' }
   },
   { 
-    id: 'LNUI-518', 
+    id: 'ElvinCODE-518',
+    iconLevelOpacity:{
+      firstFillOpacity: '0.2',
+      secondFillOpacity: '0.7',
+      thirdFillOpacity: '0.7'
+    },
     name: 'Design new Icon set for better scalability', 
     state: 'completed',
     tags: ['Performance'],

@@ -28,3 +28,11 @@
 ::-webkit-scrollbar-thumb:hover {
   background: var(--primary-color);
 }
+.bg-testing { background-color: #ef4444; }
+.bg-development { background-color: #3b82f6; }
+.bg-design { background-color: #a855f7; }
+.bg-deployment { background-color: #f97316; }
+.bg-research { background-color: #14b8a6; }
+.bg-marketing { background-color: #ec4899; }
+.bg-review { background-color: #eab308; }
+.bg-other { background-color: #6b7280; }
