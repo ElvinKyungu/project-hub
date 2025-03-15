@@ -21,9 +21,8 @@ defineProps({
     viewBox="0 0 16 16" 
     fill="currentColor" 
     class="text-muted-foreground size-4" 
-    aria-label="Medium Priority" 
+    aria-label="Level priority" 
     role="img" 
-    focusable="false" 
     xmlns="http://www.w3.org/2000/svg"
   >
     <rect x="1.5" y="8" width="3" height="6" rx="1" :fill-opacity="firstFillOpacity"/>
