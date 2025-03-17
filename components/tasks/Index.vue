@@ -30,9 +30,9 @@ const tasks = ref([
   { 
     id: 'ElvinCODE-508',
     iconLevelOpacity:{
-      firstFillOpacity: '0.2',
+      firstFillOpacity: '0.8',
       secondFillOpacity: '0.7',
-      thirdFillOpacity: '0.7'
+      thirdFillOpacity: '0.3'
     },
     name: 'Update Modal animations', 
     state: 'in-progress',
@@ -44,9 +44,9 @@ const tasks = ref([
   { 
     id: 'ElvinCODE-512',
     iconLevelOpacity:{
-      firstFillOpacity: '0.2',
-      secondFillOpacity: '0.7',
-      thirdFillOpacity: '0.7'
+      firstFillOpacity: '0.8',
+      secondFillOpacity: '0.3',
+      thirdFillOpacity: '0.3'
     },
     name: 'Enhance Breadcrumb navigation usability', 
     state: 'in-progress',
@@ -58,9 +58,9 @@ const tasks = ref([
   { 
     id: 'ElvinCODE-520',
     iconLevelOpacity:{
-      firstFillOpacity: '0.2',
-      secondFillOpacity: '0.7',
-      thirdFillOpacity: '0.7'
+      firstFillOpacity: '0.8',
+      secondFillOpacity: '0.8',
+      thirdFillOpacity: '0.8'
     },
     name: 'Enhance Loading indicator performance', 
     state: 'in-progress',
@@ -72,9 +72,9 @@ const tasks = ref([
   { 
     id: 'ElvinCODE-524',
     iconLevelOpacity:{
-      firstFillOpacity: '0.2',
-      secondFillOpacity: '0.7',
-      thirdFillOpacity: '0.7'
+      firstFillOpacity: '0.8',
+      secondFillOpacity: '0.3',
+      thirdFillOpacity: '0.3'
     },
     name: 'Implement Search bar with auto-complete', 
     state: 'in-progress',
@@ -331,25 +331,41 @@ function openAssigneeModal(task) {
         />
       </TaskSection>
 
-      <!-- <TaskSection title="Technical Review" :count="technicalReviewTasks.length">
+      <TaskSection title="Technical Review" :count="technicalReviewTasks.length">
+        <h1 class="text-xl text-white flex items-center gap-2">
+          <IconsTaskStatus
+            stroke-color="#22c55e"
+            transform-status="rotate(-90 7 7)"
+          />
+          <span>Technical Review {{ technicalReviewTasks.length }}</span>
+        </h1>
         <TasksTaskItem 
           v-for="task in technicalReviewTasks" 
           :key="task.id" 
           :task="task" 
-          :displayMode="displayMode"
+          :display-mode="displayMode"
+          status-color="#22c55e"
           @open-assignee="openAssigneeModal(task)"
         />
       </TaskSection>
 
       <TaskSection title="Completed" :count="completedTasks.length">
+        <h1 class="text-xl text-white flex items-center gap-2">
+          <IconsTaskStatus
+            stroke-color="#8b5cf6"
+            transform-status="rotate(-90 7 7)"
+          />
+          <span>Completed {{ completedTasks.length }}</span>
+        </h1>
         <TasksTaskItem 
           v-for="task in completedTasks" 
           :key="task.id" 
           :task="task" 
-          :displayMode="displayMode"
+          :display-mode="displayMode"
+          status-color="#8b5cf6"
           @open-assignee="openAssigneeModal(task)"
         />
-      </TaskSection> -->
+      </TaskSection>
     </main>
 
     <UModal v-model="filterOpen">

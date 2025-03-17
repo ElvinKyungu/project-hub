@@ -30,7 +30,7 @@ const toggleProfile = useToggle(isProfileOpen)
 </script>
 
 <template>
-  <UContainer class="sticky top-0 z-50 bg-primary text-white shadow-md w-full">
+  <div class="sticky top-0 z-50 bg-primary text-white shadow-md w-full">
     <div class="flex items-center justify-between py-4 px-6">
       <div class="flex items-center gap-4">
         <UButton variant="ghost" class="lg:hidden" @click="toggleSidebar">
@@ -40,8 +40,8 @@ const toggleProfile = useToggle(isProfileOpen)
       </div>
 
       <div class="hidden sm:flex flex-grow max-w-md relative border border-gray-700 rounded-full px-6 py-2">
-        <UInput placeholder="Rechercher..." class="w-full outline-none focus:border-none border-none" variant="outline"/>
-        <UIcon name="uil:search" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-lg text-gray-400" />
+        <UInput placeholder="Rechercher..." class="w-full outline-none focus:border-none border-none" variant="primary"/>
+        <UIcon name="uil:search" class="absolute cursor-pointer right-3 top-1/2 transform -translate-y-1/2 text-lg text-gray-400" />
       </div>
 
       <div class="flex items-center gap-4">
@@ -79,5 +79,5 @@ const toggleProfile = useToggle(isProfileOpen)
         </div>
       </div>
     </div>
-  </UContainer>
+  </div>
 </template>

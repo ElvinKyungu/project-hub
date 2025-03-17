@@ -7,6 +7,10 @@ defineProps({
   displayMode: {
     type: String,
     default: 'list'
+  },
+  statusColor:{
+    type: String,
+    default: '#facc15'
   }
 })
 
@@ -42,7 +46,7 @@ const getTagBgClass = (tag: string) => {
       <div class="col-span-1 flex items-center gap-2 sm:col-span-4 font-medium">
         <UButton variant="ghost" class="hover:bg-white/10 p-2 cursor-pointer rounded-xl">
           <IconsTaskStatus
-            stroke-color="#facc15"
+            :stroke-color="statusColor"
             transform-status="rotate(-90 7 7)"
           />
         </UButton>
