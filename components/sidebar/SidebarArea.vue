@@ -46,10 +46,24 @@ const menuGroups = ref([
     :class="{ 'translate-x-0': sidebarStore.isSidebarOpen, '-translate-x-full': !sidebarStore.isSidebarOpen }"
   >
     <div class="flex items-center justify-between px-5 py-5">
-      <NuxtLink to="/" class="flex items-center gap-2 text-white text-lg">
-        <NuxtImg src="https://nuxt.com/assets/design-kit/icon-green.svg" alt="Logo" width="40" height="40" class="h-10" />
+      <NuxtLink to="/" class="flex items-center gap-2 text-white text-base font-semibold">
+        <NuxtImg src="https://nuxt.com/assets/design-kit/icon-green.svg" alt="Logo" class="h-8" />
         <span class="mt-1">Project Hub</span>
       </NuxtLink>
+      <ul>
+        <li class="hidden lg:block">
+          <UButton icon="uil:sun" variant="ghost" @click="sidebarStore.isSidebarOpen = false" />
+        </li>
+        <li class="hidden lg:block">
+          <UButton icon="uil:moon" variant="ghost" @click="sidebarStore.isSidebarOpen = false" />
+        </li>
+        <li>
+          <UButton icon="uil:desktop" variant="ghost" class="" @click="sidebarStore.isSidebarOpen = false" />
+        </li>
+        <li>
+          <UButton icon="uil:film" variant="ghost" class="" @click="sidebarStore.isSidebarOpen = false" />
+        </li>
+      </ul>
       <UButton icon="uil:times" variant="ghost" class="lg:hidden" @click="sidebarStore.isSidebarOpen = false" />
     </div>
     <div class="flex flex-col px-5 overflow-y-auto">
