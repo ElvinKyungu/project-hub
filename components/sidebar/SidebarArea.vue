@@ -3,6 +3,7 @@ import { useSidebarStore } from '@/stores/sidebar'
 
 const target = ref(null)
 const sidebarStore = useSidebarStore()
+const isThemeModalOpen = ref(false)
 
 onClickOutside(target, () => {
   sidebarStore.isSidebarOpen = false
@@ -50,20 +51,7 @@ const menuGroups = ref([
         <NuxtImg src="https://nuxt.com/assets/design-kit/icon-green.svg" alt="Logo" class="h-8" />
         <span class="mt-1">Project Hub</span>
       </NuxtLink>
-      <ul>
-        <li class="hidden lg:block">
-          <UButton icon="uil:sun" variant="ghost" @click="sidebarStore.isSidebarOpen = false" />
-        </li>
-        <li class="hidden lg:block">
-          <UButton icon="uil:moon" variant="ghost" @click="sidebarStore.isSidebarOpen = false" />
-        </li>
-        <li>
-          <UButton icon="uil:desktop" variant="ghost" class="" @click="sidebarStore.isSidebarOpen = false" />
-        </li>
-        <li>
-          <UButton icon="uil:film" variant="ghost" class="" @click="sidebarStore.isSidebarOpen = false" />
-        </li>
-      </ul>
+      <SidebarThemeModal v-model="isThemeModalOpen" />
       <UButton icon="uil:times" variant="ghost" class="lg:hidden" @click="sidebarStore.isSidebarOpen = false" />
     </div>
     <div class="flex flex-col px-5 overflow-y-auto">
