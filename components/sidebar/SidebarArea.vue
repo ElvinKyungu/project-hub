@@ -92,9 +92,9 @@ const menuGroups = ref([
       </div>
       <SidebarThemeModal
         v-model="isThemeModalOpen"
+        :position="modalPosition"
         @update:modelValue="(v) => isThemeModalOpen = v"
         @set-theme="setTheme"
-        :position="modalPosition"
       />
       <UButton icon="uil:times" variant="ghost" class="lg:hidden" @click="sidebarStore.isSidebarOpen = false" />
     </div>
