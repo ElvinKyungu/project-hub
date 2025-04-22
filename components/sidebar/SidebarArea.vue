@@ -1,13 +1,44 @@
 <script setup lang="ts">
 import { useSidebarStore } from '@/stores/sidebar'
+import SidebarThemeModal from '@/components/sidebar/ThemeModal.vue'
 
 const target = ref(null)
 const sidebarStore = useSidebarStore()
 const isThemeModalOpen = ref(false)
+const theme = ref<'light' | 'dark' | 'system' | 'ghibli'>('system')
+
+const themeButton = ref<HTMLElement | null>(null)
+const modalPosition = ref({ top: 0, left: 0 })
+
+watch(isThemeModalOpen, (val) => {
+  if (val && themeButton.value) {
+    const rect = themeButton.value.getBoundingClientRect()
+    modalPosition.value = {
+      top: rect.bottom + 8, 
+      left: rect.left - 150,
+    }
+    console.log('modalPosition:', modalPosition.value)
+  }
+})
 
 onClickOutside(target, () => {
   sidebarStore.isSidebarOpen = false
 })
+
+const themeIcon = computed(() => {
+  switch (theme.value) {
+    case 'light': return 'uil:sun'
+    case 'dark': return 'uil:moon'
+    case 'ghibli': return 'uil:film'
+    default: return 'uil:desktop'
+  }
+})
+
+function setTheme(value: 'light' | 'dark' | 'system' | 'ghibli') {
+  theme.value = value
+  isThemeModalOpen.value = false
+  // ici tu peux aussi persister ce choix dans localStorage ou useColorMode
+}
 
 const menuGroups = ref([
   {
@@ -49,18 +80,36 @@ const menuGroups = ref([
     <div class="flex items-center justify-between px-5 py-5">
       <NuxtLink to="/" class="flex items-center gap-2 text-white text-base font-semibold">
         <NuxtImg src="https://nuxt.com/assets/design-kit/icon-green.svg" alt="Logo" class="h-8" />
-        <span class="mt-1">Project Hub</span>
+        <span>Project Hub</span>
       </NuxtLink>
-      <SidebarThemeModal v-model="isThemeModalOpen" />
+
+      <div ref="themeButton">
+        <UButton
+          :icon="themeIcon"
+          variant="ghost"
+          @click="isThemeModalOpen = true"
+        />
+      </div>
+      <SidebarThemeModal
+        v-model="isThemeModalOpen"
+        @update:modelValue="(v) => isThemeModalOpen = v"
+        @set-theme="setTheme"
+        :position="modalPosition"
+      />
       <UButton icon="uil:times" variant="ghost" class="lg:hidden" @click="sidebarStore.isSidebarOpen = false" />
     </div>
+
     <div class="flex flex-col px-5 overflow-y-auto">
       <nav>
         <ul>
           <li v-for="(group, i) in menuGroups" :key="i" class="mb-4">
             <p class="text-sm font-semibold uppercase text-gray-400">{{ group.label }}</p>
             <ul>
-              <li v-for="(item, j) in group.items" :key="j" class="py-2 flex items-center gap-3 cursor-pointer hover:bg-gray-800 rounded px-3">
+              <li
+                v-for="(item, j) in group.items"
+                :key="j"
+                class="py-2 flex items-center gap-3 cursor-pointer hover:bg-gray-800 rounded px-3"
+              >
                 <UIcon :name="item.icon" class="w-5 h-5" />
                 <NuxtLink :to="item.to" class="flex-1">{{ item.label }}</NuxtLink>
               </li>
@@ -74,6 +123,6 @@ const menuGroups = ref([
 
 <style>
 .z-sidebar {
-  z-index: 999;
+  z-index: 99;
 }
 </style>

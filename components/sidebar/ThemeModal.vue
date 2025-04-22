@@ -1,9 +1,12 @@
-<!-- components/sidebar/ThemeModal.vue -->
+<!-- ThemeModal.vue -->
 <script setup lang="ts">
 import { useGsapModal } from '@/composables/useGsapModal'
 
-const props = defineProps<{ modelValue: boolean }>()
-const emit = defineEmits(['update:modelValue'])
+const props = defineProps<{ 
+  modelValue: boolean 
+  position: { top: number; left: number }
+}>()
+const emit = defineEmits(['update:modelValue', 'set-theme'])
 
 const modal = ref<HTMLElement | null>(null)
 const { showModal, hideModal } = useGsapModal()
@@ -11,6 +14,7 @@ const { showModal, hideModal } = useGsapModal()
 watch(
   () => props.modelValue,
   (val) => {
+    console.log('modelValue changed:', val)
     if (val && modal.value) showModal(modal.value)
   }
 )
@@ -18,25 +22,38 @@ watch(
 const close = () => {
   if (modal.value) hideModal(modal.value, () => emit('update:modelValue', false))
 }
+
+const themes = [
+  { name: 'light', icon: 'uil:sun' },
+  { name: 'dark', icon: 'uil:moon' },
+  { name: 'system', icon: 'uil:desktop' },
+  { name: 'ghibli', icon: 'uil:film' }
+]
+
+const chooseTheme = (theme: string) => {
+  emit('set-theme', theme)
+  close()
+}
 </script>
 
 <template>
   <Teleport to="body">
-    <div v-if="modelValue" class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div ref="modal" class="bg-white dark:bg-gray-900 text-black dark:text-white rounded-xl shadow-lg p-6 w-[300px]">
-        <h2 class="text-lg font-semibold mb-4">Choisir un thème</h2>
-        <ul>
-          <li class="hidden lg:block">
-            <UButton icon="uil:sun" variant="ghost" />
-          </li>
-          <li class="hidden lg:block">
-            <UButton icon="uil:moon" variant="ghost" />
-          </li>
-          <li>
-            <UButton icon="uil:desktop" variant="ghost" class="" />
-          </li>
-          <li>
-            <UButton icon="uil:film" variant="ghost" class="" />
+    <div 
+      v-if="modelValue"
+      class="fixed z-[100]"
+      :style="{
+        top: `${props.position.top}px`,
+        left: `${props.position.left}px`,
+        position: 'fixed',
+      }"
+    >
+      <div ref="modal" class="bg-white dark:bg-gray-900 text-black dark:text-white rounded-xl shadow-lg p-6 w-[300px] space-y-2">
+        <p class="text-center font-semibold mb-2">Choisis un thème</p>
+        <ul class="flex flex-col gap-2">
+          <li v-for="theme in themes" :key="theme.name">
+            <UButton :icon="theme.icon" variant="ghost" block @click="chooseTheme(theme.name)">
+              {{ theme.name }}
+            </UButton>
           </li>
         </ul>
       </div>
