@@ -1,4 +1,3 @@
-<!-- ThemeModal.vue -->
 <script setup lang="ts">
 import { useGsapModal } from '@/composables/useGsapModal'
 
@@ -47,9 +46,9 @@ const chooseTheme = (theme: string) => {
         position: 'fixed',
       }"
     >
-      <div ref="modal" class="bg-white dark:bg-gray-900 text-black dark:text-white rounded-xl shadow-lg p-6 w-[300px] space-y-2">
-        <p class="text-center font-semibold mb-2">Choisis un thème</p>
-        <ul class="flex flex-col gap-2">
+      <div ref="modal" class="bg-white dark:bg-gray-900 text-black dark:text-white rounded-xl shadow-lg p-4 w-[200px] space-y-2">
+        <p class="text-left font-semibold mb-2">Choisis un thème</p>
+        <ul class="flex flex-col justify-start gap-2">
           <li v-for="theme in themes" :key="theme.name">
             <UButton :icon="theme.icon" variant="ghost" block @click="chooseTheme(theme.name)">
               {{ theme.name }}

@@ -84,9 +84,9 @@ const menuGroups = ref([
       </NuxtLink>
 
       <div ref="themeButton">
-        <UButton
-          :icon="themeIcon"
-          variant="ghost"
+        <UIcon
+          :name="themeIcon"
+          class="size-20 w-20"
           @click="isThemeModalOpen = true"
         />
       </div>
