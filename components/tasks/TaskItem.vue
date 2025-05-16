@@ -28,7 +28,7 @@ const getTagBgClass = (tag: string) => {
     Other: "bg-other",
   };
   return tagColors[tag] || "bg-other";
-};
+}; 
 </script>
 <template>
   <div 
