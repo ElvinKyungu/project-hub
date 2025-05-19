@@ -1,102 +1,98 @@
 <script setup lang="ts">
-import { useClickOutside } from '@vueuse/core'
 import { gsap } from 'gsap'
 
 const props = defineProps({
-  modelValue: {
-    type: Object,
-    required: true
-  }
+  modelValue: Object,
+  triggerElement: { type: Object as PropType<{ $el: HTMLElement }>, default: null }
 })
 
 const emit = defineEmits(['update:modelValue', 'close'])
 
 const popup = ref<HTMLElement | null>(null)
-const searchInput = ref('')
+const search = ref('')
 const isOpen = ref(false)
 
-// Close popup when clicking outside
-useClickOutside(popup, () => {
-  if (isOpen.value) {
-    emit('close')
-  }
-})
-
-// Sample task level icons data (you might want to replace this with your actual data)
-const taskLevels = [
-  { id: 1, name: 'Low', icon: 'i-heroicons-arrow-down' },
-  { id: 2, name: 'Medium', icon: 'i-heroicons-arrow-down-triangle' },
-  { id: 3, name: 'High', icon: 'i-heroicons-arrow-up' },
-  { id: 4, name: 'Critical', icon: 'i-heroicons-exclamation-circle' },
-  // Add more task levels as needed
+const priorities = [
+  { id: 0, name: 'No priority', icon: 'uil:ellipsis-h', count: 3 },
+  { id: 1, name: 'Urgent', icon: 'uil:bolt-alt', count: 11 },
+  { id: 2, name: 'High', icon: 'uil:signal-alt-3', count: 10 },
+  { id: 3, name: 'Medium', icon: 'uil:signal-alt', count: 6 },
+  { id: 4, name: 'Low', icon: 'uil:signal-alt', count: 0 },
 ]
 
-const filteredLevels = computed(() => {
-  return taskLevels.filter(level => 
-    level.name.toLowerCase().includes(searchInput.value.toLowerCase())
+const selected = ref(priorities[1])
+
+const filtered = computed(() =>
+  priorities.filter(p =>
+    p.name.toLowerCase().includes(search.value.toLowerCase())
   )
-})
+)
 
 const selectLevel = (level: any) => {
-  emit('update:modelValue', level)
-  emit('close')
+  selected.value = level
+  gsap.to(popup.value, {
+    opacity: 0,
+    y: -10,
+    duration: 0.2,
+    ease: 'power2.in',
+    onComplete: () => {
+      emit('update:modelValue', level)
+      emit('close')
+    }
+  })
 }
 
-// Animation when opening the popup
 onMounted(() => {
-  if (isOpen.value) {
-    gsap.from(popup.value, {
-      y: 20,
-      opacity: 0,
-      duration: 0.3,
-      ease: 'power2.out'
-    })
-  }
+  isOpen.value = true
+  gsap.from(popup.value, {
+    opacity: 0,
+    y: -10,
+    duration: 0.2,
+    ease: 'power2.out',
+  })
 })
 
-// Animation when closing the popup
-watch(isOpen, (newVal) => {
-  if (!newVal) {
-    gsap.to(popup.value, {
-      y: 20,
-      opacity: 0,
-      duration: 0.3,
-      ease: 'power2.in',
-      onComplete: () => {
-        emit('close')
-      }
-    })
-  }
+onClickOutside(popup, () => {
+  emit('close')
 })
 </script>
 
 <template>
-  <!-- ref="popup" -->
-  <div  class="fixed bottom-0 left-0 right-0 bg-white rounded-t-lg shadow-lg p-4 z-[999]">
-    <div class="flex items-center gap-2 mb-4">
-      <!-- <input
-        v-model="searchInput"
-        type="text"
-        placeholder="Search task levels..."
-        class="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary"
-      /> -->
-      <UIcon name="i-heroicons-magnifying-glass" class="text-gray-400" />
+  <div
+    ref="popup"
+    class="absolute items-center gap-2 bg-primary border border-b border-bordercolor rounded-lg shadow-lg p-3 z-[999] w-64 top-10"
+  >
+    <div class="flex flex-col gap-2 mb-3">
+      <h2 class="text-sm font-medium">Task Level</h2>
+      <UInput
+        v-model="search"
+        trailing-icon="uil:search"
+        placeholder="Search priority..."
+        size="md"
+        class="text-sm"
+      />
     </div>
-    
-    <div class="space-y-2">
-      <!-- <button
-        v-for="level in filteredLevels"
-        :key="level.id"
-        @click="selectLevel(level)"
-        class="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 transition-colors"
+
+    <div class="space-y-1 max-h-64 overflow-y-auto">
+      <button
+        v-for="item in filtered"
+        :key="item.id"
+        @click="selectLevel(item)"
+        class="w-full flex items-center justify-between px-2 py-1.5 rounded hover:bg-gray-800 cursor-pointer text-sm transition"
       >
-        <UIcon :name="level.icon" class="w-5 h-5" />
-        <span>{{ level.name }}</span>
-      </button> -->
+        <div class="flex items-center gap-2">
+          <UIcon :name="item.icon" class="w-4 h-4 text-gray-600" />
+          <span>{{ item.name }}</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="text-xs text-gray-500">{{ item.count }}</span>
+          <UIcon
+            name="uil:check"
+            class="w-4 h-4 text-primary"
+            v-if="selected.id === item.id"
+          />
+        </div>
+      </button>
     </div>
   </div>
 </template>
-
-<style scoped>
-/* Add any additional styles here */
-</style>

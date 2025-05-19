@@ -373,7 +373,7 @@ function openAssigneeModal(task) {
       </TaskSection>
     </main>
 
-    <UModal v-model="filterOpen">
+    <!-- <UModal v-model="filterOpen">
       <UCard>
         <template #header>
           <div class="text-xl font-bold">Filter Tasks</div>
@@ -397,10 +397,10 @@ function openAssigneeModal(task) {
           </div>
         </template>
       </UCard>
-    </UModal>
+    </UModal> -->
 
     <!-- Assignee Modal -->
-    <UModal v-model="assigneeModalOpen">
+    <!-- <UModal v-model="assigneeModalOpen">
       <UCard>
         <template #header>
           <div class="text-xl font-bold">Assign Task</div>
@@ -418,7 +418,7 @@ function openAssigneeModal(task) {
           </div>
         </template>
       </UCard>
-    </UModal>
+    </UModal> -->
   </div>
 </template>
 
