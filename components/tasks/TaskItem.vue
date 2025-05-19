@@ -6,7 +6,25 @@ const props = defineProps({
   statusColor: String,
 })
 
-const emit = defineEmits(['open-assignee'])
+const emit = defineEmits(['open-assignee', 'update-assignee'])
+
+function getAvatarUrl (seed: string) {
+  const colors = ['FF6B6B', '4ECDC4', '45B7D1', '96CEB4', 'FFEEAD', 'FF6F61']
+  const color = colors[Math.floor(Math.random() * colors.length)]
+  return `https://api.dicebear.com/9.x/glass/svg?seed=${seed}&backgroundColor=${color}`
+}
+
+const isAssigneePopupOpen = ref(false)
+const assigneeTrigger = ref<HTMLElement | null>(null)
+
+const openAssigneePopup = () => {
+  isAssigneePopupOpen.value = true
+}
+
+const handleAssigneeSelect = (assignee: any) => {
+  emit('update-assignee', { taskId: props.task.id, assignee })
+  isAssigneePopupOpen.value = false
+} 
 
 const isLevelSelectorOpen = ref(false)
 const selectedLevel = ref(props.task.iconLevelOpacity)
@@ -98,13 +116,28 @@ const getTagBgClass = (tag: string) => {
 
       <div class="hidden sm:block text-sm text-gray-500">{{ task.dueDate }}</div>
 
-      <div class="flex justify-end">
+      <div class="flex justify-end relative">
         <UAvatar
-          v-if="task.assignee"
-          :src="task.assignee.avatar"
+          ref="assigneeTrigger"
+          :src="getAvatarUrl(task.assignee?.seed || 'default')"
           size="sm"
           class="cursor-pointer hover:ring-2 hover:ring-primary"
-          @click="$emit('open-assignee', task)"
+          @click="openAssigneePopup"
+        >
+          <template #badge>
+            <UIcon
+              name="i-heroicons-check-circle-20-solid"
+              class="absolute -bottom-0.5 -right-0.5 w-4 h-4 text-primary"
+              v-if="task.assignee"
+            />
+          </template>
+        </UAvatar>
+        <TasksTaskAsignSelect
+          v-if="isAssigneePopupOpen"
+          :model-value="task.assignee"
+          :trigger-element="assigneeTrigger?.$el ?? assigneeTrigger"
+          @update:model-value="handleAssigneeSelect"
+          @close="isAssigneePopupOpen = false"
         />
       </div>
     </div>

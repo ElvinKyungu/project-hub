@@ -70,47 +70,52 @@ onClickOutside(popup, () => {
 </script>
 
 <template>
-  <div class="flex items-center gap-2">
-    <UPopover class="z-[999]">
-      <UButton color="white" class="border w-44 justify-between text-gray-700">
-        <span>{{ selected.name }}</span>
-        <NuxtIcon name="uil:angle-down" class="w-4 h-4" />
-      </UButton>
+  <div
+    ref="popup"
+    class="absolute items-center gap-2 bg-primary border border-b border-bordercolor rounded-lg shadow-lg p-3 z-[999] w-64 top-10"
+  >
+  	<div class="flex items-center gap-2">
+      <UPopover class="z-[999]">
+        <UButton color="white" class="border w-44 justify-between text-gray-700">
+          <span>{{ selected.name }}</span>
+          <NuxtIcon name="uil:angle-down" class="w-4 h-4" />
+        </UButton>
 
-      <template #panel>
-        <div class="bg-white rounded-lg shadow-lg p-3 w-64 border border-gray-200">
-          <div class="flex items-center gap-2 mb-3">
-            <h2 class="text-sm font-medium">Assign to</h2>
-            <UInput v-model="search" trailing-icon="uil:search" placeholder="Search users..." size="md" class="flex-1" />
-          </div>
-          
-          <div class="space-y-1">
-            <button
-              v-for="item in filtered"
-              :key="item.id"
-              @click="selectLevel(item)"
-              class="w-full flex items-center justify-between px-2 py-1.5 rounded hover:bg-gray-100 text-sm transition"
-            >
-              <div class="flex items-center gap-3">
-                <img
-                  :src="getAvatarUrl(item.seed)"
-                  class="w-8 h-8 rounded-full"
-                  :alt="item.name"
-                />
-                <span>{{ item.name }}</span>
-              </div>
-              <div class="flex items-center gap-1">
-                <span class="text-xs text-gray-500">{{ item.count }} tasks</span>
-                <NuxtIcon
-                  name="uil:check"
-                  class="w-4 h-4 text-primary"
-                  v-if="selected.id === item.id"
-                />
-              </div>
-            </button>
-          </div>
-        </div>
-      </template>
-    </UPopover>
-  </div>
+				<template #panel>
+					<div class="bg-white rounded-lg shadow-lg p-3 w-64 border border-gray-200">
+						<div class="flex items-center gap-2 mb-3">
+							<h2 class="text-sm font-medium">Assign to</h2>
+							<UInput v-model="search" trailing-icon="uil:search" placeholder="Search users..." size="md" class="flex-1" />
+						</div>
+						
+						<div class="space-y-1">
+							<button
+								v-for="item in filtered"
+								:key="item.id"
+								@click="selectLevel(item)"
+								class="w-full flex items-center justify-between px-2 py-1.5 rounded hover:bg-gray-100 text-sm transition"
+							>
+								<div class="flex items-center gap-3">
+									<img
+										:src="getAvatarUrl(item.seed)"
+										class="w-8 h-8 rounded-full"
+										:alt="item.name"
+									/>
+									<span>{{ item.name }}</span>
+								</div>
+								<div class="flex items-center gap-1">
+									<span class="text-xs text-gray-500">{{ item.count }} tasks</span>
+									<NuxtIcon
+										name="uil:check"
+										class="w-4 h-4 text-primary"
+										v-if="selected.id === item.id"
+									/>
+								</div>
+							</button>
+						</div>
+					</div>
+				</template>
+			</UPopover>
+		</div>
+	</div>
 </template>

@@ -80,17 +80,13 @@ onClickOutside(popup, () => {
         @click="selectLevel(item)"
         class="w-full flex items-center justify-between px-2 py-1.5 rounded hover:bg-gray-800 cursor-pointer text-sm transition"
       >
-        <div class="flex items-center gap-2">
-          <UIcon :name="item.icon" class="w-4 h-4 text-gray-600" />
+        <div class="flex items-center gap-3">
+          <UIcon :name="item.icon" class="w-4 h-4" size="16" />
           <span>{{ item.name }}</span>
         </div>
         <div class="flex items-center gap-1">
           <span class="text-xs text-gray-500">{{ item.count }}</span>
-          <UIcon
-            name="uil:check"
-            class="w-4 h-4 text-primary"
-            v-if="selected.id === item.id"
-          />
+          
         </div>
       </button>
     </div>
