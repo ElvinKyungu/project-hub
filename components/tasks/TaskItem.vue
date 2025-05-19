@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineProps({
+const props = defineProps({
   task: {
     type: Object,
     required: true
@@ -14,7 +14,21 @@ defineProps({
   }
 })
 
-defineEmits(['open-assignee'])
+const emit = defineEmits(['open-assignee'])
+
+const isLevelSelectorOpen = ref(false)
+const selectedLevel = ref(props.task.iconLevelOpacity)
+
+const openLevelSelector = () => {
+  isLevelSelectorOpen.value = true
+  console.log('Selected level:', selectedLevel.value)
+}
+
+const handleLevelSelect = (level: any) => {
+  // Update the task level here
+  console.log('Selected level:', level)
+  isLevelSelectorOpen.value = false
+}
 
 const getTagBgClass = (tag: string) => {
   const tagColors: Record<string, string> = {
@@ -36,10 +50,18 @@ const getTagBgClass = (tag: string) => {
   >
     <div class="flex items-center gap-4">
       <div class="flex items-center col-span-1 sm:col-span-2 gap-2">
-        <IconsTaskLevel
-          :first-fill-opacity="task.iconLevelOpacity.firstFillOpacity"
-          :second-fill-opacity="task.iconLevelOpacity.secondFillOpacity"
-          :third-fill-opacity="task.iconLevelOpacity.thirdFillOpacity"
+        <UButton variant="ghost" class="hover:bg-white/10 p-2 cursor-pointer rounded-xl" @click="openLevelSelector">
+          <IconsTaskLevel
+            :first-fill-opacity="task.iconLevelOpacity.firstFillOpacity"
+            :second-fill-opacity="task.iconLevelOpacity.secondFillOpacity"
+            :third-fill-opacity="task.iconLevelOpacity.thirdFillOpacity"
+          />
+        </UButton>
+        <TasksTaskLevelSelector
+          v-if="isLevelSelectorOpen"
+          :model-value="selectedLevel"
+          @update:model-value="handleLevelSelect"
+          @close="isLevelSelectorOpen = false"
         />
         <span class="text-gray-500">{{ task.id }}</span>
       </div>

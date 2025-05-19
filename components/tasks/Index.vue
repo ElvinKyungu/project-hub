@@ -315,12 +315,17 @@ function openAssigneeModal(task) {
 
     <main class="p-4">
       <TaskSection title="In Progress" :count="inProgressTasks.length">
-        <h1 class="text-xl text-white flex items-center gap-2">
-          <IconsTaskStatus
-            stroke-color="#facc15"
-            transform-status="rotate(-90 7 7)"
-          />
-          <span>In progress {{ inProgressTasks.length }}</span>
+        <h1 class="text-xl text-white flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <IconsTaskStatus
+              stroke-color="#facc15"
+              transform-status="rotate(-90 7 7)"
+            />
+            <span>In progress {{ inProgressTasks.length }}</span>
+          </div>
+          <UButton variant="ghost" class="hover:bg-white/10 p-2 cursor-pointer rounded-xl mr-2">
+            <UIcon name="uil:plus" class="text-2xl" />
+          </UButton>
         </h1>
         <TasksTaskItem 
           v-for="task in inProgressTasks" 
