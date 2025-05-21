@@ -1,6 +1,6 @@
 <script setup>
-import { useLayout } from '@/composables/useLayouts';
-import { useRoute } from 'vue-router';
+import { useLayout } from "@/composables/useLayouts";
+import { useRoute } from "vue-router";
 
 const route = useRoute();
 
@@ -30,14 +30,14 @@ const itemKey = ref(null);
 
 onBeforeMount(() => {
   itemKey.value = props.parentItemKey
-    ? props.parentItemKey + '-' + props.index
+    ? props.parentItemKey + "-" + props.index
     : String(props.index);
 
   const activeItem = layoutState.activeMenuItem;
 
   isActiveMenu.value =
     activeItem === itemKey.value || activeItem
-      ? activeItem.startsWith(itemKey.value + '-')
+      ? activeItem.startsWith(itemKey.value + "-")
       : false;
 });
 
@@ -45,7 +45,7 @@ watch(
   () => layoutState.activeMenuItem,
   (newVal) => {
     isActiveMenu.value =
-      newVal === itemKey.value || newVal.startsWith(itemKey.value + '-');
+      newVal === itemKey.value || newVal.startsWith(itemKey.value + "-");
   },
 );
 
@@ -123,7 +123,7 @@ function checkActiveRoute(item) {
       v-if="item.items && item.visible !== false"
       name="layout-submenu"
     >
-      <ul v-show="root ? true : isActiveMenu" class="layout-submenu ">
+      <ul v-show="root ? true : isActiveMenu" class="layout-submenu">
         <!-- <app-menu-item
           v-for="(child, i) in item.items"
           :key="child"
@@ -137,6 +137,4 @@ function checkActiveRoute(item) {
   </li>
 </template>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

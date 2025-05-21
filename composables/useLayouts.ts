@@ -17,11 +17,11 @@ interface LayoutState {
 }
 
 const layoutConfig: LayoutConfig = reactive({
-  preset: 'Aura',
-  primary: 'emerald',
+  preset: "Aura",
+  primary: "emerald",
   surface: null,
   darkTheme: false,
-  menuMode: 'static',
+  menuMode: "static",
 });
 
 const layoutState: LayoutState = reactive({
@@ -66,11 +66,11 @@ export function useLayout() {
 
   const executeDarkModeToggle = () => {
     layoutConfig.darkTheme = !layoutConfig.darkTheme;
-    document.documentElement.classList.toggle('app-dark');
+    document.documentElement.classList.toggle("app-dark");
   };
 
   const onMenuToggle = () => {
-    if (layoutConfig.menuMode === 'overlay') {
+    if (layoutConfig.menuMode === "overlay") {
       layoutState.overlayMenuActive = !layoutState.overlayMenuActive;
     }
 

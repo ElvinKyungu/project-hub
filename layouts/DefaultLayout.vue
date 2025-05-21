@@ -10,11 +10,10 @@
       </header>
       <main class="flex-1 bg-primary">
         <div class="mx-auto max-w-screen-4xl p-4 md:p-6 2xl:p-10">
-          <slot/>
+          <slot />
         </div>
       </main>
     </div>
   </div>
 </template>
-<style>
-</style>
+<style></style>

@@ -1,9 +1,9 @@
-@import './layout/layout.scss';
+@import "./layout/layout.scss";
 @import "tailwindcss";
 @import "tailwindcss" theme(static);
 @import "@nuxt/ui";
 
-@theme{
+@theme {
   --color-primary: #101828;
   --color-secondary: #201828;
   --color-bordercolor: #364153;
@@ -30,11 +30,27 @@
 ::-webkit-scrollbar-thumb:hover {
   background: var(--primary-color);
 }
-.bg-testing { background-color: #ef4444; }
-.bg-development { background-color: #3b82f6; }
-.bg-design { background-color: #a855f7; }
-.bg-deployment { background-color: #f97316; }
-.bg-research { background-color: #14b8a6; }
-.bg-marketing { background-color: #ec4899; }
-.bg-review { background-color: #eab308; }
-.bg-other { background-color: #6b7280; }
+.bg-testing {
+  background-color: #ef4444;
+}
+.bg-development {
+  background-color: #3b82f6;
+}
+.bg-design {
+  background-color: #a855f7;
+}
+.bg-deployment {
+  background-color: #f97316;
+}
+.bg-research {
+  background-color: #14b8a6;
+}
+.bg-marketing {
+  background-color: #ec4899;
+}
+.bg-review {
+  background-color: #eab308;
+}
+.bg-other {
+  background-color: #6b7280;
+}
