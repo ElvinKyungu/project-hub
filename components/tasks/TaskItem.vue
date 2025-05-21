@@ -5,15 +5,14 @@ const props = defineProps<({
   users: User[];
   displayMode: string;
   statusColor: string;
-}>();
+})>();
 
 const emit = defineEmits(["open-assignee", "update-assignee"]);
 
-function getAvatarUrl(seed: string) {
-  const colors = ["FF6B6B", "4ECDC4", "45B7D1", "96CEB4", "FFEEAD", "FF6F61"];
-  const color = colors[Math.floor(Math.random() * colors.length)];
-  return `https://api.dicebear.com/9.x/glass/svg?seed=${seed}&backgroundColor=${color}`;
-}
+const assigneeUser = computed(() => {
+  if (!props.users || !props.task?.assigneeId) return null;
+  return props.users.find((user) => user.id === props.task.assigneeId) || null;
+});
 
 const isAssigneePopupOpen = ref(false);
 const assigneeTrigger = ref<HTMLElement | null>(null);
@@ -22,7 +21,7 @@ const openAssigneePopup = () => {
   isAssigneePopupOpen.value = true;
 };
 onMounted(() => {
-  console.log("Users + ", props.user);
+  console.log("Users + ", props.users);
 });
 const handleAssigneeSelect = (assignee: any) => {
   emit("update-assignee", { taskId: props.task?.id, assignee });
@@ -42,9 +41,6 @@ const handleLevelSelect = (level: any) => {
   isLevelSelectorOpen.value = false;
 };
 
-const handleClose = () => {
-  isLevelSelectorOpen.value = false;
-};
 const getTagBgClass = (tag: string) => {
   const tagColors: Record<string, string> = {
     Bug: "bg-testing",
@@ -133,14 +129,15 @@ const getTagBgClass = (tag: string) => {
       <div class="flex justify-end relative">
         <UAvatar
           ref="assigneeTrigger"
-          :src="getAvatarUrl(task?.assignee?.seed || 'default')"
+          :src="assigneeUser?.avatar || 'https://i.pravatar.cc/300'"
+          :alt="assigneeUser?.name || 'default'"
           size="sm"
           class="cursor-pointer hover:ring-2 hover:ring-primary"
           @click="openAssigneePopup"
         >
           <template #badge>
             <UIcon
-              v-if="task?.assignee"
+              v-if="task?.assigneeId"
               name="i-heroicons-check-circle-20-solid"
               class="absolute -bottom-0.5 -right-0.5 w-4 h-4 text-primary"
             />
@@ -149,7 +146,7 @@ const getTagBgClass = (tag: string) => {
         <TasksTaskAsignSelect
           v-if="isAssigneePopupOpen"
           :user="props.users"
-          :model-value="task?.assignee"
+          :model-value="task?.assigneeId"
           :trigger-element="assigneeTrigger?.$el ?? assigneeTrigger"
           @update:model-value="handleAssigneeSelect"
           @close="isAssigneePopupOpen = false"

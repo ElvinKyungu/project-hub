@@ -2,13 +2,19 @@
 import { gsap } from "gsap"
 import type { User } from "@/types/tasks"
 const props = defineProps({
-  modelValue: Object,
-  users: User[],
+  modelValue: {
+    type: Object as PropType<User>,
+    default: null,
+  },
+  users: {
+    type: Array as PropType<User[]>,
+    default: () => [],
+  },
   triggerElement: {
     type: Object as PropType<{ $el: HTMLElement }>,
     default: null,
   },
-});
+})
 
 const emit = defineEmits(["update:modelValue", "close"]);
 
@@ -16,29 +22,17 @@ const popup = ref<HTMLElement | null>(null);
 const search = ref("");
 const isOpen = ref(false);
 
-const selected = ref(props.user);
-const getRandomColor = () => {
-  const colors = [
-    "#FF6B6B",
-    "#4ECDC4",
-    "#45B7D1",
-    "#96CEB4",
-    "#FFEEAD",
-    "#FF6F61",
-  ];
-  return colors[Math.floor(Math.random() * colors.length)];
-};
+const selected = ref(props.modelValue);
 
 const getAvatarUrl = (seed: string) => {
-  const color = getRandomColor();
-  return `https://api.dicebear.com/9.x/glass/svg?seed=${seed}&backgroundColor=${color.replace("#", "")}`;
-};
+  return `https://api.dicebear.com/9.x/glass/svg?seed=${seed}&backgroundColor=4ECDC4`;
+}
 
 const filtered = computed(() =>
-  props.user.filter((p) =>
+  props.users.filter((p) =>
     p.name.toLowerCase().includes(search.value.toLowerCase()),
   ),
-);
+)
 
 const selectLevel = (level: any) => {
   selected.value = level;
@@ -55,15 +49,22 @@ const selectLevel = (level: any) => {
 };
 
 onMounted(() => {
-  isOpen.value = true;
+  isOpen.value = true
+  console.log(filtered.value)
+  console.log(props.users)
   gsap.from(popup.value, {
     opacity: 0,
     y: -10,
     duration: 0.2,
     ease: "power2.out",
-  });
-});
-
+  })
+})
+watch(() => props.modelValue, (val) => {
+  selected.value = val;
+})
+watch(filtered, (val) => {
+  console.log("Filtered users:", val);
+})
 onClickOutside(popup, () => {
   emit("close");
 });

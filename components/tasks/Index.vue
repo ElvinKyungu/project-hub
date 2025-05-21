@@ -1,39 +1,23 @@
-<script setup lang="ts">
-import type { Task, User } from "@/types/tasks";
-const breakpoints = useBreakpoints({
-  mobile: 640,
-  tablet: 768,
-  desktop: 1024,
-});
+<script setup lang="ts">import type { Task, User } from "@/types/tasks";
 
-const isMobile = breakpoints.smaller("tablet");
-
-const displayMode = ref("list");
-const filterOpen = ref(false);
-const assigneeModalOpen = ref(false);
-const currentTask = ref(null);
-
-const filters = ref({
-  status: {
-    inProgress: true,
-    technicalReview: true,
-    completed: true,
-  },
-  type: {
-    bug: true,
-    feature: true,
-    improvement: true,
-  },
-});
-
+const displayMode = ref("list")
+const filterOpen = ref(false)
+const assigneeModalOpen = ref(false)
+const currentTask = ref<Task | null>(null)
 const users = ref<User[]>([
-  { id: 1, name: "Alex Smith", avatar: "/avatar1.png", teams: [1] },
-  { id: 2, name: "Jordan Lee", avatar: "/avatar2.png", teams: [1] },
-  { id: 3, name: "Taylor Kim", avatar: "/avatar3.png", teams: [1] },
-  { id: 4, name: "Morgan Chen", avatar: "/avatar4.png", teams: [2] },
-  { id: 5, name: "Riley Patel", avatar: "/avatar5.png", teams: [2] },
+  { id: 1, name: "Elvin.code", teams: [1] },
+  { id: 2, name: "Gabriel.delattre", teams: [1] },
+  { id: 3, name: "Deb.yambenu", teams: [1] },
+  { id: 4, name: "Bienfaits.shomari", teams: [2] },
+  { id: 5, name: "Astrid.code", teams: [2] },
 ]);
 
+const enrichedUsers = computed(() =>
+  users.value.map((user: User) => ({
+    ...user,
+    avatarUrl: `https://api.dicebear.com/7.x/shapes/svg?seed=${encodeURIComponent(user.name)}`
+  }))
+)
 const tasks = ref<Task[]>([
   {
     id: "ElvinCODE-508",
@@ -43,7 +27,7 @@ const tasks = ref<Task[]>([
     type: "improvement",
     component: "Gabriel UI - Dropdown",
     dueDate: "Mar 17",
-    assigneeId: 1,
+    assigneeId: 12,
     iconLevelOpacity: {
       firstFillOpacity: "0.8",
       secondFillOpacity: "0.7",
@@ -58,7 +42,7 @@ const tasks = ref<Task[]>([
     type: "improvement",
     component: "",
     dueDate: "Mar 21",
-    assigneeId: 1,
+    assigneeId: 12,
     iconLevelOpacity: {
       firstFillOpacity: "0.8",
       secondFillOpacity: "0.3",
@@ -278,38 +262,16 @@ const tasks = ref<Task[]>([
 ]);
 
 const inProgressTasks = computed(() =>
-  tasks.value.filter((task) => task.state === "in-progress"),
+  tasks.value.filter((task: Task) => task.state === "in-progress"),
 );
 
 const technicalReviewTasks = computed(() =>
-  tasks.value.filter((task) => task.state === "review"),
+  tasks.value.filter((task: Task) => task.state === "review"),
 );
-
 const completedTasks = computed(() =>
-  tasks.value.filter((task) => task.state === "completed"),
+  tasks.value.filter((task: Task) => task.state === "completed"),
 );
-
-function resetFilters() {
-  filters.value = {
-    status: {
-      inProgress: true,
-      technicalReview: true,
-      completed: true,
-    },
-    type: {
-      bug: true,
-      feature: true,
-      improvement: true,
-    },
-  };
-}
-
-function applyFilters() {
-  filterOpen.value = false;
-  // Logic to filter tasks
-}
-
-function openAssigneeModal(task) {
+function openAssigneeModal(task: Task) {
   currentTask.value = task;
   assigneeModalOpen.value = true;
 }
@@ -368,7 +330,8 @@ function openAssigneeModal(task) {
           :key="task.id"
           :task="task"
           :display-mode="displayMode"
-          :user="users"
+          :users="enrichedUsers"
+          status-color="#22c55e"
           @open-assignee="openAssigneeModal(task)"
         />
       </TaskSection>
@@ -389,8 +352,7 @@ function openAssigneeModal(task) {
           :key="task.id"
           :task="task"
           :display-mode="displayMode"
-          :user="users"
-          status-color="#22c55e"
+           :users="enrichedUsers"          status-color="#22c55e"
           @open-assignee="openAssigneeModal(task)"
         />
       </TaskSection>
@@ -408,11 +370,12 @@ function openAssigneeModal(task) {
           :key="task.id"
           :task="task"
           :display-mode="displayMode"
-          :users="users"
-          status-color="#8b5cf6"
+           :users="enrichedUsers"          
+           status-color="#8b5cf6"
           @open-assignee="openAssigneeModal(task)"
         />
       </TaskSection>
     </main>
   </div>
 </template>
+
