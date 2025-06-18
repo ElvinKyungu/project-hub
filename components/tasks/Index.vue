@@ -15,7 +15,7 @@ const users = ref<User[]>([
 const enrichedUsers = computed(() =>
   users.value.map((user: User) => ({
     ...user,
-    avatarUrl: user.avatar || `https://api.dicebear.com/7.x/shapes/svg?seed=${encodeURIComponent(user.name)}`
+    avatarUrl: user.avatar || `https://api.dicebear.com/9.x/glass/svg?seed=${user.name}`
   }))
 )
 const tasks = ref<Task[]>([

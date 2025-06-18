@@ -25,7 +25,7 @@ const isOpen = ref(false);
 const selected = ref(props.modelValue);
 
 const getAvatarUrl = (seed: string) => {
-  return `https://api.dicebear.com/9.x/glass/svg?seed=${seed}&backgroundColor=4ECDC4`;
+  return `https://api.dicebear.com/9.x/glass/svg?seed=${seed}`;
 }
 
 const filtered = computed(() =>
@@ -96,7 +96,7 @@ onClickOutside(popup, () => {
         >
           <div class="flex items-center gap-3">
             <img
-              :src="getAvatarUrl(item.seed)"
+              :src="getAvatarUrl(item.name)"
               class="w-8 h-8 rounded-full"
               :alt="item.name"
             />
