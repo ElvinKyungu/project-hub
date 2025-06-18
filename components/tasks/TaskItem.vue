@@ -11,7 +11,7 @@ const emit = defineEmits(["open-assignee", "update-assignee"]);
 
 const assigneeUser = computed(() => {
   if (!props.users || !props.task?.assigneeId) return null;
-  return props.users.find((user) => user.id === props.task.assigneeId) || null;
+  return props.users.find((user: User) => user.id === props.task.assigneeId) || null;
 });
 
 const isAssigneePopupOpen = ref(false);
@@ -23,7 +23,7 @@ const openAssigneePopup = () => {
 onMounted(() => {
   console.log("Users + ", props.users);
 });
-const handleAssigneeSelect = (assignee: any) => {
+const handleAssigneeSelect = (assignee: User) => {
   emit("update-assignee", { taskId: props.task?.id, assignee });
   isAssigneePopupOpen.value = false;
 };

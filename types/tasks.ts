@@ -4,7 +4,7 @@ type TaskType = "bug" | "feature" | "improvement";
 export interface User {
   id: number;
   name: string;
-  // avatar: string;
+  avatar: string;
   teams: number[]; // IDs des équipes
 }
 

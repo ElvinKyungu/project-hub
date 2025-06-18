@@ -5,17 +5,17 @@ const filterOpen = ref(false)
 const assigneeModalOpen = ref(false)
 const currentTask = ref<Task | null>(null)
 const users = ref<User[]>([
-  { id: 1, name: "Elvin.code", teams: [1] },
-  { id: 2, name: "Gabriel.delattre", teams: [1] },
-  { id: 3, name: "Deb.yambenu", teams: [1] },
-  { id: 4, name: "Bienfaits.shomari", teams: [2] },
-  { id: 5, name: "Astrid.code", teams: [2] },
+  { id: 1, name: "Elvin.code", avatar: '', teams: [1] },
+  { id: 2, name: "Gabriel.delattre", avatar: '', teams: [1] },
+  { id: 3, name: "Deb.yambenu", avatar: '', teams: [1] },
+  { id: 4, name: "Bienfaits.shomari", avatar: '', teams: [2] },
+  { id: 5, name: "Astrid.code", avatar: '', teams: [2] },
 ]);
 
 const enrichedUsers = computed(() =>
   users.value.map((user: User) => ({
     ...user,
-    avatarUrl: `https://api.dicebear.com/7.x/shapes/svg?seed=${encodeURIComponent(user.name)}`
+    avatarUrl: user.avatar || `https://api.dicebear.com/7.x/shapes/svg?seed=${encodeURIComponent(user.name)}`
   }))
 )
 const tasks = ref<Task[]>([
