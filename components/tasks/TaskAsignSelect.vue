@@ -3,7 +3,7 @@ import { gsap } from "gsap"
 import type { User } from "@/types/tasks"
 const props = defineProps({
   modelValue: {
-    type: Object as PropType<User>,
+    type: Number as PropType<number | null>,
     default: null,
   },
   users: {
@@ -50,8 +50,8 @@ const selectLevel = (level: any) => {
 
 onMounted(() => {
   isOpen.value = true
-  console.log(filtered.value)
-  console.log(props.users)
+  console.log(props.modelValue, "Model Value")
+  console.log(props.users, "Users")
   gsap.from(popup.value, {
     opacity: 0,
     y: -10,

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import { useSidebarStore } from "@/stores/sidebar";
-
-const { toggleSidebar } = useSidebarStore();
-
 const menuItems = [
   {
     label: "Profile",
@@ -45,10 +41,13 @@ const toggleProfile = useToggle(isProfileOpen);
   <div class="sticky top-0 z-50 bg-primary text-white shadow-md w-full">
     <div class="flex items-center justify-between py-4 px-6">
       <div class="flex items-center gap-4">
-        <UButton variant="ghost" class="lg:hidden" @click="toggleSidebar">
+        <NuxtLink to="/" class="flex items-center gap-2 text-white text-lg">
+          <span class="mt-1">Yours tasks</span>
+        </NuxtLink>
+        <!-- <UButton variant="ghost" class="lg:hidden" @click="toggleSidebar">
           <UIcon name="uil:bars" class="w-6 h-6" />
         </UButton>
-        <UIcon name="uil:bars" class="text-2xl" />
+        <UIcon name="uil:bars" class="text-2xl" /> -->
       </div>
 
       <div
@@ -57,7 +56,7 @@ const toggleProfile = useToggle(isProfileOpen);
         <UInput
           placeholder="Rechercher..."
           class="w-full outline-none focus:border-none border-none"
-          variant="primary"
+          variant="none"
         />
         <UIcon
           name="uil:search"
@@ -108,7 +107,9 @@ const toggleProfile = useToggle(isProfileOpen);
                 class="w-full flex items-center gap-2 py-1 cursor-pointer"
                 @click="item.command"
               >
-                <UIcon :name="item.icon" class="w-5 h-5 text-white" />
+                <span v-if="item.icon" class="flex-shrink-0">
+                  <UIcon :name="item.icon" class="w-5 h-5 text-white" />
+                </span>
                 <span class="text-sm">{{ item.label }}</span>
               </UButton>
             </template>

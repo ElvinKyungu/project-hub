@@ -370,8 +370,8 @@ function openAssigneeModal(task: Task) {
           :key="task.id"
           :task="task"
           :display-mode="displayMode"
-           :users="enrichedUsers"          
-           status-color="#8b5cf6"
+          :users="enrichedUsers"
+          status-color="#8b5cf6"
           @open-assignee="openAssigneeModal(task)"
         />
       </TaskSection>
