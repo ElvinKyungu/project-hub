@@ -1,8 +1,16 @@
 <script setup lang="ts">
+const auth = useAuthStore()
 
 const email = ref('')
 const password = ref('')
 const rememberMe = ref(false)
+
+const handleLogin = async () => {
+  await auth.login(email.value, password.value)
+  if (!auth.error) {
+    await navigateTo('/')
+  }
+}
 </script>
 <template>
   <div class="min-h-screen flex">
@@ -24,26 +32,26 @@ const rememberMe = ref(false)
           <div class="h-px bg-gray-300 flex-1"/>
         </div>
 
-        <form>
+        <form @submit.prevent="handleLogin">
           <div class="space-y-4 flex flex-col w-full relative">
-          <UFormGroup label="Email">
-            <UInput v-model="email" size="xl" placeholder="emmatayor7@example.com" color="secondary" icon="uil:envelope" variant="outline" class="w-full text-primary" style="background-color: transparent; color: #222"  type="email" />
-          </UFormGroup>
+            <UFormGroup label="Email">
+              <UInput v-model="email" size="xl" placeholder="emmatayor7@example.com" color="secondary" icon="uil:envelope" variant="outline" class="w-full text-primary" style="background-color: transparent; color: #222"  type="email" />
+            </UFormGroup>
 
-          <UFormGroup label="Password">
-            <UInput v-model="password" size="xl" variant="outline" class="w-full text-primary" color="secondary" style="background-color: transparent; color: #222" icon="uil:lock" type="password" />
-          </UFormGroup>
-        </div>
+            <UFormGroup label="Password">
+              <UInput v-model="password" size="xl" variant="outline" class="w-full text-primary" color="secondary" style="background-color: transparent; color: #222" icon="uil:lock" type="password" />
+            </UFormGroup>
+          </div>
 
-        <div class="flex items-center justify-between text-sm mt-5">
-          <label class="flex items-center space-x-2">
-            <UCheckbox v-model="rememberMe" color="secondary" class="text-white" />
-            <span>Remember me</span>
-          </label>
-          <a href="#" class="text-secondary hover:underline">Forgot Password?</a>
-        </div>
+          <div class="flex items-center justify-between text-sm mt-5">
+            <label class="flex items-center space-x-2">
+              <UCheckbox v-model="rememberMe" color="secondary" class="text-white" />
+              <span>Remember me</span>
+            </label>
+            <a href="#" class="text-secondary hover:underline">Forgot Password?</a>
+          </div>
 
-        <UButton block size="lg" color="secondary" class="mt-5 text-white">Sign in</UButton>
+          <UButton block size="lg" color="secondary" class="mt-5 text-white">Sign in</UButton>
         </form>
 
         <p class="text-sm text-center">
