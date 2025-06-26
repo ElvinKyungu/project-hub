@@ -1,10 +1,19 @@
 <script setup lang="ts">
+import { validateLogin } from '@/utils/authFormValidation'
+
+const { login, errorMessages, loading } = useAuth()
 const auth = useAuthStore()
 const email = ref('')
 const password = ref('')
 const rememberMe = ref(false)
 
 const handleLogin = async () => {
+  const error = validateLogin(email.value, password.value)
+  if (error) {
+    errorMessages.value = error
+    return
+  }
+
   await auth.login(email.value, password.value)
   if (!auth.error) {
     await navigateTo('/')
@@ -22,11 +31,11 @@ const handleLogin = async () => {
     <form @submit.prevent="handleLogin">
       <div class="space-y-4 flex flex-col w-full relative">
         <UFormGroup label="Email">
-          <UInput v-model="email" size="xl" placeholder="example@email.com" color="secondary" icon="uil:envelope" variant="outline" class="w-full text-primary" />
+          <UInput v-model="email" size="xl" placeholder="example@email.com" icon="uil:envelope" variant="none" class="w-full bg-transparent text-primary placeholder:text-gray-400 border border-gray-300 rounded-lg" />
         </UFormGroup>
 
         <UFormGroup label="Password">
-          <UInput v-model="password" size="xl" type="password" variant="outline" color="secondary" icon="uil:lock" class="w-full text-primary" />
+          <UInput v-model="password" size="xl" type="password" variant="none" icon="uil:lock" class="w-full bg-transparent text-primary placeholder:text-gray-400 border border-gray-300 rounded-lg" />
         </UFormGroup>
       </div>
 
@@ -47,3 +56,9 @@ const handleLogin = async () => {
     </p>
   </div>
 </template>
+
+<style>
+:deep(.u-input input) {
+  color: #000 !important;
+}
+</style>
