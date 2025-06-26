@@ -15,7 +15,10 @@ export default defineNuxtConfig({
     "@nuxt/ui",
     "@nuxt/test-utils",
     "@pinia/nuxt",
+    "@nuxtjs/supabase",
   ],
+  supabase: {
+  },
   vite: {
     plugins: [tailwindcss()],
   },
