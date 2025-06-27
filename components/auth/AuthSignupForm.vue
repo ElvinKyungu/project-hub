@@ -1,22 +1,39 @@
 <script setup lang="ts">
-import { validateLogin } from '@/utils/authFormValidation'
+import { useAuthStore } from '@/stores/auth'
+import { validateSignup } from '@/utils/authFormValidation'
 
 const auth = useAuthStore()
+
+const name = ref('')
+const lastName = ref('')
 const email = ref('')
 const password = ref('')
-const rememberMe = ref(false)
-const errorMessage = ref<string | null>(null)
+const confirmPassword = ref('')
 
-const handleLogin = async () => {
-  const validationError = validateLogin(email.value, password.value)
+const errorMessage = ref<string | null>(null)
+const successMessage = ref<string | null>(null)
+
+const handleSignup = async () => {
+  errorMessage.value = null
+  successMessage.value = null
+
+  // Vérifie la correspondance des mots de passe
+  if (password.value !== confirmPassword.value) {
+    errorMessage.value = 'Les mots de passe ne correspondent pas.'
+    return
+  }
+
+  const validationError = validateSignup(email.value, password.value, name.value, lastName.value)
   if (validationError) {
     errorMessage.value = validationError
     return
   }
 
-  const success = await auth.login(email.value, password.value)
+  const success = await auth.signup(email.value, password.value, name.value, lastName.value)
+
   if (success) {
-    await navigateTo('/')
+    successMessage.value = 'Inscription réussie ! Vérifiez votre boîte mail.'
+    await navigateTo('/login')
   } else {
     errorMessage.value = auth.error
   }
@@ -25,87 +42,43 @@ const handleLogin = async () => {
 
 <template>
   <div class="w-full max-w-md space-y-6">
-    <div class="text-2xl font-semibold text-gray-800">Welcome back,</div>
-    <p class="text-gray-500">Please enter your details</p>
+    <div class="text-2xl font-semibold text-gray-800">Create your account</div>
+    <p class="text-gray-500">Please fill in the form to sign up</p>
 
-    <AuthProviderLogin />
+    <form @submit.prevent="handleSignup">
+      <div class="space-y-4 flex flex-col">
+        <UFormGroup label="First Name">
+          <UInput v-model="name" size="xl" placeholder="John" icon="uil:user" variant="none" class="u-input" />
+        </UFormGroup>
 
-    <form @submit.prevent="handleLogin">
-      <div class="space-y-4 flex flex-col w-full relative">
-        <UFormGroup label="Email">
-          <UInput
-            v-model="email"
-            size="xl"
-            placeholder="example@email.com"
-            icon="uil:envelope"
-            variant="none"
-            class="u-input"
-          />
+        <UFormGroup label="Last Name">
+          <UInput v-model="lastName" size="xl" placeholder="Doe" icon="uil:user" variant="none" class="u-input" />
         </UFormGroup>
+
         <UFormGroup label="Email">
-          <UInput
-            v-model="email"
-            size="xl"
-            placeholder="example@email.com"
-            icon="uil:envelope"
-            variant="none"
-            class="u-input"
-          />
-        </UFormGroup>
-        <UFormGroup label="Email">
-          <UInput
-            v-model="email"
-            size="xl"
-            placeholder="example@email.com"
-            icon="uil:envelope"
-            variant="none"
-            class="u-input"
-          />
+          <UInput v-model="email" size="xl" placeholder="example@email.com" icon="uil:envelope" variant="none" class="u-input" />
         </UFormGroup>
 
         <UFormGroup label="Password">
-          <UInput
-            v-model="password"
-            size="xl"
-            type="password"
-            icon="uil:lock"
-            variant="none"
-            class="u-input"
-          />
+          <UInput v-model="password" type="password" size="xl" placeholder="******" icon="uil:lock" variant="none" class="u-input" />
         </UFormGroup>
 
-        <UFormGroup label="Password">
-          <UInput
-            v-model="password"
-            size="xl"
-            type="password"
-            icon="uil:lock"
-            variant="none"
-            class="u-input"
-          />
+        <UFormGroup label="Confirm Password">
+          <UInput v-model="confirmPassword" type="password" size="xl" placeholder="******" icon="uil:lock" variant="none" class="u-input" />
         </UFormGroup>
-      </div>
-
-      <div class="flex items-center justify-between text-sm mt-5">
-        <label class="flex items-center space-x-2">
-          <UCheckbox v-model="rememberMe" color="secondary" />
-          <span>Remember me</span>
-        </label>
-        <a href="#" class="text-secondary hover:underline">Forgot Password?</a>
       </div>
 
       <UButton type="submit" block size="lg" color="secondary" class="mt-5 text-white">
-        Sign in
+        Create Account
       </UButton>
 
-      <p v-if="errorMessage" class="text-sm text-red-500 mt-2 text-center">
-        {{ errorMessage }}
-      </p>
+      <p v-if="errorMessage" class="text-sm text-red-500 mt-2 text-center">{{ errorMessage }}</p>
+      <p v-if="successMessage" class="text-sm text-green-600 mt-2 text-center">{{ successMessage }}</p>
     </form>
 
     <p class="text-sm text-center">
-      Don't have an account?
-      <NuxtLink to="/signup" class="hover:underline text-blue-500">Register now</NuxtLink>
+      Already have an account?
+      <NuxtLink to="/login" class="text-blue-500 hover:underline">Sign in here</NuxtLink>
     </p>
   </div>
 </template>
