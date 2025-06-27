@@ -26,7 +26,13 @@ const handleLogin = async () => {
 <template>
   <div class="w-full max-w-md space-y-6">
     <div class="text-2xl font-semibold text-gray-800">Welcome back,</div>
-    <p class="text-gray-500">Please enter your details</p>
+    <UButton block size="lg" color="secondary" variant="outline">
+      <template #leading>
+        <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" />
+      </template>
+      Sign in with Google
+    </UButton>
+    <p class="text-gray-500">Or enter your details</p>
 
     <AuthProviderLogin />
 
@@ -48,6 +54,7 @@ const handleLogin = async () => {
             v-model="password"
             size="xl"
             type="password"
+            placeholder="******"
             icon="uil:lock"
             variant="none"
             class="u-input"
