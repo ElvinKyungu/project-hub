@@ -39,7 +39,7 @@ const handleLogin = async () => {
             placeholder="example@email.com"
             icon="uil:envelope"
             variant="none"
-            class="w-full bg-transparent text-black placeholder:text-gray-400 border border-gray-300 rounded-lg"
+            class="u-input"
           />
         </UFormGroup>
         <UFormGroup label="Email">
@@ -49,7 +49,7 @@ const handleLogin = async () => {
             placeholder="example@email.com"
             icon="uil:envelope"
             variant="none"
-            class="w-full bg-transparent text-black placeholder:text-gray-400 border border-gray-300 rounded-lg"
+            class="u-input"
           />
         </UFormGroup>
         <UFormGroup label="Email">
@@ -59,7 +59,7 @@ const handleLogin = async () => {
             placeholder="example@email.com"
             icon="uil:envelope"
             variant="none"
-            class="w-full bg-transparent text-black placeholder:text-gray-400 border border-gray-300 rounded-lg"
+            class="u-input"
           />
         </UFormGroup>
 
@@ -70,7 +70,18 @@ const handleLogin = async () => {
             type="password"
             icon="uil:lock"
             variant="none"
-            class="w-full bg-transparent text-black placeholder:text-gray-400 border border-gray-300 rounded-lg"
+            class="u-input"
+          />
+        </UFormGroup>
+
+        <UFormGroup label="Password">
+          <UInput
+            v-model="password"
+            size="xl"
+            type="password"
+            icon="uil:lock"
+            variant="none"
+            class="u-input"
           />
         </UFormGroup>
       </div>
@@ -100,5 +111,7 @@ const handleLogin = async () => {
 </template>
 
 <style scoped>
-
+:deep(.u-input input) {
+  color: #000 !important;
+}
 </style>
