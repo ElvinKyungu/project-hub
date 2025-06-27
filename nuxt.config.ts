@@ -24,6 +24,13 @@
       },
     },
     supabase: {
+      redirectOptions: {
+        login: "/login",
+        callback: '/confirm',
+        include: [],
+        exclude: ['/signup'],
+        saveRedirectToCookie: false,
+      },
     },
     vite: {
       plugins: [tailwindcss()],
