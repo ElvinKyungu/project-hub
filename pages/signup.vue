@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useAuth } from '@/composables/useAuth'
 import { validateSignup } from '@/utils/authFormValidation'
 
 const name = ref('')
@@ -7,7 +6,7 @@ const lastName = ref('')
 const email = ref('')
 const password = ref('')
 
-const { signup, errorMessage, loading } = useAuth()
+const { signup, errorMessage, loading } = useAuthStore()
 
 const handleSignup = async () => {
   const validationError = validateSignup(email.value, password.value, name.value, lastName.value)

@@ -1,3 +1,4 @@
+// stores/auth.ts
 import { defineStore } from 'pinia'
 
 export const useAuthStore = defineStore('auth', () => {
@@ -7,20 +8,16 @@ export const useAuthStore = defineStore('auth', () => {
   const error = ref<string | null>(null)
   const loading = ref(false)
 
-  // Sign Up
   async function signup(email: string, password: string, name: string, lastName: string) {
     loading.value = true
     error.value = null
 
-    const { data, error: signUpError } = await client.auth.signUp({
-      email,
-      password,
-    })
+    const { data, error: signUpError } = await client.auth.signUp({ email, password })
 
     if (signUpError) {
       error.value = signUpError.message
       loading.value = false
-      return
+      return false
     }
 
     const userId = data.user?.id
@@ -35,26 +32,25 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     loading.value = false
+    return true
   }
 
-  // Login
   async function login(email: string, password: string) {
     loading.value = true
     error.value = null
 
-    const { error: loginError } = await client.auth.signInWithPassword({
-      email,
-      password,
-    })
+    const { error: loginError } = await client.auth.signInWithPassword({ email, password })
 
     if (loginError) {
       error.value = loginError.message
+      loading.value = false
+      return false
     }
 
     loading.value = false
+    return true
   }
 
-  // Logout
   async function logout() {
     await client.auth.signOut()
   }

@@ -1,22 +1,24 @@
 <script setup lang="ts">
 import { validateLogin } from '@/utils/authFormValidation'
 
-const { login, errorMessages, loading } = useAuth()
 const auth = useAuthStore()
 const email = ref('')
 const password = ref('')
 const rememberMe = ref(false)
+const errorMessage = ref<string | null>(null)
 
 const handleLogin = async () => {
-  const error = validateLogin(email.value, password.value)
-  if (error) {
-    errorMessages.value = error
+  const validationError = validateLogin(email.value, password.value)
+  if (validationError) {
+    errorMessage.value = validationError
     return
   }
 
-  await auth.login(email.value, password.value)
-  if (!auth.error) {
+  const success = await auth.login(email.value, password.value)
+  if (success) {
     await navigateTo('/')
+  } else {
+    errorMessage.value = auth.error
   }
 }
 </script>
@@ -31,11 +33,25 @@ const handleLogin = async () => {
     <form @submit.prevent="handleLogin">
       <div class="space-y-4 flex flex-col w-full relative">
         <UFormGroup label="Email">
-          <UInput v-model="email" size="xl" placeholder="example@email.com" icon="uil:envelope" variant="none" class="w-full bg-transparent text-primary placeholder:text-gray-400 border border-gray-300 rounded-lg" />
+          <UInput
+            v-model="email"
+            size="xl"
+            placeholder="example@email.com"
+            icon="uil:envelope"
+            variant="none"
+            class="w-full bg-transparent text-black placeholder:text-gray-400 border border-gray-300 rounded-lg"
+          />
         </UFormGroup>
 
         <UFormGroup label="Password">
-          <UInput v-model="password" size="xl" type="password" variant="none" icon="uil:lock" class="w-full bg-transparent text-primary placeholder:text-gray-400 border border-gray-300 rounded-lg" />
+          <UInput
+            v-model="password"
+            size="xl"
+            type="password"
+            icon="uil:lock"
+            variant="none"
+            class="w-full bg-transparent text-black placeholder:text-gray-400 border border-gray-300 rounded-lg"
+          />
         </UFormGroup>
       </div>
 
@@ -47,7 +63,13 @@ const handleLogin = async () => {
         <a href="#" class="text-secondary hover:underline">Forgot Password?</a>
       </div>
 
-      <UButton type="submit" block size="lg" color="secondary" class="mt-5 text-white">Sign in</UButton>
+      <UButton type="submit" block size="lg" color="secondary" class="mt-5 text-white">
+        Sign in
+      </UButton>
+
+      <p v-if="errorMessage" class="text-sm text-red-500 mt-2 text-center">
+        {{ errorMessage }}
+      </p>
     </form>
 
     <p class="text-sm text-center">
@@ -57,7 +79,7 @@ const handleLogin = async () => {
   </div>
 </template>
 
-<style>
+<style scoped>
 :deep(.u-input input) {
   color: #000 !important;
 }
