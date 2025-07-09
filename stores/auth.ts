@@ -37,7 +37,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function login(email: string, password: string) {
     console.log(email, password);
-    
+    console.log('hey dude');
     loading.value = true
     error.value = null
 
