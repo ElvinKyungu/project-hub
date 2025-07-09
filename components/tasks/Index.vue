@@ -4,6 +4,7 @@ const displayMode = ref("list")
 const filterOpen = ref(false)
 const assigneeModalOpen = ref(false)
 const currentTask = ref<Task | null>(null)
+const showTask = ref(false)
 const users = ref<User[]>([
   { id: 1, name: "Elvin.code", avatar: '', teams: [1] },
   { id: 2, name: "Gabriel.delattre", avatar: '', teams: [1] },
@@ -275,6 +276,11 @@ function openAssigneeModal(task: Task) {
   currentTask.value = task;
   assigneeModalOpen.value = true;
 }
+const createTask = () => {
+  // Logic to create a new task
+  console.log("Create new task");
+  showTask.value = true;
+};
 </script>
 <template>
   <div class="task-management-app">
@@ -321,10 +327,12 @@ function openAssigneeModal(task: Task) {
           <UButton
             variant="ghost"
             class="hover:bg-white/10 p-2 cursor-pointer rounded-xl mr-2"
+            @click="createTask"
           >
             <UIcon name="uil:plus" class="text-2xl" />
           </UButton>
         </h1>
+        <TasksCreateTask v-if="showTask" @close="showTask.value = false" />
         <TasksTaskItem
           v-for="task in inProgressTasks"
           :key="task.id"
