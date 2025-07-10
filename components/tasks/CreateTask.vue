@@ -24,7 +24,7 @@ const handleSubmit = async () => {
     class="fixed inset-0 w-full h-screen flex items-center justify-center bg-black/80 z-[9999]"
   >
     <div
-      class="container mx-auto bg-white rounded-lg shadow-lg p-6 max-w-md w-full relative"
+      class="container mx-auto bg-white rounded-lg shadow-lg p-6 max-w-lg w-full relative"
     >
       <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
         <UIcon name="uil:times" size="24" />
@@ -54,7 +54,6 @@ const handleSubmit = async () => {
           />
         </UFormGroup>
         <UFormGroup label="actions" class="flex flex-wrap gap-2">
-          
           <UButton color="undefined" class="bg-gray-100">
             <UIcon name="uil:plus" />
             <span>In progress</span>
@@ -77,7 +76,9 @@ const handleSubmit = async () => {
           <UInput v-model="form.target_date" type="date" class="u-input" variant="none" />
         </UFormGroup> -->
 
-        <UButton type="submit" color="secondary" block>Add Task</UButton>
+        <div class="flex justify-end">
+          <UButton type="submit" color="secondary" >Add Task</UButton>
+        </div>
 
         <p v-if="tasksStore.error" class="text-red-500 mt-2">
           {{ tasksStore.error }}
