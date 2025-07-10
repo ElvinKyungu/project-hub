@@ -15,7 +15,6 @@ const handleLogin = async () => {
   }
 
   const success = await auth.login(email.value, password.value);
-  console.log(email.value, password.value, success);
 
   if (success) {
     await navigateTo("/");

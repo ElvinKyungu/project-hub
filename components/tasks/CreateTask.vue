@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { useTasksStore } from "@/stores/tasks";
-
-const tasksStore = useTasksStore();
+const tasksStore = useTasksStore()
 
 const form = reactive({
   title: "",
@@ -12,7 +10,7 @@ const form = reactive({
   lead_id: null,
   progress: 0,
   target_date: "",
-});
+})
 
 const handleSubmit = async () => {
   await tasksStore.addTask(form);
@@ -23,14 +21,17 @@ const handleSubmit = async () => {
 </script>
 <template>
   <div
-    class="fixed inset-0 w-full h-screen flex items-center justify-center bg-black/55 z-[9999]"
+    class="fixed inset-0 w-full h-screen flex items-center justify-center bg-black/80 z-[9999]"
   >
     <div
-      class="container mx-auto bg-white rounded-lg shadow-lg p-6 max-w-md w-full"
+      class="container mx-auto bg-white rounded-lg shadow-lg p-6 max-w-md w-full relative"
     >
+      <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+        <UIcon name="uil:times" size="24" />
+      </button>
       <h1 class="text-2xl font-bold mb-4">Add New Task</h1>
 
-      <form @submit.prevent="handleSubmit" class="space-y-4 flex flex-col">
+      <form class="space-y-4 flex flex-col" @submit.prevent="handleSubmit">
         <UFormGroup label="Title" class="w-full">
           <UInput
             v-model="form.title"
@@ -52,58 +53,29 @@ const handleSubmit = async () => {
             variant="none"
           />
         </UFormGroup>
-
-        <UFormGroup label="Status">
-          <USelect
-            v-model="form.status"
-            :options="[
-              'Todo',
-              'Backlog',
-              'In progress',
-              'Technical Review',
-              'Paused',
-              'Completed',
-            ]"
-          />
+        <UFormGroup label="actions" class="flex flex-wrap gap-2">
+          
+          <UButton color="undefined" class="bg-gray-100">
+            <UIcon name="uil:plus" />
+            <span>In progress</span>
+          </UButton>
+          <UButton color="undefined" class="bg-gray-100">
+            <UIcon name="uil:flags" />
+            <span>No priority</span>
+          </UButton>
+          <UButton color="undefined" class="bg-gray-100">
+            <UIcon name="uil:check" />
+            <span>Project</span>
+          </UButton>
+          <UButton color="undefined" class="bg-gray-100">
+            <UIcon name="uil:user" />
+            <span>Unassigned</span>
+          </UButton>
         </UFormGroup>
 
-        <UFormGroup label="Type">
-          <USelect
-            v-model="form.type"
-            :options="[
-              'Feature',
-              'Refactor',
-              'Design',
-              'Performance',
-              'Documentation',
-              'Accessibility',
-              'Testing',
-              'Security',
-            ]"
-          />
-        </UFormGroup>
-
-        <UFormGroup label="Priority">
-          <USelect
-            v-model="form.priority"
-            :options="['No priority', 'Low', 'Medium', 'High', 'Urgent']"
-          />
-        </UFormGroup>
-
-        <UFormGroup label="Lead (User ID)">
-          <UInput
-            v-model="form.lead_id"
-            placeholder="UUID of the lead user (optional)"
-          />
-        </UFormGroup>
-
-        <UFormGroup label="Progress">
-          <UInput type="number" v-model="form.progress" min="0" max="100" />
-        </UFormGroup>
-
-        <UFormGroup label="Target Date">
-          <UInput type="date" v-model="form.target_date" />
-        </UFormGroup>
+        <!-- <UFormGroup label="Target Date">
+          <UInput v-model="form.target_date" type="date" class="u-input" variant="none" />
+        </UFormGroup> -->
 
         <UButton type="submit" color="secondary" block>Add Task</UButton>
 
@@ -116,7 +88,7 @@ const handleSubmit = async () => {
 </template>
 
 <style scoped>
-:deep(.u-input input, .u-input textarea) {
+:deep(.u-input input, .u-input textarea, .u-input select) {
   color: #000 !important;
 }
 </style>
