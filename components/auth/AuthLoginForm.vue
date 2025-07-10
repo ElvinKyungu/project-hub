@@ -1,28 +1,28 @@
 <script setup lang="ts">
-import { validateLogin } from '@/utils/authFormValidation'
+import { validateLogin } from "@/utils/authFormValidation";
 
-const auth = useAuthStore()
-const email = ref('')
-const password = ref('')
-const rememberMe = ref(false)
-const errorMessage = ref<string | null>(null)
+const auth = useAuthStore();
+const email = ref("");
+const password = ref("");
+const rememberMe = ref(false);
+const errorMessage = ref<string | null>(null);
 
 const handleLogin = async () => {
-  const validationError = validateLogin(email.value, password.value)
+  const validationError = validateLogin(email.value, password.value);
   if (validationError) {
-    errorMessage.value = validationError
-    return
+    errorMessage.value = validationError;
+    return;
   }
 
-  const success = await auth.login(email.value, password.value)
+  const success = await auth.login(email.value, password.value);
   console.log(email.value, password.value, success);
-  
+
   if (success) {
-    await navigateTo('/')
+    await navigateTo("/");
   } else {
-    errorMessage.value = auth.error
+    errorMessage.value = auth.error;
   }
-}
+};
 </script>
 
 <template>
@@ -30,7 +30,10 @@ const handleLogin = async () => {
     <div class="text-2xl font-semibold text-gray-800">Welcome back,</div>
     <UButton block size="lg" color="secondary" variant="outline">
       <template #leading>
-        <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" />
+        <img
+          src="https://www.svgrepo.com/show/475656/google-color.svg"
+          class="w-5 h-5"
+        />
       </template>
       Sign in with Google
     </UButton>
@@ -72,7 +75,13 @@ const handleLogin = async () => {
         <a href="#" class="text-secondary hover:underline">Forgot Password?</a>
       </div>
 
-      <UButton type="submit" block size="lg" color="secondary" class="mt-5 text-white">
+      <UButton
+        type="submit"
+        block
+        size="lg"
+        color="secondary"
+        class="mt-5 text-white"
+      >
         Sign in
       </UButton>
 
@@ -83,7 +92,9 @@ const handleLogin = async () => {
 
     <p class="text-sm text-center">
       Don't have an account?
-      <NuxtLink to="/signup" class="hover:underline text-blue-500">Register now</NuxtLink>
+      <NuxtLink to="/signup" class="hover:underline text-blue-500"
+        >Register now</NuxtLink
+      >
     </p>
   </div>
 </template>

@@ -1,18 +1,20 @@
 <script setup lang="ts">
 import type { Task, User } from "@/types/tasks";
 
-const props = defineProps<({
+const props = defineProps<{
   task: Task;
   users: User[];
   displayMode: string;
   statusColor: string;
-})>();
+}>();
 
 const emit = defineEmits(["open-assignee", "update-assignee"]);
 
 const assigneeUser = computed(() => {
-  if (!props.users || !props.task?.assigneeId) return null
-  return props.users.find((user: User) => user.id === props.task.assigneeId) || null;
+  if (!props.users || !props.task?.assigneeId) return null;
+  return (
+    props.users.find((user: User) => user.id === props.task.assigneeId) || null
+  );
 });
 
 const isAssigneePopupOpen = ref(false);

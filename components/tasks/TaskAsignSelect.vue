@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { gsap } from "gsap"
-import type { User } from "@/types/tasks"
+import { gsap } from "gsap";
+import type { User } from "@/types/tasks";
 const props = defineProps({
   modelValue: {
     type: Number as PropType<number | null>,
@@ -14,7 +14,7 @@ const props = defineProps({
     type: Object as PropType<{ $el: HTMLElement }>,
     default: null,
   },
-})
+});
 
 const emit = defineEmits(["update:modelValue", "close"]);
 
@@ -26,13 +26,13 @@ const selected = ref(props.modelValue);
 
 const getAvatarUrl = (seed: string) => {
   return `https://api.dicebear.com/9.x/glass/svg?seed=${seed}`;
-}
+};
 
 const filtered = computed(() =>
   props.users.filter((p) =>
     p.name.toLowerCase().includes(search.value.toLowerCase()),
   ),
-)
+);
 
 const selectLevel = (level: any) => {
   selected.value = level;
@@ -49,22 +49,25 @@ const selectLevel = (level: any) => {
 };
 
 onMounted(() => {
-  isOpen.value = true
-  console.log(props.modelValue, "Model Value")
-  console.log(props.users, "Users")
+  isOpen.value = true;
+  console.log(props.modelValue, "Model Value");
+  console.log(props.users, "Users");
   gsap.from(popup.value, {
     opacity: 0,
     y: -10,
     duration: 0.2,
     ease: "power2.out",
-  })
-})
-watch(() => props.modelValue, (val) => {
-  selected.value = val;
-})
+  });
+});
+watch(
+  () => props.modelValue,
+  (val) => {
+    selected.value = val;
+  },
+);
 watch(filtered, (val) => {
   console.log("Filtered users:", val);
-})
+});
 onClickOutside(popup, () => {
   emit("close");
 });

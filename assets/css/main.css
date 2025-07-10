@@ -37,6 +37,10 @@
 ::-webkit-scrollbar-thumb:hover {
   background: var(--primary-color);
 }
+:deep(.u-input input) {
+  color: #000 !important;
+}
+
 .bg-testing {
   background-color: #ef4444;
 }

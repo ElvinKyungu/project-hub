@@ -1,16 +1,16 @@
 <script setup lang="ts">
-const auth = useAuthStore()
+const auth = useAuthStore();
 
-const email = ref('')
-const password = ref('')
-const rememberMe = ref(false)
+const email = ref("");
+const password = ref("");
+const rememberMe = ref(false);
 
 const handleLogin = async () => {
-  await auth.login(email.value, password.value)
+  await auth.login(email.value, password.value);
   if (!auth.error) {
-    await navigateTo('/')
+    await navigateTo("/");
   }
-}
+};
 </script>
 <template>
   <div class="min-h-screen flex">
@@ -21,37 +21,67 @@ const handleLogin = async () => {
 
         <UButton block size="lg" color="secondary" variant="outline">
           <template #leading>
-            <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" />
+            <img
+              src="https://www.svgrepo.com/show/475656/google-color.svg"
+              class="w-5 h-5"
+            />
           </template>
           Sign in with Google
         </UButton>
 
         <div class="flex items-center space-x-4">
-          <div class="h-px bg-gray-300 flex-1"/>
+          <div class="h-px bg-gray-300 flex-1" />
           <span class="text-xs text-gray-400">or sign in with email</span>
-          <div class="h-px bg-gray-300 flex-1"/>
+          <div class="h-px bg-gray-300 flex-1" />
         </div>
 
         <form @submit.prevent="handleLogin">
           <div class="space-y-4 flex flex-col w-full relative">
             <UFormGroup label="Email">
-              <UInput v-model="email" size="xl" placeholder="emmatayor7@example.com" color="secondary" icon="uil:envelope" variant="outline" class="w-full text-primary" style="background-color: transparent; color: #222"  type="email" />
+              <UInput
+                v-model="email"
+                size="xl"
+                placeholder="emmatayor7@example.com"
+                color="secondary"
+                icon="uil:envelope"
+                variant="outline"
+                class="w-full text-primary"
+                style="background-color: transparent; color: #222"
+                type="email"
+              />
             </UFormGroup>
 
             <UFormGroup label="Password">
-              <UInput v-model="password" size="xl" variant="outline" class="w-full text-primary" color="secondary" style="background-color: transparent; color: #222" icon="uil:lock" type="password" />
+              <UInput
+                v-model="password"
+                size="xl"
+                variant="outline"
+                class="w-full text-primary"
+                color="secondary"
+                style="background-color: transparent; color: #222"
+                icon="uil:lock"
+                type="password"
+              />
             </UFormGroup>
           </div>
 
           <div class="flex items-center justify-between text-sm mt-5">
             <label class="flex items-center space-x-2">
-              <UCheckbox v-model="rememberMe" color="secondary" class="text-white" />
+              <UCheckbox
+                v-model="rememberMe"
+                color="secondary"
+                class="text-white"
+              />
               <span>Remember me</span>
             </label>
-            <a href="#" class="text-secondary hover:underline">Forgot Password?</a>
+            <a href="#" class="text-secondary hover:underline"
+              >Forgot Password?</a
+            >
           </div>
 
-          <UButton block size="lg" color="secondary" class="mt-5 text-white">Sign in</UButton>
+          <UButton block size="lg" color="secondary" class="mt-5 text-white"
+            >Sign in</UButton
+          >
         </form>
 
         <p class="text-sm text-center">
@@ -63,9 +93,13 @@ const handleLogin = async () => {
 
     <div
       class="hidden md:flex w-1/2 flex-col justify-center items-center text-white p-12 relative"
-      :style="{ backgroundImage: 'url(https://images.unsplash.com/photo-1517196084897-498e0abd7c2d?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)', backgroundSize: 'cover' }"
+      :style="{
+        backgroundImage:
+          'url(https://images.unsplash.com/photo-1517196084897-498e0abd7c2d?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)',
+        backgroundSize: 'cover',
+      }"
     >
-      <div class="absolute inset-0 bg-black/30"/>
+      <div class="absolute inset-0 bg-black/30" />
 
       <div class="relative z-10 space-y-6 max-w-xs">
         <div class="bg-white/20 backdrop-blur-md p-4 rounded-xl">
@@ -74,7 +108,10 @@ const handleLogin = async () => {
         </div>
 
         <div class="bg-white text-gray-900 p-4 rounded-xl">
-          <p class="text-sm">“Project-Hub UI is surprisingly handy for keeping all my business stuff in one place”</p>
+          <p class="text-sm">
+            “Project-Hub UI is surprisingly handy for keeping all my business
+            stuff in one place”
+          </p>
           <div class="mt-2 flex items-center space-x-2">
             <UAvatar src="/images/gab.jpg" />
             <div>
@@ -93,5 +130,4 @@ const handleLogin = async () => {
   </div>
 </template>
 
-<style>
-</style>
+<style></style>

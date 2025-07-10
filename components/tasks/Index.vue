@@ -1,24 +1,26 @@
-<script setup lang="ts">import type { Task, User } from "@/types/tasks";
+<script setup lang="ts">
+import type { Task, User } from "@/types/tasks";
 
-const displayMode = ref("list")
-const filterOpen = ref(false)
-const assigneeModalOpen = ref(false)
-const currentTask = ref<Task | null>(null)
-const showTask = ref(false)
+const displayMode = ref("list");
+const filterOpen = ref(false);
+const assigneeModalOpen = ref(false);
+const currentTask = ref<Task | null>(null);
+const showTask = ref(false);
 const users = ref<User[]>([
-  { id: 1, name: "Elvin.code", avatar: '', teams: [1] },
-  { id: 2, name: "Gabriel.delattre", avatar: '', teams: [1] },
-  { id: 3, name: "Deb.yambenu", avatar: '', teams: [1] },
-  { id: 4, name: "Bienfaits.shomari", avatar: '', teams: [2] },
-  { id: 5, name: "Astrid.code", avatar: '', teams: [2] },
+  { id: 1, name: "Elvin.code", avatar: "", teams: [1] },
+  { id: 2, name: "Gabriel.delattre", avatar: "", teams: [1] },
+  { id: 3, name: "Deb.yambenu", avatar: "", teams: [1] },
+  { id: 4, name: "Bienfaits.shomari", avatar: "", teams: [2] },
+  { id: 5, name: "Astrid.code", avatar: "", teams: [2] },
 ]);
 
 const enrichedUsers = computed(() =>
   users.value.map((user: User) => ({
     ...user,
-    avatarUrl: user.avatar || `https://api.dicebear.com/9.x/glass/svg?seed=${user.name}`
-  }))
-)
+    avatarUrl:
+      user.avatar || `https://api.dicebear.com/9.x/glass/svg?seed=${user.name}`,
+  })),
+);
 const tasks = ref<Task[]>([
   {
     id: "ElvinCODE-508",
@@ -360,7 +362,8 @@ const createTask = () => {
           :key="task.id"
           :task="task"
           :display-mode="displayMode"
-           :users="enrichedUsers"          status-color="#22c55e"
+          :users="enrichedUsers"
+          status-color="#22c55e"
           @open-assignee="openAssigneeModal(task)"
         />
       </TaskSection>
@@ -386,4 +389,3 @@ const createTask = () => {
     </main>
   </div>
 </template>
-
