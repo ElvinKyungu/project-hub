@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { gsap } from "gsap";
 import type { User } from "@/types/tasks";
+
 const props = defineProps({
   modelValue: {
     type: Number as PropType<number | null>,
@@ -14,6 +15,7 @@ const props = defineProps({
     type: Object as PropType<{ $el: HTMLElement }>,
     default: null,
   },
+  
 });
 
 const emit = defineEmits(["update:modelValue", "close"]);

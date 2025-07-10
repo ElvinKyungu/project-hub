@@ -1,6 +1,16 @@
 <script setup lang="ts">
 const tasksStore = useTasksStore()
 
+const activePopup = ref<null | 'assign' | 'level' | 'priority' | 'project'>(null)
+
+const openPopup = (popup: typeof activePopup.value) => {
+  activePopup.value = popup
+}
+
+const closePopup = () => {
+  activePopup.value = null
+}
+
 const form = reactive({
   title: "",
   description: "",
@@ -54,22 +64,26 @@ const handleSubmit = async () => {
           />
         </UFormGroup>
         <UFormGroup label="actions" class="flex flex-wrap gap-2">
-          <UButton color="undefined" class="bg-gray-100">
+          <UButton class="bg-gray-100" @click="openPopup('level')">
             <UIcon name="uil:plus" />
             <span>In progress</span>
           </UButton>
-          <UButton color="undefined" class="bg-gray-100">
+          <PopupTaskLevelSelector v-if="activePopup === 'level'" :close="closePopup" />
+          <UButton class="bg-gray-100" @click="openPopup('priority')">
             <UIcon name="uil:flags" />
             <span>No priority</span>
           </UButton>
-          <UButton color="undefined" class="bg-gray-100">
+          <PopupTaskPrioritySelector v-if="activePopup === 'priority'" :close="closePopup" />
+          <UButton class="bg-gray-100" @click="openPopup('project')">
             <UIcon name="uil:check" />
             <span>Project</span>
           </UButton>
-          <UButton color="undefined" class="bg-gray-100">
+          <PopupTaskProjectSelector v-if="activePopup === 'project'" :close="closePopup" />
+          <UButton class="bg-gray-100" @click="openPopup('assign')">
             <UIcon name="uil:user" />
             <span>Unassigned</span>
           </UButton>
+          <PopupTaskAssignSelect v-if="activePopup === 'assign'" :close="closePopup" />
         </UFormGroup>
 
         <!-- <UFormGroup label="Target Date">
