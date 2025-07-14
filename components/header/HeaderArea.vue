@@ -44,10 +44,6 @@ const toggleProfile = useToggle(isProfileOpen);
         <NuxtLink to="/" class="flex items-center gap-2 text-white text-lg">
           <span class="mt-1">Yours tasks</span>
         </NuxtLink>
-        <!-- <UButton variant="ghost" class="lg:hidden" @click="toggleSidebar">
-          <UIcon name="uil:bars" class="w-6 h-6" />
-        </UButton>
-        <UIcon name="uil:bars" class="text-2xl" /> -->
       </div>
 
       <div

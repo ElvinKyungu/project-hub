@@ -3,9 +3,9 @@
   <div class="flex h-screen overflow-hidden bg-primary">
     <SidebarArea />
     <div
-      class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden"
+      class="relative flex flex-1 justify-start flex-col overflow-y-auto overflow-x-hidden"
     >
-      <header class="flex-1">
+      <header class="">
         <HeaderArea />
       </header>
       <main class="flex-1 bg-primary">
