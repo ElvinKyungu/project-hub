@@ -1,15 +1,17 @@
 <script setup lang="ts">
-const tasksStore = useTasksStore()
+const tasksStore = useTasksStore();
 
-const activePopup = ref<null | 'assign' | 'level' | 'priority' | 'project'>(null)
+const activePopup = ref<null | "assign" | "level" | "priority" | "project">(
+  null,
+);
 
 const openPopup = (popup: typeof activePopup.value) => {
-  activePopup.value = popup
-}
+  activePopup.value = popup;
+};
 
 const closePopup = () => {
-  activePopup.value = null
-}
+  activePopup.value = null;
+};
 
 const form = reactive({
   title: "",
@@ -20,7 +22,7 @@ const form = reactive({
   lead_id: null,
   progress: 0,
   target_date: "",
-})
+});
 
 const handleSubmit = async () => {
   await tasksStore.addTask(form);
@@ -68,22 +70,34 @@ const handleSubmit = async () => {
             <UIcon name="uil:plus" />
             <span>In progress</span>
           </UButton>
-          <PopupTaskLevelSelector v-if="activePopup === 'level'" :close="closePopup" />
+          <PopupTaskLevelSelector
+            v-if="activePopup === 'level'"
+            :close="closePopup"
+          />
           <UButton class="bg-gray-100" @click="openPopup('priority')">
             <UIcon name="uil:flags" />
             <span>No priority</span>
           </UButton>
-          <PopupTaskPrioritySelector v-if="activePopup === 'priority'" :close="closePopup" />
+          <PopupTaskPrioritySelector
+            v-if="activePopup === 'priority'"
+            :close="closePopup"
+          />
           <UButton class="bg-gray-100" @click="openPopup('project')">
             <UIcon name="uil:check" />
             <span>Project</span>
           </UButton>
-          <PopupTaskProjectSelector v-if="activePopup === 'project'" :close="closePopup" />
+          <PopupTaskProjectSelector
+            v-if="activePopup === 'project'"
+            :close="closePopup"
+          />
           <UButton class="bg-gray-100" @click="openPopup('assign')">
             <UIcon name="uil:user" />
             <span>Unassigned</span>
           </UButton>
-          <PopupTaskAssignSelect v-if="activePopup === 'assign'" :close="closePopup" />
+          <PopupTaskAssignSelect
+            v-if="activePopup === 'assign'"
+            :close="closePopup"
+          />
         </UFormGroup>
 
         <!-- <UFormGroup label="Target Date">
@@ -91,7 +105,7 @@ const handleSubmit = async () => {
         </UFormGroup> -->
 
         <div class="flex justify-end">
-          <UButton type="submit" color="secondary" >Add Task</UButton>
+          <UButton type="submit" color="secondary">Add Task</UButton>
         </div>
 
         <p v-if="tasksStore.error" class="text-red-500 mt-2">

@@ -15,7 +15,6 @@ const props = defineProps({
     type: Object as PropType<{ $el: HTMLElement }>,
     default: null,
   },
-  
 });
 
 const emit = defineEmits(["update:modelValue", "close"]);
