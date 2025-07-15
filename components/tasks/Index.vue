@@ -1,18 +1,13 @@
 <script setup lang="ts">
 import type { Task, User } from "@/types/tasks";
 
+const usersStore = useUsersStore()
 const displayMode = ref("list");
 const filterOpen = ref(false);
 const assigneeModalOpen = ref(false);
 const currentTask = ref<Task | null>(null);
 const showTask = ref(false);
-const users = ref<User[]>([
-  { id: 1, name: "Elvin.code", avatar: "", teams: [1] },
-  { id: 2, name: "Gabriel.delattre", avatar: "", teams: [1] },
-  { id: 3, name: "Deb.yambenu", avatar: "", teams: [1] },
-  { id: 4, name: "Bienfaits.shomari", avatar: "", teams: [2] },
-  { id: 5, name: "Astrid.code", avatar: "", teams: [2] },
-]);
+const users = ref<User[]>([])
 
 const enrichedUsers = computed(() =>
   users.value.map((user: User) => ({
@@ -59,6 +54,12 @@ const createTask = () => {
   console.log("Create new task")
   showTask.value = true
 }
+onMounted(async () => {
+  if (usersStore.users.length === 0) {
+    await usersStore.fetchUsers()
+  }
+  users.value = usersStore.users
+})
 </script>
 <template>
   <div class="task-management-app">

@@ -7,7 +7,9 @@ const props = defineProps<{
   displayMode: string;
   statusColor: string;
 }>();
-
+const usersStore = useUsersStore()
+await usersStore.fetchUsers()
+const leadId = ref<string | null>(null)
 const emit = defineEmits(["open-assignee", "update-assignee"]);
 
 const assigneeUser = computed(() => {
@@ -149,7 +151,7 @@ const getTagBgClass = (tag: string) => {
         <PopupTaskAssignSelect
           v-if="isAssigneePopupOpen"
           :users="props.users"
-          :model-value="task?.assigneeId"
+          :model-value="leadId"
           :trigger-element="assigneeTrigger?.$el ?? assigneeTrigger"
           @update:model-value="handleAssigneeSelect"
           @close="isAssigneePopupOpen = false"
