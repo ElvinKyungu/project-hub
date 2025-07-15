@@ -104,7 +104,7 @@ const selectUser = (user: User) => {
       >
         <div class="flex items-center gap-3">
           <img
-            :src="user.avatar_url || getAvatarUrl(user.name)"
+            :src="user.avatarUrl"
             class="w-8 h-8 rounded-full"
             :alt="user.name"
           />

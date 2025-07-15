@@ -23,9 +23,8 @@ export const useTasksStore = defineStore("tasks", () => {
         .from("tasks")
         .select("*")
         .order("created_at", { ascending: false })
-
       if (error) throw error
-
+      console.log("Fetched tasks:", data)
       tasks.value = enrichTasks(data || [])
     } catch (err) {
       handleError(err)

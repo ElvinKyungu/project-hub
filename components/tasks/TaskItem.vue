@@ -12,9 +12,9 @@ const leadId = ref<string | null>(null)
 const emit = defineEmits(["open-assignee", "update-assignee"]);
 
 const assigneeUser = computed(() => {
-  if (!props.users || !props.task?.assigneeId) return null;
+  if (!props.users || !props.task?.lead_id) return null;
   return (
-    props.users.find((user: User) => user.id === props.task.assigneeId) || null
+    props.users.find((user: User) => user.id === props.task.lead_id) || null
   );
 });
 
@@ -33,7 +33,6 @@ const handleAssigneeSelect = (assignee: User) => {
 };
 
 const isLevelSelectorOpen = ref(false);
-const selectedLevel = ref(props.task?.iconLevelOpacity);
 const triggerElementRef = ref<HTMLElement | null>(null);
 
 const openLevelSelector = () => {
@@ -72,10 +71,6 @@ const getTagBgClass = (tag: string) => {
           class="hover:bg-white/10 p-2 cursor-pointer rounded-xl"
           @click="openLevelSelector"
         >
-          <IconsTaskLevel
-            :first-fill-opacity="task?.iconLevelOpacity.firstFillOpacity"
-            :second-fill-opacity="task?.iconLevelOpacity.secondFillOpacity"
-            :third-fill-opacity="task?.iconLevelOpacity.thirdFillOpacity"
           />
         </UButton>
 
@@ -133,7 +128,7 @@ const getTagBgClass = (tag: string) => {
       <div class="flex justify-end relative">
         <UAvatar
           ref="assigneeTrigger"
-          :src="assigneeUser?.avatarUrl || 'https://i.pravatar.cc/300'"
+          :src="assigneeUser?.avatarUrl"
           :alt="assigneeUser?.name || 'default'"
           size="sm"
           class="cursor-pointer hover:ring-2 hover:ring-primary"
@@ -141,7 +136,7 @@ const getTagBgClass = (tag: string) => {
         >
           <template #badge>
             <UIcon
-              v-if="task?.assigneeId"
+              v-if="task?.lead_id"
               name="i-heroicons-check-circle-20-solid"
               class="absolute -bottom-0.5 -right-0.5 w-4 h-4 text-primary"
             />

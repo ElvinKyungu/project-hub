@@ -16,25 +16,22 @@ const showTask = ref(false)
 const { tasks, loading: tasksLoading, error: tasksError } = storeToRefs(tasksStore)
 const { users, loading: usersLoading, error: usersError } = storeToRefs(usersStore)
 
-// 🖼️ Avatar enrichi une seule fois (si pas d’avatar_url → avatar généré)
-const enrichedUsers = computed(() =>
-  users.value.map((user: User) => ({
-    ...user,
-    avatarUrl:
-      user.avatar_url || `https://api.dicebear.com/9.x/glass/svg?seed=${encodeURIComponent(user.name)}`
+const taskStatuses = [
+  { key: "In progress", label: "In Progress", color: "#facc15" },
+  { key: "Technical Review", label: "Technical Review", color: "#22c55e" },
+  { key: "Completed", label: "Completed", color: "#8b5cf6" },
+  { key: "Todo", label: "To Do", color: "#0ea5e9" },
+  { key: "Backlog", label: "Backlog", color: "#f97316" },
+  { key: "Paused", label: "Paused", color: "#e11d48" },
+]
+
+const groupedTasks = computed(() =>
+  taskStatuses.map(status => ({
+    ...status,
+    tasks: tasks.value.filter((task: Task) => task.status === status.key)
   }))
 )
 
-// 📂 Filtrage par état
-const inProgressTasks = computed(() =>
-  tasks.value.filter((task: Task) => task.state === "in-progress")
-)
-const technicalReviewTasks = computed(() =>
-  tasks.value.filter((task: Task) => task.state === "review")
-)
-const completedTasks = computed(() =>
-  tasks.value.filter((task: Task) => task.state === "completed")
-)
 
 function openAssigneeModal(task: Task) {
   currentTask.value = task
@@ -47,6 +44,7 @@ const createTask = () => {
 
 // ⬇️ Chargement initial des données
 onMounted(async () => {
+  await tasksStore.fetchTasks()
   if (!tasks.value.length) await tasksStore.fetchTasks()
   if (!users.value.length) await usersStore.fetchUsers()
 })
@@ -92,78 +90,40 @@ onMounted(async () => {
         {{ tasksError || usersError }}
       </div>
       <template v-else>
-        <!-- 📦 In Progress Section -->
-        <TaskSection title="In Progress" :count="inProgressTasks.length">
-          <h1 class="text-xl text-white flex items-center justify-between gap-2">
-            <div class="flex items-center gap-2">
-              <IconsTaskStatus
-                stroke-color="#facc15"
-                transform-status="rotate(-90 7 7)"
-              />
-              <span>In progress {{ inProgressTasks.length }}</span>
-            </div>
-            <UButton
+        <div class="relative w-full flex flex-end">
+          <UButton
               variant="ghost"
               class="hover:bg-white/10 p-2 cursor-pointer rounded-xl mr-2"
               @click="createTask"
             >
               <UIcon name="uil:plus" class="text-2xl" />
             </UButton>
+        </div>
+        <TaskSection
+          v-for="status in groupedTasks"
+          :key="status.key"
+          :title="status.label"
+          :count="status.tasks.length"
+        >
+          <h1 class="text-xl text-white flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <IconsTaskStatus :stroke-color="status.color" transform-status="rotate(-90 7 7)" />
+              <span>{{ status.label }} {{ status.tasks.length }}</span>
+            </div>
           </h1>
+
           <TasksCreateTask v-if="showTask" @close="showTask = false" />
           <TasksTaskItem
-            v-for="task in inProgressTasks"
+            v-for="task in status.tasks"
             :key="task.id"
             :task="task"
             :display-mode="displayMode"
-            :users="enrichedUsers"
-            status-color="#facc15"
+            :users="users"
+            :status-color="status.color"
             @open-assignee="openAssigneeModal(task)"
           />
         </TaskSection>
 
-        <!-- 📦 Technical Review Section -->
-        <TaskSection
-          title="Technical Review"
-          :count="technicalReviewTasks.length"
-        >
-          <h1 class="text-xl text-white flex items-center gap-2">
-            <IconsTaskStatus
-              stroke-color="#22c55e"
-              transform-status="rotate(-90 7 7)"
-            />
-            <span>Technical Review {{ technicalReviewTasks.length }}</span>
-          </h1>
-          <TasksTaskItem
-            v-for="task in technicalReviewTasks"
-            :key="task.id"
-            :task="task"
-            :display-mode="displayMode"
-            :users="enrichedUsers"
-            status-color="#22c55e"
-            @open-assignee="openAssigneeModal(task)"
-          />
-        </TaskSection>
-
-        <!-- 📦 Completed Section -->
-        <TaskSection title="Completed" :count="completedTasks.length">
-          <h1 class="text-xl text-white flex items-center gap-2">
-            <IconsTaskStatus
-              stroke-color="#8b5cf6"
-              transform-status="rotate(-90 7 7)"
-            />
-            <span>Completed {{ completedTasks.length }}</span>
-          </h1>
-          <TasksTaskItem
-            v-for="task in completedTasks"
-            :key="task.id"
-            :task="task"
-            :display-mode="displayMode"
-            :users="enrichedUsers"
-            status-color="#8b5cf6"
-            @open-assignee="openAssigneeModal(task)"
-          />
-        </TaskSection>
       </template>
     </main>
   </div>
