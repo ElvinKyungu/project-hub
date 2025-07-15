@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { Task, User } from "@/types/tasks";
+import type { Task } from "@/types/tasks"
+import type { User } from "@/types/user"
 
 const usersStore = useUsersStore()
 const displayMode = ref("list");
@@ -50,8 +51,6 @@ function openAssigneeModal(task: Task) {
   assigneeModalOpen.value = true
 }
 const createTask = () => {
-  // Logic to create a new task
-  console.log("Create new task")
   showTask.value = true
 }
 onMounted(async () => {
@@ -117,7 +116,7 @@ onMounted(async () => {
           :key="task.id"
           :task="task"
           :display-mode="displayMode"
-          :users="enrichedUsers"
+          :users="users"
           status-color="#22c55e"
           @open-assignee="openAssigneeModal(task)"
         />

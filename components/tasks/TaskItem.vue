@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import type { Task, User } from "@/types/tasks";
+import type { Task } from "@/types/tasks"
+import type { User } from "@/types/user"
 
 const props = defineProps<{
   task: Task;
   users: User[];
   displayMode: string;
   statusColor: string;
-}>();
-const usersStore = useUsersStore()
-await usersStore.fetchUsers()
+}>()
 const leadId = ref<string | null>(null)
 const emit = defineEmits(["open-assignee", "update-assignee"]);
 
@@ -134,7 +133,7 @@ const getTagBgClass = (tag: string) => {
       <div class="flex justify-end relative">
         <UAvatar
           ref="assigneeTrigger"
-          :src="assigneeUser?.avatar || 'https://i.pravatar.cc/300'"
+          :src="assigneeUser?.avatarUrl || 'https://i.pravatar.cc/300'"
           :alt="assigneeUser?.name || 'default'"
           size="sm"
           class="cursor-pointer hover:ring-2 hover:ring-primary"

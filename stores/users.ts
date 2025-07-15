@@ -8,17 +8,15 @@ export const useUsersStore = defineStore('users', () => {
     last_name: string
     email: string
     avatar_url: string | null
-    avatarUrl: string // ✅ URL finale prête à l’emploi
+    avatarUrl: string
   }>>([])
 
   const loading = ref(false)
   const error = ref<string | null>(null)
 
-  // ✅ Générer un avatar fallback avec DiceBear
   const generateAvatarUrl = (seed: string) =>
     `https://api.dicebear.com/9.x/glass/svg?seed=${encodeURIComponent(seed)}`
 
-  // 📦 Fetch tous les users une seule fois
   async function fetchUsers() {
     loading.value = true
     error.value = null
@@ -39,7 +37,6 @@ export const useUsersStore = defineStore('users', () => {
         avatar_url: string | null
       }) => ({
         ...u,
-        // ✅ avatarUrl finalisé ici
         avatarUrl: u.avatar_url || generateAvatarUrl(`${u.name} ${u.last_name}`),
       }))
 
