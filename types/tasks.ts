@@ -1,31 +1,26 @@
-type TaskState = "in-progress" | "review" | "completed";
-type TaskType = "bug" | "feature" | "improvement";
-
-export interface User {
-  id: number;
-  name: string;
-  avatar: string;
-  teams: number[]; // IDs des équipes
-}
-
-export interface Team {
-  id: number;
-  name: string;
-  members: number[]; // IDs des users
-}
-
 export interface Task {
   id: string;
-  name: string;
-  state: TaskState;
-  type: TaskType;
-  tags: string[];
-  component?: string;
-  dueDate: string;
-  assigneeId: number;
-  iconLevelOpacity: {
-    firstFillOpacity: string;
-    secondFillOpacity: string;
-    thirdFillOpacity: string;
-  };
+  title: string;
+  description: string | null;
+  status:
+    | "Todo"
+    | "Backlog"
+    | "In progress"
+    | "Technical Review"
+    | "Paused"
+    | "Completed";
+  type:
+    | "Feature"
+    | "Refactor"
+    | "Design"
+    | "Performance"
+    | "Documentation"
+    | "Accessibility"
+    | "Testing"
+    | "Security";
+  priority: "No priority" | "Low" | "Medium" | "High" | "Urgent";
+  lead_id: string | null;
+  progress: number;
+  target_date: string | null;
+  created_at: string;
 }

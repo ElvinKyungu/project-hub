@@ -1,15 +1,8 @@
 import { defineStore } from 'pinia'
-
+import type { User } from '@/types/user'
 export const useUsersStore = defineStore('users', () => {
   const client = useSupabaseClient()
-  const users = ref<Array<{
-    id: string
-    name: string
-    last_name: string
-    email: string
-    avatar_url: string | null
-    avatarUrl: string
-  }>>([])
+  const users = ref<User[]>([])
 
   const loading = ref(false)
   const error = ref<string | null>(null)

@@ -1,33 +1,7 @@
 // stores/tasks.ts
-import { defineStore } from "pinia";
-import { useSupabaseClient } from "#imports";
-
-export interface Task {
-  id: string;
-  title: string;
-  description: string | null;
-  status:
-    | "Todo"
-    | "Backlog"
-    | "In progress"
-    | "Technical Review"
-    | "Paused"
-    | "Completed";
-  type:
-    | "Feature"
-    | "Refactor"
-    | "Design"
-    | "Performance"
-    | "Documentation"
-    | "Accessibility"
-    | "Testing"
-    | "Security";
-  priority: "No priority" | "Low" | "Medium" | "High" | "Urgent";
-  lead_id: string | null;
-  progress: number;
-  target_date: string | null;
-  created_at: string;
-}
+import { defineStore } from "pinia"
+import { useSupabaseClient } from "#imports"
+import type { Task } from "@/types/tasks"
 
 export const useTasksStore = defineStore("tasks", () => {
   const client = useSupabaseClient();
