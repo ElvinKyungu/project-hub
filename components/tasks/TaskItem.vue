@@ -146,7 +146,7 @@ const getTagBgClass = (tag: string) => {
             />
           </template>
         </UAvatar>
-        <TasksTaskAsignSelect
+        <PopupTaskAssignSelect
           v-if="isAssigneePopupOpen"
           :users="props.users"
           :model-value="task?.assigneeId"

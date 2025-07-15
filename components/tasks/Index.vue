@@ -41,23 +41,24 @@ const tasks = ref<Task[]>([
 
 const inProgressTasks = computed(() =>
   tasks.value.filter((task: Task) => task.state === "in-progress"),
-);
+)
 
 const technicalReviewTasks = computed(() =>
   tasks.value.filter((task: Task) => task.state === "review"),
-);
+)
+
 const completedTasks = computed(() =>
   tasks.value.filter((task: Task) => task.state === "completed"),
-);
+)
 function openAssigneeModal(task: Task) {
-  currentTask.value = task;
-  assigneeModalOpen.value = true;
+  currentTask.value = task
+  assigneeModalOpen.value = true
 }
 const createTask = () => {
   // Logic to create a new task
-  console.log("Create new task");
-  showTask.value = true;
-};
+  console.log("Create new task")
+  showTask.value = true
+}
 </script>
 <template>
   <div class="task-management-app">
@@ -109,7 +110,7 @@ const createTask = () => {
             <UIcon name="uil:plus" class="text-2xl" />
           </UButton>
         </h1>
-        <TasksCreateTask v-if="showTask" @close="showTask.value = false" />
+        <TasksCreateTask v-if="showTask" @close="showTask = false" />
         <TasksTaskItem
           v-for="task in inProgressTasks"
           :key="task.id"
