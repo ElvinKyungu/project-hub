@@ -71,7 +71,7 @@ const getTagBgClass = (tag: string) => {
           class="hover:bg-white/10 p-2 cursor-pointer rounded-xl"
           @click="openLevelSelector"
         >
-          />
+          <IconsTaskLevel />
         </UButton>
 
         <TasksTaskLevelSelector
@@ -81,7 +81,7 @@ const getTagBgClass = (tag: string) => {
           @update:model-value="handleLevelSelect"
           @close="isLevelSelectorOpen = false"
         />
-        <span class="text-gray-500">{{ task?.id }}</span>
+        <span class="text-gray-500">{{ task?.status }}</span>
       </div>
       <div class="flex items-center gap-2 font-medium">
         <UButton
@@ -93,7 +93,7 @@ const getTagBgClass = (tag: string) => {
             transform-status="rotate(-90 7 7)"
           />
         </UButton>
-        <span>{{ task?.name }}</span>
+        <span>{{ task?.title }}</span>
       </div>
     </div>
 

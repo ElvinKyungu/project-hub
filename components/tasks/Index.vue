@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia"
 import type { Task } from "@/types/tasks"
-import type { User } from "@/types/user"
 
 const tasksStore = useTasksStore()
 const usersStore = useUsersStore()
