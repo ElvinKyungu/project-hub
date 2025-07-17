@@ -21,6 +21,7 @@ export interface Task {
   priority: "No priority" | "Low" | "Medium" | "High" | "Urgent";
   lead_id: string | null;
   progress: number;
+  component_id: string | null;
   target_date: string | null;
   created_at: string;
 }

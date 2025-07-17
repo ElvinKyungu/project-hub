@@ -1,27 +1,29 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import type { Task } from "@/types/tasks";
+import type { Task } from "@/types/tasks"
 
-const tasksStore = useTasksStore();
-const usersStore = useUsersStore();
+const tasksStore = useTasksStore()
+const usersStore = useUsersStore()
+const componentsStore = useComponentsStore()
 
-const displayMode = ref("list");
-const filterOpen = ref(false);
-const assigneeModalOpen = ref(false);
-const currentTask = ref<Task | null>(null);
-const showTask = ref(false);
+const displayMode = ref("list")
+const filterOpen = ref(false)
+const assigneeModalOpen = ref(false)
+const currentTask = ref<Task | null>(null)
+const showTask = ref(false)
 
 // 🏃‍♂️ Reactive store values
 const {
   tasks,
   loading: tasksLoading,
-  error: tasksError,
 } = storeToRefs(tasksStore);
 const {
   users,
   loading: usersLoading,
-  error: usersError,
-} = storeToRefs(usersStore);
+} = storeToRefs(usersStore)
+
+const {
+  components,
+} = storeToRefs(componentsStore)
 
 const taskStatuses = [
   { key: "In progress", label: "In Progress", color: "#facc15" },
@@ -30,14 +32,14 @@ const taskStatuses = [
   { key: "Todo", label: "To Do", color: "#0ea5e9" },
   { key: "Backlog", label: "Backlog", color: "#f97316" },
   { key: "Paused", label: "Paused", color: "#e11d48" },
-];
+]
 
 const groupedTasks = computed(() =>
   taskStatuses.map((status) => ({
     ...status,
     tasks: tasks.value.filter((task: Task) => task.status === status.key),
   })),
-);
+)
 
 function openAssigneeModal(task: Task) {
   currentTask.value = task;
@@ -48,12 +50,12 @@ const createTask = () => {
   showTask.value = true;
 };
 
-// ⬇️ Chargement initial des données
 onMounted(async () => {
-  await tasksStore.fetchTasks();
-  if (!tasks.value.length) await tasksStore.fetchTasks();
-  if (!users.value.length) await usersStore.fetchUsers();
-});
+  await tasksStore.fetchTasks()
+  if (!tasks.value.length) await tasksStore.fetchTasks()
+  if (!users.value.length) await usersStore.fetchUsers()
+  if (!components.value.length) await componentsStore.fetchComponents()
+})
 </script>
 
 <template>
@@ -88,18 +90,11 @@ onMounted(async () => {
     </header>
 
     <main class="p-4">
-      <!-- ✅ Loading and error states -->
       <div
         v-if="tasksLoading || usersLoading"
         class="text-center text-gray-400"
       >
         Loading tasks and users...
-      </div>
-      <div
-        v-else-if="tasksError || usersError"
-        class="text-red-500 text-center"
-      >
-        {{ tasksError || usersError }}
       </div>
       <template v-else>
         <div class="relative w-full flex flex-end">
@@ -118,14 +113,15 @@ onMounted(async () => {
           :count="status.tasks.length"
         >
           <h1
-            class="text-xl text-white flex items-center justify-between gap-2"
+            class="text-xl text-white flex items-center justify-between gap-2 my-5 py-3 px-5 rounded"
+            :style="{ backgroundColor: status.color + '10' }"
           >
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-4">
               <IconsTaskStatus
                 :stroke-color="status.color"
                 transform-status="rotate(-90 7 7)"
               />
-              <span>{{ status.label }} {{ status.tasks.length }}</span>
+              <span class="flex gap-4"><span>{{ status.label }}</span> <span>{{ status.tasks.length }}</span></span>
             </div>
           </h1>
 
@@ -136,6 +132,7 @@ onMounted(async () => {
             :task="task"
             :display-mode="displayMode"
             :users="users"
+            :components="components"
             :status-color="status.color"
             @open-assignee="openAssigneeModal(task)"
           />

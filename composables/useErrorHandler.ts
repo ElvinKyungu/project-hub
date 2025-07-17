@@ -1,6 +1,6 @@
 // composables/useErrorHandler.ts
 export function useErrorHandler(context = "Unknown") {
-  const toast = useToast();
+  const toast = useToast()
 
   const handleError = (
     err: unknown,

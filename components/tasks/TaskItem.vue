@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import type { Task } from "@/types/tasks";
-import type { User } from "@/types/user";
+import type { Task } from "@/types/tasks"
+import type { User } from "@/types/user"
+import type { Components } from "@/types/components"
 
 const props = defineProps<{
   task: Task;
-  users: User[];
-  displayMode: string;
-  statusColor: string;
-}>();
+  users: User[]
+  components: Components[]
+  displayMode: string
+  statusColor: string
+}>()
 const leadId = ref<string | null>(null);
 const emit = defineEmits(["open-assignee", "update-assignee"]);
 
@@ -15,8 +17,12 @@ const assigneeUser = computed(() => {
   if (!props.users || !props.task?.lead_id) return null;
   return (
     props.users.find((user: User) => user.id === props.task.lead_id) || null
-  );
-});
+  )
+})
+
+const taskComponent = computed(() => {
+  return props.components.find((c: Components) => c.id === props.task.component_id) || null
+})
 
 const isAssigneePopupOpen = ref(false);
 const assigneeTrigger = ref<HTMLElement | null>(null);
@@ -39,11 +45,20 @@ const openLevelSelector = () => {
   isLevelSelectorOpen.value = true;
 };
 
-const handleLevelSelect = (level: any) => {
-  selectedLevel.value = level;
+const handleLevelSelect = () => {
   isLevelSelectorOpen.value = false;
-};
+}
 
+const priorityIcon = computed(() => {
+  const priorityMap: Record<string, any> = {
+    "No priority": resolveComponent("IconsNoPriority"),
+    Low: resolveComponent("IconsLow"),
+    Medium: resolveComponent("IconsMedium"),
+    High: resolveComponent("IconsHigh"),
+    Urgent: resolveComponent("IconsUrgent"),
+  }
+  return priorityMap[props.task.priority] || resolveComponent("IconsNoPriority")
+})
 const getTagBgClass = (tag: string) => {
   const tagColors: Record<string, string> = {
     Bug: "bg-testing",
@@ -61,7 +76,7 @@ const getTagBgClass = (tag: string) => {
 
 <template>
   <div
-    class="flex justify-between text-white hover:bg-white/5 rounded-md p-3 transition-colors"
+    class="flex justify-between text-white hover:bg-white/5 rounded-md p-2 transition-colors"
   >
     <div class="flex items-center gap-4">
       <div class="flex items-center gap-2 relative">
@@ -71,7 +86,7 @@ const getTagBgClass = (tag: string) => {
           class="hover:bg-white/10 p-2 cursor-pointer rounded-xl"
           @click="openLevelSelector"
         >
-          <IconsTaskLevel />
+          <component :is="priorityIcon" />
         </UButton>
 
         <TasksTaskLevelSelector
@@ -100,29 +115,42 @@ const getTagBgClass = (tag: string) => {
     <div class="flex items-center gap-4">
       <div class="hidden sm:flex gap-1">
         <UBadge
-          v-for="tag in task?.tags"
-          :key="tag"
+          :key="task.type"
           color="neutral"
           variant="outline"
           size="xs"
           class="border border-bordercolor flex items-center gap-2 px-3 text-xs py-1 rounded-full"
         >
-          <span class="w-2 h-2 rounded-full" :class="getTagBgClass(tag)" />
-          {{ tag }}
+          <span class="w-2 h-2 rounded-full" :class="getTagBgClass(task.type)" />
+          {{ task.type }}
         </UBadge>
       </div>
 
       <div class="hidden sm:block text-sm">
-        <UIcon
-          v-if="task?.component"
-          name="i-heroicons-puzzle-piece"
-          class="mr-1"
-        />
-        <span>{{ task?.component }}</span>
+        <UBadge
+          :key="task.type"
+          color="neutral"
+          variant="outline"
+          size="xs"
+          class="border flex items-center gap-2 px-3 text-xs py-1 rounded-full"
+          :style="{ borderColor: taskComponent?.color || 'var(--border-bordercolor)' }"
+        >
+          <UIcon
+            v-if="taskComponent?.name"
+            name="i-heroicons-puzzle-piece"
+            class="mr-1"
+          />
+          Elvin UI {{ taskComponent?.name }}
+        </UBadge>
       </div>
 
       <div class="hidden sm:block text-sm text-gray-500">
-        {{ task.dueDate }}
+        {{ task.target_date
+          ? new Date(task.target_date).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+            })
+          : "No due date" }}
       </div>
 
       <div class="flex justify-end relative">
@@ -146,7 +174,7 @@ const getTagBgClass = (tag: string) => {
           v-if="isAssigneePopupOpen"
           :users="props.users"
           :model-value="leadId"
-          :trigger-element="assigneeTrigger?.$el ?? assigneeTrigger"
+          :trigger-element="assigneeTrigger ? { $el: assigneeTrigger } : undefined"
           @update:model-value="handleAssigneeSelect"
           @close="isAssigneePopupOpen = false"
         />
