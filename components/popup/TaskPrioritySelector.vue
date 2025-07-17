@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { gsap } from "gsap"
-import type { Task } from "@/types/tasks"
+import { resolveComponent } from "vue";
+import { gsap } from "gsap";
+import type { Task } from "@/types/tasks";
 
 const props = defineProps({
   modelValue: Object,
@@ -21,18 +22,18 @@ const search = ref("");
 const isOpen = ref(false);
 
 const priorityMap = [
-  { id: 0, name: "No priority", component: "IconsNoPriority" },
-  { id: 1, name: "Urgent", component: "IconsUrgent" },
-  { id: 2, name: "High", component: "IconsHigh" },
-  { id: 3, name: "Medium", component: "IconsMedium" },
-  { id: 4, name: "Low", component: "IconsLow" },
+  { id: 0, name: "No priority", icon: "IconsNoPriority" },
+  { id: 1, name: "Urgent", icon: "IconsUrgent" },
+  { id: 2, name: "High", icon: "IconsHigh" },
+  { id: 3, name: "Medium", icon: "IconsMedium" },
+  { id: 4, name: "Low", icon: "IconsLow" },
 ];
 
 const priorities = computed(() =>
   priorityMap.map((p) => ({
     ...p,
-    icon: resolveComponent(p.component),
-    count: props.tasks.filter((task) => task.priority === p.name).length,
+    icon: p.icon,
+    count: p.id,
   }))
 );
 
