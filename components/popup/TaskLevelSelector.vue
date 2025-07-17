@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import { gsap } from "gsap";
-
+import { gsap } from "gsap"
+import type { Task } from "@/types/tasks"
 const props = defineProps({
   modelValue: Object,
+   tasks: {
+    type: Array as PropType<Task[]>,
+    required: true,
+  },
   triggerElement: {
     type: Object as PropType<{ $el: HTMLElement }>,
     default: null,
@@ -15,18 +19,26 @@ const popup = ref<HTMLElement | null>(null);
 const search = ref("");
 const isOpen = ref(false);
 
-const priorities = [
-  { id: 0, name: "No priority", icon: "uil:ellipsis-h", count: 3 },
-  { id: 1, name: "Urgent", icon: "uil:bolt-alt", count: 11 },
-  { id: 2, name: "High", icon: "uil:signal-alt-3", count: 10 },
-  { id: 3, name: "Medium", icon: "uil:signal-alt", count: 6 },
-  { id: 4, name: "Low", icon: "uil:signal-alt", count: 0 },
-];
+const priorities = computed(() =>
+  [
+    { id: 0, name: "No priority", icon: "uil:ellipsis-h" },
+    { id: 1, name: "Urgent", icon: "uil:bolt-alt" },
+    { id: 2, name: "High", icon: "uil:signal-alt-3" },
+    { id: 3, name: "Medium", icon: "uil:signal-alt" },
+    { id: 4, name: "Low", icon: "uil:signal-alt" },
+  ].map((p) => ({
+    ...p,
+    count: props.tasks.filter(
+      (task: Task) => task.priority === p.name
+    ).length,
+  }))
+)
 
-const selected = ref(priorities[1]);
+
+const selected = ref(priorities.value[1]);
 
 const filtered = computed(() =>
-  priorities.filter((p) =>
+  priorities.value.filter((p) =>
     p.name.toLowerCase().includes(search.value.toLowerCase()),
   ),
 );
@@ -80,8 +92,8 @@ onClickOutside(popup, () => {
       <button
         v-for="item in filtered"
         :key="item.id"
-        @click="selectLevel(item)"
         class="w-full flex items-center justify-between px-2 py-1.5 rounded hover:bg-gray-800 cursor-pointer text-sm transition"
+        @click="selectLevel(item)"
       >
         <div class="flex items-center gap-3">
           <UIcon :name="item.icon" class="w-4 h-4" size="16" />
