@@ -1,19 +1,27 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia"
-import type { Task } from "@/types/tasks"
+import { storeToRefs } from "pinia";
+import type { Task } from "@/types/tasks";
 
-const tasksStore = useTasksStore()
-const usersStore = useUsersStore()
+const tasksStore = useTasksStore();
+const usersStore = useUsersStore();
 
-const displayMode = ref("list")
-const filterOpen = ref(false)
-const assigneeModalOpen = ref(false)
-const currentTask = ref<Task | null>(null)
-const showTask = ref(false)
+const displayMode = ref("list");
+const filterOpen = ref(false);
+const assigneeModalOpen = ref(false);
+const currentTask = ref<Task | null>(null);
+const showTask = ref(false);
 
 // 🏃‍♂️ Reactive store values
-const { tasks, loading: tasksLoading, error: tasksError } = storeToRefs(tasksStore)
-const { users, loading: usersLoading, error: usersError } = storeToRefs(usersStore)
+const {
+  tasks,
+  loading: tasksLoading,
+  error: tasksError,
+} = storeToRefs(tasksStore);
+const {
+  users,
+  loading: usersLoading,
+  error: usersError,
+} = storeToRefs(usersStore);
 
 const taskStatuses = [
   { key: "In progress", label: "In Progress", color: "#facc15" },
@@ -22,31 +30,30 @@ const taskStatuses = [
   { key: "Todo", label: "To Do", color: "#0ea5e9" },
   { key: "Backlog", label: "Backlog", color: "#f97316" },
   { key: "Paused", label: "Paused", color: "#e11d48" },
-]
+];
 
 const groupedTasks = computed(() =>
-  taskStatuses.map(status => ({
+  taskStatuses.map((status) => ({
     ...status,
-    tasks: tasks.value.filter((task: Task) => task.status === status.key)
-  }))
-)
-
+    tasks: tasks.value.filter((task: Task) => task.status === status.key),
+  })),
+);
 
 function openAssigneeModal(task: Task) {
-  currentTask.value = task
-  assigneeModalOpen.value = true
+  currentTask.value = task;
+  assigneeModalOpen.value = true;
 }
 
 const createTask = () => {
-  showTask.value = true
-}
+  showTask.value = true;
+};
 
 // ⬇️ Chargement initial des données
 onMounted(async () => {
-  await tasksStore.fetchTasks()
-  if (!tasks.value.length) await tasksStore.fetchTasks()
-  if (!users.value.length) await usersStore.fetchUsers()
-})
+  await tasksStore.fetchTasks();
+  if (!tasks.value.length) await tasksStore.fetchTasks();
+  if (!users.value.length) await usersStore.fetchUsers();
+});
 </script>
 
 <template>
@@ -82,21 +89,27 @@ onMounted(async () => {
 
     <main class="p-4">
       <!-- ✅ Loading and error states -->
-      <div v-if="tasksLoading || usersLoading" class="text-center text-gray-400">
+      <div
+        v-if="tasksLoading || usersLoading"
+        class="text-center text-gray-400"
+      >
         Loading tasks and users...
       </div>
-      <div v-else-if="tasksError || usersError" class="text-red-500 text-center">
+      <div
+        v-else-if="tasksError || usersError"
+        class="text-red-500 text-center"
+      >
         {{ tasksError || usersError }}
       </div>
       <template v-else>
         <div class="relative w-full flex flex-end">
           <UButton
-              variant="ghost"
-              class="hover:bg-white/10 p-2 cursor-pointer rounded-xl mr-2"
-              @click="createTask"
-            >
-              <UIcon name="uil:plus" class="text-2xl" />
-            </UButton>
+            variant="ghost"
+            class="hover:bg-white/10 p-2 cursor-pointer rounded-xl mr-2"
+            @click="createTask"
+          >
+            <UIcon name="uil:plus" class="text-2xl" />
+          </UButton>
         </div>
         <TaskSection
           v-for="status in groupedTasks"
@@ -104,9 +117,14 @@ onMounted(async () => {
           :title="status.label"
           :count="status.tasks.length"
         >
-          <h1 class="text-xl text-white flex items-center justify-between gap-2">
+          <h1
+            class="text-xl text-white flex items-center justify-between gap-2"
+          >
             <div class="flex items-center gap-2">
-              <IconsTaskStatus :stroke-color="status.color" transform-status="rotate(-90 7 7)" />
+              <IconsTaskStatus
+                :stroke-color="status.color"
+                transform-status="rotate(-90 7 7)"
+              />
               <span>{{ status.label }} {{ status.tasks.length }}</span>
             </div>
           </h1>
@@ -122,7 +140,6 @@ onMounted(async () => {
             @open-assignee="openAssigneeModal(task)"
           />
         </TaskSection>
-
       </template>
     </main>
   </div>

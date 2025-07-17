@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { gsap } from "gsap"
-import { onClickOutside } from "@vueuse/core"
-import type { User } from "@/types/tasks"
+import { gsap } from "gsap";
+import { onClickOutside } from "@vueuse/core";
+import type { User } from "@/types/tasks";
 
-const usersStore = useUsersStore()
+const usersStore = useUsersStore();
 
 const props = defineProps({
   modelValue: {
@@ -14,23 +14,24 @@ const props = defineProps({
     type: Object as PropType<{ $el: HTMLElement }>,
     default: null,
   },
-})
-const emit = defineEmits(["update:modelValue", "close"])
+});
+const emit = defineEmits(["update:modelValue", "close"]);
 
-const popup = ref<HTMLElement | null>(null)
-const search = ref("")
-const selected = ref<User | null>(null)
+const popup = ref<HTMLElement | null>(null);
+const search = ref("");
+const selected = ref<User | null>(null);
 
 const getAvatarUrl = (seed: string) =>
-  `https://api.dicebear.com/9.x/glass/svg?seed=${seed}`
+  `https://api.dicebear.com/9.x/glass/svg?seed=${seed}`;
 
 // Charge les users depuis le store au montage
 onMounted(async () => {
   if (usersStore.users.length === 0) {
-    await usersStore.fetchUsers()
+    await usersStore.fetchUsers();
   }
   // Synchroniser le modelValue avec le selected
-  selected.value = usersStore.users.find(u => u.id === props.modelValue) || null
+  selected.value =
+    usersStore.users.find((u) => u.id === props.modelValue) || null;
 
   // Animation d’entrée
   gsap.from(popup.value, {
@@ -38,32 +39,32 @@ onMounted(async () => {
     y: -10,
     duration: 0.2,
     ease: "power2.out",
-  })
-})
+  });
+});
 
 // Fermer le popup si on clique en dehors
-onClickOutside(popup, () => emit("close"))
+onClickOutside(popup, () => emit("close"));
 
 // Filtrer les utilisateurs selon la recherche
 const filteredUsers = computed(() =>
   usersStore.users.filter((u) =>
-    u.name.toLowerCase().includes(search.value.toLowerCase())
-  )
-)
+    u.name.toLowerCase().includes(search.value.toLowerCase()),
+  ),
+);
 
 const selectUser = (user: User) => {
-  selected.value = user
+  selected.value = user;
   gsap.to(popup.value, {
     opacity: 0,
     y: -10,
     duration: 0.2,
     ease: "power2.in",
     onComplete: () => {
-      emit("update:modelValue", user.id) // émettre l'id du user sélectionné
-      emit("close")
+      emit("update:modelValue", user.id); // émettre l'id du user sélectionné
+      emit("close");
     },
-  })
-}
+  });
+};
 </script>
 
 <template>
@@ -83,16 +84,10 @@ const selectUser = (user: User) => {
     </div>
 
     <div class="space-y-1 max-h-64 overflow-y-auto">
-      <div
-        v-if="usersStore.loading"
-        class="text-gray-500 text-center py-2"
-      >
+      <div v-if="usersStore.loading" class="text-gray-500 text-center py-2">
         Loading users...
       </div>
-      <div
-        v-else-if="usersStore.error"
-        class="text-red-500 text-center py-2"
-      >
+      <div v-else-if="usersStore.error" class="text-red-500 text-center py-2">
         {{ usersStore.error }}
       </div>
       <button

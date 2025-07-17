@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import type { Task } from "@/types/tasks"
-import type { User } from "@/types/user"
+import type { Task } from "@/types/tasks";
+import type { User } from "@/types/user";
 
 const props = defineProps<{
   task: Task;
   users: User[];
   displayMode: string;
   statusColor: string;
-}>()
-const leadId = ref<string | null>(null)
+}>();
+const leadId = ref<string | null>(null);
 const emit = defineEmits(["open-assignee", "update-assignee"]);
 
 const assigneeUser = computed(() => {
