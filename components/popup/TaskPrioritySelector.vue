@@ -32,7 +32,7 @@ const priorityMap = [
 const priorities = computed(() =>
   priorityMap.map((p) => ({
     ...p,
-    icon: p.icon,
+    iconComponent: resolveComponent(p.icon),
     count: p.id,
   }))
 );
@@ -42,7 +42,6 @@ const filtered = computed(() =>
     p.name.toLowerCase().includes(search.value.toLowerCase())
   )
 );
-
 const selectLevel = (level: any) => {
   gsap.to(popup.value, {
     opacity: 0,
@@ -67,8 +66,8 @@ onMounted(() => {
 });
 
 onClickOutside(popup, () => {
-  emit("close");
-});
+  emit("close")
+})
 </script>
 
 <template>
@@ -91,11 +90,12 @@ onClickOutside(popup, () => {
       <button
         v-for="item in filtered"
         :key="item.id"
-        @click="selectLevel(item)"
         class="w-full flex items-center justify-between px-2 py-1.5 rounded hover:bg-gray-800 cursor-pointer text-sm transition"
+        @click="selectLevel(item)"
       >
         <div class="flex items-center gap-3">
-          <component :is="item.icon" class="w-4 h-4" />
+          <component :is="item.iconComponent" class="w-4 h-4" />
+          {{ item.iconComponent }}
           <span>{{ item.name }}</span>
         </div>
         <div class="flex items-center gap-1">

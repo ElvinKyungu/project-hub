@@ -35,4 +35,8 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+  components: [
+    '~/components',
+    { path: '~/components/icons', prefix: 'Icons' }
+  ]
 });
