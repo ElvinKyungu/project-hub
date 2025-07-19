@@ -51,13 +51,13 @@ const handleLevelSelect = () => {
 
 const priorityIcon = computed(() => {
   const priorityMap: Record<string, any> = {
-    "No priority": resolveComponent("IconsNoPriority"),
-    Low: resolveComponent("IconsLow"),
-    Medium: resolveComponent("IconsMedium"),
-    High: resolveComponent("IconsHigh"),
-    Urgent: resolveComponent("IconsUrgent"),
+    "No priority": resolveComponent("NoPriority"),
+    Low: resolveComponent("Low"),
+    Medium: resolveComponent("Medium"),
+    High: resolveComponent("High"),
+    Urgent: resolveComponent("Urgent"),
   }
-  return priorityMap[props.task.priority] || resolveComponent("IconsNoPriority")
+  return priorityMap[props.task.priority] || resolveComponent("NoPriority")
 })
 const getTagBgClass = (tag: string) => {
   const tagColors: Record<string, string> = {
@@ -88,7 +88,7 @@ const getTagBgClass = (tag: string) => {
         >
           <component :is="priorityIcon" />
         </UButton>
-        <PopupTaskPrioritySelector
+        <TaskPrioritySelector
           v-if="isLevelSelectorOpen"
           :tasks="[props.task]"
           :trigger-element="triggerElementRef?.$el ?? triggerElementRef"
@@ -102,7 +102,7 @@ const getTagBgClass = (tag: string) => {
           variant="ghost"
           class="hover:bg-white/10 p-2 cursor-pointer rounded-xl"
         >
-          <IconsTaskStatus
+          <TaskStatus
             :stroke-color="statusColor"
             transform-status="rotate(-90 7 7)"
           />
@@ -169,7 +169,7 @@ const getTagBgClass = (tag: string) => {
             />
           </template>
         </UAvatar>
-        <PopupTaskAssignSelect
+        <TaskAssignSelect
           v-if="isAssigneePopupOpen"
           :users="props.users"
           :model-value="leadId"

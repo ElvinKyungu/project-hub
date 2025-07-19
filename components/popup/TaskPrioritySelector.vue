@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { resolveComponent } from "vue";
-import { gsap } from "gsap";
-import type { Task } from "@/types/tasks";
+import { gsap } from "gsap"
+import type { Task } from "@/types/tasks"
 
-const props = defineProps({
-  modelValue: Object,
+defineProps({
   tasks: {
     type: Array as PropType<Task[]>,
     required: true,
@@ -13,20 +11,20 @@ const props = defineProps({
     type: Object as PropType<{ $el: HTMLElement }>,
     default: null,
   },
-});
+})
 
-const emit = defineEmits(["update:modelValue", "close"]);
+const emit = defineEmits(["update:modelValue", "close"])
 
 const popup = ref<HTMLElement | null>(null);
 const search = ref("");
 const isOpen = ref(false);
 
 const priorityMap = [
-  { id: 0, name: "No priority", icon: "IconsNoPriority" },
-  { id: 1, name: "Urgent", icon: "IconsUrgent" },
-  { id: 2, name: "High", icon: "IconsHigh" },
-  { id: 3, name: "Medium", icon: "IconsMedium" },
-  { id: 4, name: "Low", icon: "IconsLow" },
+  { id: 0, name: "No priority", icon: "NoPriority" },
+  { id: 1, name: "Urgent", icon: "Urgent" },
+  { id: 2, name: "High", icon: "High" },
+  { id: 3, name: "Medium", icon: "Medium" },
+  { id: 4, name: "Low", icon: "Low" },
 ];
 
 const priorities = computed(() =>
@@ -94,7 +92,7 @@ onClickOutside(popup, () => {
         @click="selectLevel(item)"
       >
         <div class="flex items-center gap-3">
-          <component :is="item.icon" class="w-4 h-4" />
+          <component :is="item.iconComponent" class="w-4 h-4" />
           <span>{{ item.name }}</span>
         </div>
         <div class="flex items-center gap-1">

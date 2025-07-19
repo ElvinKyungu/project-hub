@@ -117,7 +117,7 @@ onMounted(async () => {
             :style="{ backgroundColor: status.color + '10' }"
           >
             <div class="flex items-center gap-4">
-              <IconsTaskStatus
+              <TaskStatus
                 :stroke-color="status.color"
                 transform-status="rotate(-90 7 7)"
               />
@@ -126,7 +126,7 @@ onMounted(async () => {
           </h1>
 
           <TasksCreateTask v-if="showTask" @close="showTask = false" />
-          <TasksTaskItem
+          <TaskItem
             v-for="task in status.tasks"
             :key="task.id"
             :task="task"
