@@ -1,14 +1,5 @@
 // @ts-check
-import withNuxt from './.nuxt/eslint.config.mjs'
-import vue from 'eslint-plugin-vue'
+import withNuxt from "./.nuxt/eslint.config.mjs";
 
-export default withNuxt({
-  plugins: {
-    vue,
-  },
-  rules: {
-    'vue/v-on-event-hyphenation': ['error', 'always', {
-      ignore: ['update:modelValue', 'position:position'],
-    }],
-  },
-})
+export default withNuxt();
+// Your custom configs here

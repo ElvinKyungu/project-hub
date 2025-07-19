@@ -1,9 +1,9 @@
-@import './layout/layout.scss';
+@import "./layout/layout.scss";
 @import "tailwindcss";
 @import "tailwindcss" theme(static);
 @import "@nuxt/ui";
 
-@theme{
+@theme {
   --color-primary: #101828;
   --color-secondary: #201828;
   --color-bordercolor: #364153;
@@ -11,6 +11,13 @@
 @layer base {
   body {
     @apply relative z-[1] text-base font-normal;
+  }
+}
+
+@layer components {
+  .u-input {
+    @apply w-full bg-transparent text-black placeholder:text-gray-400 border border-gray-300 rounded-lg
+      focus:border-blue-500 focus:ring-2 focus:ring-blue-500;
   }
 }
 
@@ -30,11 +37,31 @@
 ::-webkit-scrollbar-thumb:hover {
   background: var(--primary-color);
 }
-.bg-testing { background-color: #ef4444; }
-.bg-development { background-color: #3b82f6; }
-.bg-design { background-color: #a855f7; }
-.bg-deployment { background-color: #f97316; }
-.bg-research { background-color: #14b8a6; }
-.bg-marketing { background-color: #ec4899; }
-.bg-review { background-color: #eab308; }
-.bg-other { background-color: #6b7280; }
+:deep(.u-input input) {
+  color: #000 !important;
+}
+
+.bg-testing {
+  background-color: #ef4444;
+}
+.bg-development {
+  background-color: #3b82f6;
+}
+.bg-design {
+  background-color: #a855f7;
+}
+.bg-deployment {
+  background-color: #f97316;
+}
+.bg-research {
+  background-color: #14b8a6;
+}
+.bg-marketing {
+  background-color: #ec4899;
+}
+.bg-review {
+  background-color: #eab308;
+}
+.bg-other {
+  background-color: #6b7280;
+}
