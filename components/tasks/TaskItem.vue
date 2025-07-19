@@ -88,10 +88,8 @@ const getTagBgClass = (tag: string) => {
         >
           <component :is="priorityIcon" />
         </UButton>
-
         <PopupTaskPrioritySelector
           v-if="isLevelSelectorOpen"
-          :model-value="selectedLevel"
           :tasks="[props.task]"
           :trigger-element="triggerElementRef?.$el ?? triggerElementRef"
           @update:model-value="handleLevelSelect"

@@ -41,7 +41,7 @@ const filtered = computed(() =>
   priorities.value.filter((p) =>
     p.name.toLowerCase().includes(search.value.toLowerCase())
   )
-);
+)
 const selectLevel = (level: any) => {
   gsap.to(popup.value, {
     opacity: 0,
@@ -94,8 +94,7 @@ onClickOutside(popup, () => {
         @click="selectLevel(item)"
       >
         <div class="flex items-center gap-3">
-          <component :is="item.iconComponent" class="w-4 h-4" />
-          {{ item.iconComponent }}
+          <component :is="item.icon" class="w-4 h-4" />
           <span>{{ item.name }}</span>
         </div>
         <div class="flex items-center gap-1">
