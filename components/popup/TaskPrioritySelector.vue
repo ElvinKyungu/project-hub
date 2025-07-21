@@ -20,23 +20,15 @@ const search = ref("");
 const isOpen = ref(false);
 
 const priorityMap = [
-  { id: 0, name: "No priority", icon: "NoPriority" },
-  { id: 1, name: "Urgent", icon: "Urgent" },
-  { id: 2, name: "High", icon: "High" },
-  { id: 3, name: "Medium", icon: "Medium" },
-  { id: 4, name: "Low", icon: "Low" },
-];
-
-const priorities = computed(() =>
-  priorityMap.map((p) => ({
-    ...p,
-    iconComponent: resolveComponent(p.icon),
-    count: p.id,
-  }))
-);
+  { id: 0, name: "No priority", icon: resolveComponent("IconNoPriority") },
+  { id: 1, name: "Urgent", icon: resolveComponent("IconUrgent") },
+  { id: 2, name: "High", icon: resolveComponent("IconHigh") },
+  { id: 3, name: "Medium", icon: resolveComponent("IconMedium") },
+  { id: 4, name: "Low", icon: resolveComponent("IconLow") },
+]
 
 const filtered = computed(() =>
-  priorities.value.filter((p) =>
+  priorityMap.filter((p) =>
     p.name.toLowerCase().includes(search.value.toLowerCase())
   )
 )
@@ -51,7 +43,7 @@ const selectLevel = (level: any) => {
       emit("close");
     },
   });
-};
+}
 
 onMounted(() => {
   isOpen.value = true;
@@ -88,15 +80,20 @@ onClickOutside(popup, () => {
       <button
         v-for="item in filtered"
         :key="item.id"
-        class="w-full flex items-center justify-between px-2 py-1.5 rounded hover:bg-gray-800 cursor-pointer text-sm transition"
+        class="w-full flex items-center justify-between px-2 py-1rounded hover:bg-gray-800 cursor-pointer text-sm transition"
         @click="selectLevel(item)"
       >
         <div class="flex items-center gap-3">
-          <component :is="item.iconComponent" class="w-4 h-4" />
+          <UButton
+            variant="ghost"
+            class="cursor-pointer"
+          >
+            <component :is="item.icon" />
+          </UButton>
           <span>{{ item.name }}</span>
         </div>
         <div class="flex items-center gap-1">
-          <span class="text-xs text-gray-500">{{ item.count }}</span>
+          <span class="text-xs text-gray-500">{{ item.id }}</span>
         </div>
       </button>
     </div>

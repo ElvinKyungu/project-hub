@@ -51,11 +51,11 @@ const handleLevelSelect = () => {
 
 const priorityIcon = computed(() => {
   const priorityMap: Record<string, any> = {
-    "No priority": resolveComponent("NoPriority"),
-    Low: resolveComponent("Low"),
-    Medium: resolveComponent("Medium"),
-    High: resolveComponent("High"),
-    Urgent: resolveComponent("Urgent"),
+    "No priority": resolveComponent("IconNoPriority"),
+    Low: resolveComponent("IconLow"),
+    Medium: resolveComponent("IconMedium"),
+    High: resolveComponent("IconHigh"),
+    Urgent: resolveComponent("IconUrgent"),
   }
   return priorityMap[props.task.priority] || resolveComponent("NoPriority")
 })
@@ -118,7 +118,7 @@ const getTagBgClass = (tag: string) => {
           color="neutral"
           variant="outline"
           size="xs"
-          class="border border-bordercolor flex items-center gap-2 px-3 text-xs py-1 rounded-full"
+          class="border border-bordercolor bg-black flex items-center gap-2 px-3 text-xs py-1 rounded-full"
         >
           <span class="w-2 h-2 rounded-full" :class="getTagBgClass(task.type)" />
           {{ task.type }}
@@ -131,8 +131,7 @@ const getTagBgClass = (tag: string) => {
           color="neutral"
           variant="outline"
           size="xs"
-          class="border flex items-center gap-2 px-3 text-xs py-1 rounded-full"
-          :style="{ borderColor: taskComponent?.color || 'var(--border-bordercolor)' }"
+          class="border flex items-center gap-2 px-3 text-xs py-1 border-bordercolor rounded-full bg-black"
         >
           <UIcon
             v-if="taskComponent?.name"
@@ -153,22 +152,24 @@ const getTagBgClass = (tag: string) => {
       </div>
 
       <div class="flex justify-end relative">
-        <UAvatar
-          ref="assigneeTrigger"
-          :src="assigneeUser?.avatarUrl"
-          :alt="assigneeUser?.name || 'default'"
-          size="sm"
-          class="cursor-pointer hover:ring-2 hover:ring-primary"
-          @click="openAssigneePopup"
-        >
-          <template #badge>
-            <UIcon
-              v-if="task?.lead_id"
-              name="i-heroicons-check-circle-20-solid"
-              class="absolute -bottom-0.5 -right-0.5 w-4 h-4 text-primary"
-            />
-          </template>
-        </UAvatar>
+         <UChip inset>
+          <UAvatar
+            ref="assigneeTrigger"
+            :src="assigneeUser?.avatarUrl"
+            :alt="assigneeUser?.name || 'default'"
+            size="sm"
+            class="cursor-pointer hover:ring-2 hover:ring-primary"
+            @click="openAssigneePopup"
+          >
+            <template #badge>
+              <UIcon
+                v-if="task?.lead_id"
+                name="i-heroicons-check-circle-20-solid"
+                class="absolute -bottom-0.5 -right-0.5 w-4 h-4 text-primary"
+              />
+            </template>
+          </UAvatar>
+         </UChip>
         <TaskAssignSelect
           v-if="isAssigneePopupOpen"
           :users="props.users"

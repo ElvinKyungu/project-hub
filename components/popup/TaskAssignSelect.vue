@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { gsap } from "gsap";
-import { onClickOutside } from "@vueuse/core";
-import type { User } from "@/types/tasks";
+import { gsap } from "gsap"
+import type { User } from "@/types/users";
 
 const usersStore = useUsersStore();
 
@@ -21,10 +20,6 @@ const popup = ref<HTMLElement | null>(null);
 const search = ref("");
 const selected = ref<User | null>(null);
 
-const getAvatarUrl = (seed: string) =>
-  `https://api.dicebear.com/9.x/glass/svg?seed=${seed}`;
-
-// Charge les users depuis le store au montage
 onMounted(async () => {
   if (usersStore.users.length === 0) {
     await usersStore.fetchUsers();
@@ -87,22 +82,23 @@ const selectUser = (user: User) => {
       <div v-if="usersStore.loading" class="text-gray-500 text-center py-2">
         Loading users...
       </div>
-      <div v-else-if="usersStore.error" class="text-red-500 text-center py-2">
-        {{ usersStore.error }}
-      </div>
       <button
-        v-else
         v-for="user in filteredUsers"
+        v-else
         :key="user.id"
         class="w-full flex items-center justify-between px-2 py-1.5 rounded hover:bg-gray-100 cursor-pointer text-sm transition"
         @click="selectUser(user)"
       >
         <div class="flex items-center gap-3">
-          <img
+          <UChip inset>
+          <UAvatar
+            ref="assigneeTrigger"
             :src="user.avatarUrl"
-            class="w-8 h-8 rounded-full"
-            :alt="user.name"
+            :alt="user.name || 'default'"
+            size="sm"
+            class="cursor-pointer hover:ring-2 hover:ring-primary"
           />
+         </UChip>
           <span>{{ user.name }} {{ user.last_name }}</span>
         </div>
         <UIcon
