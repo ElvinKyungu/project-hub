@@ -12,9 +12,7 @@ const currentTask = ref<Task | null>(null)
 const showTask = ref(false)
 const popupRef = ref<HTMLElement | null>(null);
 
-const { isOpen, openPopup, closePopup } = usePopupAnimation(popupRef, () => {
-  emit("close")
-})
+const showTaskPopup = ref(false)
 // 🏃‍♂️ Reactive store values
 const {
   tasks,
@@ -105,7 +103,7 @@ onMounted(async () => {
           <UButton
             variant="ghost"
             class="hover:bg-white/10 p-2 cursor-pointer rounded-xl mr-2"
-            @click="createTask"
+            @click="showTaskPopup = true"
           >
             <UIcon name="uil:plus" class="text-2xl" />
           </UButton>
@@ -129,10 +127,9 @@ onMounted(async () => {
             </div>
           </h1>
 
-          <TasksCreateTask
-            v-show="isOpen"
-            ref="popupRef"
-            @close="closePopup"
+          <CreateTask
+            v-if="showTaskPopup"
+            @close="showTaskPopup = false"
           />
           <TaskItem
             v-for="task in status.tasks"

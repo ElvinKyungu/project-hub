@@ -1,10 +1,13 @@
 import { gsap } from "gsap"
 
-export function usePopupAnimation(popupRef: Ref<HTMLElement | null>, onClose: () => void) {
-  const isOpen = ref(false);
+export function usePopupAnimation(
+  popupRef: Ref<HTMLElement | null>,
+  onClose: () => void
+) {
+  const isOpen = ref(false)
 
   const openPopup = () => {
-    isOpen.value = true;
+    isOpen.value = true
     nextTick(() => {
       if (popupRef.value) {
         gsap.fromTo(
@@ -27,20 +30,15 @@ export function usePopupAnimation(popupRef: Ref<HTMLElement | null>, onClose: ()
         onComplete: () => {
           isOpen.value = false
           onClose()
-        }
+        },
       })
     }
   }
 
-  onClickOutside(popupRef, () => {
-    if (isOpen.value) closePopup()
+  // 👇 Gestion uniquement de ESC dans le composable
+  useEventListener("keydown", (e) => {
+    if (e.key === "Escape" && isOpen.value) closePopup()
   })
-
-  if (typeof window !== "undefined") {
-    window.addEventListener("keydown", (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen.value) closePopup();
-    })
-  }
 
   return { isOpen, openPopup, closePopup }
 }
