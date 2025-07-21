@@ -11,7 +11,14 @@ const openPopup = (popup: typeof activePopup.value) => {
 
 const closePopup = () => {
   activePopup.value = null;
-};
+}
+
+const popupRef = ref<HTMLElement | null>(null)
+const { isOpen, openPopup: openPopupAnimation, closePopup: closePopupAnimation } = usePopupAnimation(popupRef, () => {
+  closePopup()
+})
+
+const emit = defineEmits(["close"])
 
 const form = reactive({
   title: "",
@@ -36,9 +43,10 @@ const handleSubmit = async () => {
     class="fixed inset-0 w-full h-screen flex items-center justify-center bg-black/80 z-[9999]"
   >
     <div
+      ref="popupRef"
       class="container mx-auto bg-white rounded-lg shadow-lg p-6 max-w-lg w-full relative"
     >
-      <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+      <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700" @click="emit('close')">
         <UIcon name="uil:times" size="24" />
       </button>
       <h1 class="text-2xl font-bold mb-4">Add New Task</h1>

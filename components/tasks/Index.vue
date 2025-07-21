@@ -10,7 +10,11 @@ const filterOpen = ref(false)
 const assigneeModalOpen = ref(false)
 const currentTask = ref<Task | null>(null)
 const showTask = ref(false)
+const popupRef = ref<HTMLElement | null>(null);
 
+const { isOpen, openPopup, closePopup } = usePopupAnimation(popupRef, () => {
+  emit("close")
+})
 // 🏃‍♂️ Reactive store values
 const {
   tasks,
@@ -97,7 +101,7 @@ onMounted(async () => {
         Loading tasks and users...
       </div>
       <template v-else>
-        <div class="relative w-full flex flex-end">
+        <div class="relative w-full flex flex-end justify-end">
           <UButton
             variant="ghost"
             class="hover:bg-white/10 p-2 cursor-pointer rounded-xl mr-2"
@@ -125,7 +129,11 @@ onMounted(async () => {
             </div>
           </h1>
 
-          <TasksCreateTask v-if="showTask" @close="showTask = false" />
+          <TasksCreateTask
+            v-show="isOpen"
+            ref="popupRef"
+            @close="closePopup"
+          />
           <TaskItem
             v-for="task in status.tasks"
             :key="task.id"
