@@ -36,9 +36,11 @@ export function usePopupAnimation(popupRef: Ref<HTMLElement | null>, onClose: ()
     if (isOpen.value) closePopup()
   })
 
-  window.addEventListener("keydown", (e: KeyboardEvent) => {
-    if (e.key === "Escape" && isOpen.value) closePopup()
-  })
+  if (typeof window !== "undefined") {
+    window.addEventListener("keydown", (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen.value) closePopup();
+    })
+  }
 
   return { isOpen, openPopup, closePopup }
 }
