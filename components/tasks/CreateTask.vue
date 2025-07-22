@@ -10,7 +10,6 @@ const props = defineProps<{
   displayMode: string
   statusColor: string
 }>()
-
 const tasksStore = useTasksStore();
 
 const popupRef = ref<HTMLElement | null>(null)
@@ -21,6 +20,38 @@ const { openPopup: openPopupAnimation, closePopup: closePopupAnimation } = usePo
 })
 
 const emit = defineEmits(["close"])
+
+const activePopup = ref<null | "status" | "priority" | "project" | "assignee">(null)
+const popupData = ref<{ id: number; name: string; icon: any; count?: number }[]>([])
+
+const priorities = [
+  { id: 0, name: "No priority", icon: resolveComponent("IconNoPriority") },
+  { id: 1, name: "Urgent", icon: resolveComponent("IconUrgent") },
+  { id: 2, name: "High", icon: resolveComponent("IconHigh") },
+  { id: 3, name: "Medium", icon: resolveComponent("IconMedium") },
+  { id: 4, name: "Low", icon: resolveComponent("IconLow") },
+]
+
+const statuses = [
+  { id: 0, name: "In Progress", icon: resolveComponent("TaskStatus") },
+  { id: 1, name: "Completed", icon: resolveComponent("TaskStatus") },
+  { id: 2, name: "Todo", icon: resolveComponent("TaskStatus") },
+  { id: 3, name: "Backlog", icon: resolveComponent("TaskStatus") },
+  { id: 5, name: "Technical Review", icon: resolveComponent("TaskStatus") },
+  { id: 6, name: "Paused", icon: resolveComponent("TaskStatus") },
+]
+
+const openPopup = (type: typeof activePopup.value) => {
+  activePopup.value = type
+  if (type === "priority") popupData.value = priorities
+  else if (type === "status") popupData.value = statuses
+  // ... pareil pour project ou assignee
+  else if (type === "project") {
+    // Logique pour charger les projets
+  } else if (type === "assignee") {
+    // Logique pour charger les utilisateurs
+  }
+}
 
 const form = reactive({
   title: "",
@@ -79,19 +110,30 @@ onMounted(() => {
           />
         </UFormGroup>
         <UFormGroup label="actions" class="flex flex-wrap gap-2">
-          <UButton class="bg-black text-white border border-bordercolor rounded-full px-3 py-1 flex gap-2 items-center">
+          <UButton 
+            class="bg-black text-white border border-bordercolor rounded-full px-3 py-1 flex gap-2 items-center"
+            @click="openPopup('status')">
             <TaskStatus />
             <span class="text-[15px] font-medium">In progress</span>
           </UButton>
-          <UButton class="bg-black text-white border border-bordercolor rounded-full px-3 py-1" >
+          <UButton 
+            class="bg-black text-white border border-bordercolor rounded-full px-3 py-1"
+            @click="openPopup('priority')"
+          >
             <IconNoPriority />
             <span class="text-[15px] font-medium">No priority</span>
           </UButton>
-          <UButton class="bg-black text-white border border-bordercolor rounded-full px-3 py-1">
+          <UButton 
+            class="bg-black text-white border border-bordercolor rounded-full px-3 py-1"
+            @click="openPopup('project')"
+          >
             <UIcon name="uil:folder" class="text-lg"/>
             <span class="text-[15px] font-medium">Project</span>
           </UButton>
-          <UButton class="bg-black text-white border border-bordercolor rounded-full px-3 py-1">
+          <UButton 
+            class="bg-black text-white border border-bordercolor rounded-full px-3 py-1"
+            @click="openPopup('assignee')"
+          >
             <UIcon name="uil:user" class="text-lg" />
             <span class="text-[15px] font-medium">Unassigned</span>
           </UButton>
