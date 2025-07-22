@@ -10,7 +10,7 @@ const props = defineProps<{
   displayMode: string
   statusColor: string
 }>()
-const tasksStore = useTasksStore();
+const tasksStore = useTasksStore()
 
 const popupRef = ref<HTMLElement | null>(null)
 const wrapperRef = ref<HTMLElement | null>(null)
@@ -23,6 +23,7 @@ const emit = defineEmits(["close"])
 
 const activePopup = ref<null | "status" | "priority" | "project" | "assignee">(null)
 const popupData = ref<{ id: number; name: string; icon: any; count?: number }[]>([])
+const triggerElement = ref<HTMLElement | null>(null)
 
 const priorities = [
   { id: 0, name: "No priority", icon: resolveComponent("IconNoPriority") },
@@ -41,7 +42,8 @@ const statuses = [
   { id: 6, name: "Paused", icon: resolveComponent("TaskStatus") },
 ]
 
-const openPopup = (type: typeof activePopup.value) => {
+const openPopup = (type: typeof activePopup.value, el: HTMLElement) => {
+  triggerElement.value = el
   activePopup.value = type
   if (type === "priority") popupData.value = priorities
   else if (type === "status") popupData.value = statuses
@@ -112,31 +114,43 @@ onMounted(() => {
         <UFormGroup label="actions" class="flex flex-wrap gap-2">
           <UButton 
             class="bg-black text-white border border-bordercolor rounded-full px-3 py-1 flex gap-2 items-center"
-            @click="openPopup('status')">
+            @click="(e) => openPopup('status', e.currentTarget)"
+          >
             <TaskStatus />
             <span class="text-[15px] font-medium">In progress</span>
           </UButton>
           <UButton 
             class="bg-black text-white border border-bordercolor rounded-full px-3 py-1"
-            @click="openPopup('priority')"
+            @click="(e) => openPopup('priority', e.currentTarget)"
           >
             <IconNoPriority />
             <span class="text-[15px] font-medium">No priority</span>
           </UButton>
           <UButton 
             class="bg-black text-white border border-bordercolor rounded-full px-3 py-1"
-            @click="openPopup('project')"
+            @click="(e) => openPopup('project', e.currentTarget)"
           >
             <UIcon name="uil:folder" class="text-lg"/>
             <span class="text-[15px] font-medium">Project</span>
           </UButton>
           <UButton 
             class="bg-black text-white border border-bordercolor rounded-full px-3 py-1"
-            @click="openPopup('assignee')"
+            @click="(e) => openPopup('assignee', e.currentTarget)"
           >
             <UIcon name="uil:user" class="text-lg" />
             <span class="text-[15px] font-medium">Unassigned</span>
           </UButton>
+          <Popup
+            v-if="activePopup"
+            :items="popupData"
+            title="Choose option"
+            @update:modelValue="(item) => {
+              // 👇 Par exemple ici on set la priorité
+              if (activePopup === 'priority') form.priority = item.name
+              activePopup = null
+            }"
+            @close="activePopup = null"
+          />
         </UFormGroup>
         <div class="flex justify-end">
           <UButton type="submit" color="secondary">Add Task</UButton>
