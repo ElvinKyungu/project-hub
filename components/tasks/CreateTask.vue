@@ -2,6 +2,7 @@
 import type { Task } from "@/types/tasks"
 import type { User } from "@/types/user"
 import type { Components } from "@/types/components"
+import { PopupTaskPrioritySelector } from "#components";
 
 const props = defineProps<{
   task: Task;
@@ -14,7 +15,9 @@ const tasksStore = useTasksStore()
 
 const popupRef = ref<HTMLElement | null>(null)
 const wrapperRef = ref<HTMLElement | null>(null)
-
+const priorityTrigger = ref<HTMLElement | null>(null)
+const assigneeTrigger = ref<HTMLElement | null>(null)
+const 
 const { openPopup: openPopupAnimation, closePopup: closePopupAnimation } = usePopupAnimation(popupRef, () => {
   emit("close")
 })
@@ -119,13 +122,20 @@ onMounted(() => {
             <TaskStatus />
             <span class="text-[15px] font-medium">In progress</span>
           </UButton>
-          <UButton 
+          <UButton
+            ref="priorityTrigger"
             class="bg-black text-white border border-bordercolor rounded-full px-3 py-1"
             @click="(e) => openPopup('priority', e.currentTarget)"
           >
             <IconNoPriority />
             <span class="text-[15px] font-medium">No priority</span>
           </UButton>
+          <PopupTaskPrioritySelector
+            v-if="activePopup === 'priority'"
+            :items="popupData"
+            :trigger-element="priorityTrigger"
+            @close="activePopup = null"
+          />
           <UButton 
             class="bg-black text-white border border-bordercolor rounded-full px-3 py-1"
             @click="(e) => openPopup('project', e.currentTarget)"
@@ -133,22 +143,17 @@ onMounted(() => {
             <UIcon name="uil:folder" class="text-lg"/>
             <span class="text-[15px] font-medium">Project</span>
           </UButton>
-          <UButton 
+          <UButton
+            ref="assigneeTrigger"
             class="bg-black text-white border border-bordercolor rounded-full px-3 py-1"
             @click="(e) => openPopup('assignee', e.currentTarget)"
           >
             <UIcon name="uil:user" class="text-lg" />
             <span class="text-[15px] font-medium">Unassigned</span>
           </UButton>
-          <Popup
-            v-if="activePopup"
-            :items="popupData"
-            title="Choose option"
-            @update:modelValue="(item) => {
-              // 👇 Par exemple ici on set la priorité
-              if (activePopup === 'priority') form.priority = item.name
-              activePopup = null
-            }"
+          <PopupTaskAssignSelect
+            v-if="activePopup === 'assignee'"
+            :users="users"
             @close="activePopup = null"
           />
         </UFormGroup>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { gsap } from "gsap"
-import type { User } from "@/types/users";
+import type { User } from "@/types/users"
 
 const usersStore = useUsersStore();
 
@@ -13,7 +13,12 @@ const props = defineProps({
     type: Object as PropType<{ $el: HTMLElement }>,
     default: null,
   },
-});
+  users: {
+    type: Array as PropType<User[]>,
+    required: true,
+  },
+})
+
 const emit = defineEmits(["update:modelValue", "close"]);
 
 const popup = ref<HTMLElement | null>(null);
@@ -24,11 +29,8 @@ onMounted(async () => {
   if (usersStore.users.length === 0) {
     await usersStore.fetchUsers();
   }
-  // Synchroniser le modelValue avec le selected
   selected.value =
     usersStore.users.find((u) => u.id === props.modelValue) || null;
-
-  // Animation d’entrée
   gsap.from(popup.value, {
     opacity: 0,
     y: -10,
@@ -37,10 +39,8 @@ onMounted(async () => {
   });
 });
 
-// Fermer le popup si on clique en dehors
-onClickOutside(popup, () => emit("close"));
+onClickOutside(popup, () => emit("close"))
 
-// Filtrer les utilisateurs selon la recherche
 const filteredUsers = computed(() =>
   usersStore.users.filter((u) =>
     u.name.toLowerCase().includes(search.value.toLowerCase()),
@@ -55,11 +55,11 @@ const selectUser = (user: User) => {
     duration: 0.2,
     ease: "power2.in",
     onComplete: () => {
-      emit("update:modelValue", user.id); // émettre l'id du user sélectionné
-      emit("close");
+      emit("update:modelValue", user.id)
+      emit("close")
     },
-  });
-};
+  })
+}
 </script>
 
 <template>
