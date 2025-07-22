@@ -11,21 +11,33 @@ const props = defineProps<{
   statusColor: string
 }>()
 const tasksStore = useTasksStore()
+const componentsStore = useComponentsStore()
 
 const popupRef = ref<HTMLElement | null>(null)
 const wrapperRef = ref<HTMLElement | null>(null)
 const priorityTrigger = ref<HTMLElement | null>(null)
 const assigneeTrigger = ref<HTMLElement | null>(null)
 
+const form = reactive({
+  title: "",
+  description: "",
+  status: "Todo",
+  type: "Feature",
+  priority: "No priority",
+  lead_id: null,
+  progress: 0,
+  target_date: "",
+})
 const { openPopup: openPopupAnimation, closePopup: closePopupAnimation } = usePopupAnimation(popupRef, () => {
   emit("close")
 })
 
 const emit = defineEmits(["close"])
 
-const activePopup = ref<null | "status" | "priority" | "project" | "assignee">(null)
 const popupData = ref<{ id: number; name: string; icon: any; count?: number }[]>([])
 const triggerElement = ref<HTMLElement | null>(null)
+const isAssigneePopupOpen = ref(false)
+const isOpenProjectPopup = ref(false)
 
 const priorities = [
   { id: 0, name: "No priority", icon: resolveComponent("IconNoPriority") },
@@ -57,28 +69,16 @@ const openPopup = (type: typeof activePopup.value, el: HTMLElement) => {
   }
 }
 
-const form = reactive({
-  title: "",
-  description: "",
-  status: "Todo",
-  type: "Feature",
-  priority: "No priority",
-  lead_id: null,
-  progress: 0,
-  target_date: "",
-});
-
 const handleSubmit = async () => {
   await tasksStore.addTask(form)
 }
-const isAssigneePopupOpen = ref(false)
 
 const openAssigneePopup = () => {
   isAssigneePopupOpen.value = true
 }
-const handleAssigneeSelect = (assignee: User) => {
-  emit("update-assignee", { taskId: props.task?.id, assignee })
-  isAssigneePopupOpen.value = false
+
+const openProjectPopup = () => {
+  isOpenProjectPopup.value = true
 }
 
 onMounted(() => {
@@ -152,11 +152,17 @@ onMounted(() => {
           <div class="flex relative">
             <UButton 
               class="bg-black text-white border border-bordercolor rounded-full px-3 py-1"
-              @click="(e) => openPopup('project', e.currentTarget)"
+              @click="openProjectPopup"
             >
               <UIcon name="uil:folder" class="text-lg"/>
               <span class="text-[15px] font-medium">Project</span>
             </UButton>
+            <PopupTaskProjectSelector
+              v-if="isOpenProjectPopup"
+              :items="componentsStore.components"
+              :trigger-element="triggerElement"
+              @close="isOpenProjectPopup = false"
+            />
           </div>
           <div class="flex relative">
             <UButton
@@ -171,7 +177,6 @@ onMounted(() => {
               v-if="isAssigneePopupOpen"
               :users="props.users"
               :trigger-element="assigneeTrigger ? { $el: assigneeTrigger } : undefined"
-              @update:model-value="handleAssigneeSelect"
               @close="isAssigneePopupOpen = false"
             />
           </div>
