@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import { gsap } from "gsap";
+import { gsap } from "gsap"
+import type { Components } from '@/types/components'
 
 const props = defineProps({
-  modelValue: Object,
+  component: {
+    type: Object as PropType<Components[]>,
+    required: true,
+  },
   triggerElement: {
     type: Object as PropType<{ $el: HTMLElement }>,
     default: null,
   },
-});
+})
 
 const emit = defineEmits(["update:modelValue", "close"]);
 
@@ -26,7 +30,7 @@ const priorities = [
 const selected = ref(priorities[1]);
 
 const filtered = computed(() =>
-  priorities.filter((p) =>
+  props.component.filter((p) =>
     p.name.toLowerCase().includes(search.value.toLowerCase()),
   ),
 );

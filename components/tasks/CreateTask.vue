@@ -157,7 +157,7 @@ onMounted(() => {
               <UIcon name="uil:folder" class="text-lg"/>
               <span class="text-[15px] font-medium">Project</span>
             </UButton>
-            <PopupTaskProjectSelector
+            <TaskProjectSelector
               v-if="isOpenProjectPopup"
               :items="componentsStore.components"
               :trigger-element="triggerElement"
