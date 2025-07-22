@@ -42,7 +42,7 @@ onMounted(async () => {
 onClickOutside(popup, () => emit("close"))
 
 const filteredUsers = computed(() =>
-  usersStore.users.filter((u) =>
+  props.users.filter((u: User) =>
     u.name.toLowerCase().includes(search.value.toLowerCase()),
   ),
 );

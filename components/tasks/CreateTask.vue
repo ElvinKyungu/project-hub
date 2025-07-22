@@ -2,7 +2,6 @@
 import type { Task } from "@/types/tasks"
 import type { User } from "@/types/user"
 import type { Components } from "@/types/components"
-import { PopupTaskPrioritySelector } from "#components";
 
 const props = defineProps<{
   task: Task;
@@ -17,7 +16,7 @@ const popupRef = ref<HTMLElement | null>(null)
 const wrapperRef = ref<HTMLElement | null>(null)
 const priorityTrigger = ref<HTMLElement | null>(null)
 const assigneeTrigger = ref<HTMLElement | null>(null)
-const 
+
 const { openPopup: openPopupAnimation, closePopup: closePopupAnimation } = usePopupAnimation(popupRef, () => {
   emit("close")
 })
