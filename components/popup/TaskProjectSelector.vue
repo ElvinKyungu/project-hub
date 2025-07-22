@@ -15,7 +15,7 @@ const search = ref("");
 const isOpen = ref(false);
 
 const priorities = [
-  { id: 0, name: "API", icon: "uil:ellipsis-h", count: 3 },
+  { id: 0, name: "No Project", icon: "uil:folder", count: 3 },
   { id: 1, name: "Navigation", icon: "uil:bolt-alt", count: 11 },
   { id: 2, name: "Dropdown", icon: "uil:signal-alt-3", count: 10 },
   { id: 3, name: "Modals", icon: "uil:signal-alt", count: 6 },
@@ -25,6 +25,7 @@ const priorities = [
   { id: 7, name: "Core Components", icon: "uil:signal-alt", count: 0 },
   { id: 8, name: "Data Table", icon: "uil:signal-alt", count: 0 },
   { id: 9, name: "Cards", icon: "uil:signal-alt", count: 0 },
+  { id: 10, name: "API", icon: "uil:signal-alt", count: 0 },
 ];
 
 const selected = ref(priorities[1]);
@@ -67,7 +68,7 @@ onClickOutside(popup, () => {
 <template>
   <div
     ref="popup"
-    class="absolute items-center gap-2 text-white bg-primary border border-b border-bordercolor rounded-lg shadow-lg p-3 z-[999] w-[18rem] max-w-full top-10"
+    class="absolute items-center gap-2 text-white bg-primary border border-b border-bordercolor rounded-lg shadow-lg p-3 z-[999] w-[18rem] top-10"
   >
     <div class="flex flex-col gap-2 mb-3">
       <h2 class="text-sm font-medium">Task Level</h2>
