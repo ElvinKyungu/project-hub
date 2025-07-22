@@ -142,12 +142,12 @@ onMounted(() => {
               <IconNoPriority />
               <span class="text-[15px] font-medium">No priority</span>
             </UButton>
-            <PopupTaskPrioritySelector
+            <!-- <PopupTaskPrioritySelector
               v-if="activePopup === 'priority'"
               :items="popupData"
               :trigger-element="priorityTrigger"
               @close="activePopup = null"
-            />
+            /> -->
           </div>
           <div class="flex relative">
             <UButton 
@@ -159,7 +159,7 @@ onMounted(() => {
             </UButton>
             <TaskProjectSelector
               v-if="isOpenProjectPopup"
-              :items="componentsStore.components"
+              :component="componentsStore.components"
               :trigger-element="triggerElement"
               @close="isOpenProjectPopup = false"
             />

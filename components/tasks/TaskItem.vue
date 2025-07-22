@@ -111,7 +111,6 @@ const getTagBgClass = (tag: string) => {
     <div class="flex items-center gap-4">
       <div class="hidden sm:flex gap-1">
         <UBadge
-          :key="task.type"
           color="neutral"
           variant="outline"
           size="xs"
@@ -124,7 +123,6 @@ const getTagBgClass = (tag: string) => {
 
       <div class="hidden sm:block text-sm">
         <UBadge
-          :key="task.type"
           color="neutral"
           variant="outline"
           size="xs"
