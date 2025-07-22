@@ -71,6 +71,15 @@ const form = reactive({
 const handleSubmit = async () => {
   await tasksStore.addTask(form)
 }
+const isAssigneePopupOpen = ref(false)
+
+const openAssigneePopup = () => {
+  isAssigneePopupOpen.value = true
+}
+const handleAssigneeSelect = (assignee: User) => {
+  emit("update-assignee", { taskId: props.task?.id, assignee })
+  isAssigneePopupOpen.value = false
+}
 
 onMounted(() => {
   openPopupAnimation()
@@ -114,47 +123,58 @@ onMounted(() => {
           />
         </UFormGroup>
         <UFormGroup label="actions" class="flex flex-wrap gap-2">
-          <UButton 
-            class="bg-black text-white border border-bordercolor rounded-full px-3 py-1 flex gap-2 items-center"
-            @click="(e) => openPopup('status', e.currentTarget)"
-          >
-            <TaskStatus />
-            <span class="text-[15px] font-medium">In progress</span>
-          </UButton>
-          <UButton
-            ref="priorityTrigger"
-            class="bg-black text-white border border-bordercolor rounded-full px-3 py-1"
-            @click="(e) => openPopup('priority', e.currentTarget)"
-          >
-            <IconNoPriority />
-            <span class="text-[15px] font-medium">No priority</span>
-          </UButton>
-          <PopupTaskPrioritySelector
-            v-if="activePopup === 'priority'"
-            :items="popupData"
-            :trigger-element="priorityTrigger"
-            @close="activePopup = null"
-          />
-          <UButton 
-            class="bg-black text-white border border-bordercolor rounded-full px-3 py-1"
-            @click="(e) => openPopup('project', e.currentTarget)"
-          >
-            <UIcon name="uil:folder" class="text-lg"/>
-            <span class="text-[15px] font-medium">Project</span>
-          </UButton>
-          <UButton
-            ref="assigneeTrigger"
-            class="bg-black text-white border border-bordercolor rounded-full px-3 py-1"
-            @click="(e) => openPopup('assignee', e.currentTarget)"
-          >
-            <UIcon name="uil:user" class="text-lg" />
-            <span class="text-[15px] font-medium">Unassigned</span>
-          </UButton>
-          <PopupTaskAssignSelect
-            v-if="activePopup === 'assignee'"
-            :users="users"
-            @close="activePopup = null"
-          />
+          <div class="flex relative">
+            <UButton
+              ref="statusTrigger"
+              class="bg-black text-white border border-bordercolor rounded-full px-3 py-1"
+              @click="(e) => openPopup('status', e.currentTarget)"
+            >
+              <TaskStatus />
+              <span class="text-[15px] font-medium">In progress</span>
+            </UButton>
+          </div>
+          <div class="flex relative">
+            <UButton
+              ref="priorityTrigger"
+              class="bg-black text-white border border-bordercolor rounded-full px-3 py-1"
+              @click="(e) => openPopup('priority', e.currentTarget)"
+            >
+              <IconNoPriority />
+              <span class="text-[15px] font-medium">No priority</span>
+            </UButton>
+            <PopupTaskPrioritySelector
+              v-if="activePopup === 'priority'"
+              :items="popupData"
+              :trigger-element="priorityTrigger"
+              @close="activePopup = null"
+            />
+          </div>
+          <div class="flex relative">
+            <UButton 
+              class="bg-black text-white border border-bordercolor rounded-full px-3 py-1"
+              @click="(e) => openPopup('project', e.currentTarget)"
+            >
+              <UIcon name="uil:folder" class="text-lg"/>
+              <span class="text-[15px] font-medium">Project</span>
+            </UButton>
+          </div>
+          <div class="flex relative">
+            <UButton
+              ref="assigneeTrigger"
+              class="bg-black text-white border border-bordercolor rounded-full px-3 py-1"
+              @click="openAssigneePopup"
+            >
+              <UIcon name="uil:user" class="text-lg" />
+              <span class="text-[15px] font-medium">Unassigned</span>
+            </UButton>
+            <TaskAssignSelect
+              v-if="isAssigneePopupOpen"
+              :users="props.users"
+              :trigger-element="assigneeTrigger ? { $el: assigneeTrigger } : undefined"
+              @update:model-value="handleAssigneeSelect"
+              @close="isAssigneePopupOpen = false"
+            />
+          </div>
         </UFormGroup>
         <div class="flex justify-end">
           <UButton type="submit" color="secondary">Add Task</UButton>

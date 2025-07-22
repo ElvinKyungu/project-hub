@@ -24,19 +24,16 @@ const taskComponent = computed(() => {
   return props.components.find((c: Components) => c.id === props.task.component_id) || null
 })
 
-const isAssigneePopupOpen = ref(false);
-const assigneeTrigger = ref<HTMLElement | null>(null);
+const isAssigneePopupOpen = ref(false)
+const assigneeTrigger = ref<HTMLElement | null>(null)
 
 const openAssigneePopup = () => {
-  isAssigneePopupOpen.value = true;
-};
-onMounted(() => {
-  console.log("Users + ", props.users);
-});
+  isAssigneePopupOpen.value = true
+}
 const handleAssigneeSelect = (assignee: User) => {
-  emit("update-assignee", { taskId: props.task?.id, assignee });
-  isAssigneePopupOpen.value = false;
-};
+  emit("update-assignee", { taskId: props.task?.id, assignee })
+  isAssigneePopupOpen.value = false
+}
 
 const isLevelSelectorOpen = ref(false);
 const triggerElementRef = ref<HTMLElement | null>(null);

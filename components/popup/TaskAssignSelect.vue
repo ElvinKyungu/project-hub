@@ -65,7 +65,7 @@ const selectUser = (user: User) => {
 <template>
   <div
     ref="popup"
-    class="absolute items-center gap-2 bg-primary border border-b border-bordercolor rounded-lg shadow-lg p-3 z-[999] w-64 top-10"
+    class="absolute items-center gap-2 bg-primary border border-b border-bordercolor rounded-lg shadow-lg p-3 z-[999] w-64 top-10 text-white"
   >
     <div class="flex flex-col gap-2 mb-3">
       <h2 class="text-sm text-left font-medium">Assign to...</h2>
