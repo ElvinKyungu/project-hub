@@ -1,4 +1,16 @@
 <script setup lang="ts">
+import type { Task } from "@/types/tasks"
+import type { User } from "@/types/user"
+import type { Components } from "@/types/components"
+
+const props = defineProps<{
+  task: Task;
+  users: User[]
+  components: Components[]
+  displayMode: string
+  statusColor: string
+}>()
+
 const tasksStore = useTasksStore();
 
 const popupRef = ref<HTMLElement | null>(null)
@@ -32,12 +44,12 @@ onMounted(() => {
 <template>
   <div
     ref="wrapperRef"
-    class="fixed inset-0 w-full h-screen flex items-center justify-center bg-primary z-[9999]"
+    class="fixed inset-0 w-full h-screen flex items-center justify-center bg-black z-[9999]"
     @click="closePopupAnimation"
   >
     <div
       ref="popupRef"
-      class="container mx-auto bg-black rounded-lg border border-bordercolor shadow-lg p-6 max-w-lg w-full relative"
+      class="container mx-auto bg-primary rounded-lg border border-bordercolor shadow-lg p-6 max-w-[40rem] w-full relative"
       @click.stop
       >
       <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700" @click="closePopupAnimation">
@@ -52,7 +64,6 @@ onMounted(() => {
             class="u-input border border-bordercolor"
             placeholder="Task title"
             size="xl"
-            icon="uil:lock"
             variant="none"
             required
           />
@@ -68,30 +79,22 @@ onMounted(() => {
           />
         </UFormGroup>
         <UFormGroup label="actions" class="flex flex-wrap gap-2">
-          <UButton class="bg-gray-100">
-            <UIcon name="uil:plus" />
-            <span>In progress</span>
+          <UButton class="bg-black text-white border border-bordercolor rounded-full px-3 py-1 flex gap-2 items-center">
+            <TaskStatus />
+            <span class="text-[15px] font-medium">In progress</span>
           </UButton>
-          <PopupTaskLevelSelector
-          />
-          <UButton class="bg-gray-100" >
-            <UIcon name="uil:flags" />
-            <span>No priority</span>
+          <UButton class="bg-black text-white border border-bordercolor rounded-full px-3 py-1" >
+            <IconNoPriority />
+            <span class="text-[15px] font-medium">No priority</span>
           </UButton>
-          <PopupTaskPrioritySelector
-          />
-          <UButton class="bg-gray-100">
-            <UIcon name="uil:check" />
-            <span>Project</span>
+          <UButton class="bg-black text-white border border-bordercolor rounded-full px-3 py-1">
+            <UIcon name="uil:folder" class="text-lg"/>
+            <span class="text-[15px] font-medium">Project</span>
           </UButton>
-          <PopupTaskProjectSelector
-          />
-          <UButton class="bg-gray-100">
-            <UIcon name="uil:user" />
-            <span>Unassigned</span>
+          <UButton class="bg-black text-white border border-bordercolor rounded-full px-3 py-1">
+            <UIcon name="uil:user" class="text-lg" />
+            <span class="text-[15px] font-medium">Unassigned</span>
           </UButton>
-          <PopupTaskAssignSelect
-          />
         </UFormGroup>
         <div class="flex justify-end">
           <UButton type="submit" color="secondary">Add Task</UButton>

@@ -9,8 +9,6 @@ const displayMode = ref("list")
 const filterOpen = ref(false)
 const assigneeModalOpen = ref(false)
 const currentTask = ref<Task | null>(null)
-const showTask = ref(false)
-const popupRef = ref<HTMLElement | null>(null);
 
 const showTaskPopup = ref(false)
 // 🏃‍♂️ Reactive store values
@@ -47,10 +45,6 @@ function openAssigneeModal(task: Task) {
   currentTask.value = task;
   assigneeModalOpen.value = true;
 }
-
-const createTask = () => {
-  showTask.value = true;
-};
 
 onMounted(async () => {
   await tasksStore.fetchTasks()
@@ -129,6 +123,7 @@ onMounted(async () => {
 
           <CreateTask
             v-if="showTaskPopup"
+            :users="users"
             @close="showTaskPopup = false"
           />
           <TaskItem
