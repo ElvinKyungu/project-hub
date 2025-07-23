@@ -9,11 +9,11 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["update:modelValue", "close"]);
+const emit = defineEmits(["update:modelValue", "close"])
 
-const popup = ref<HTMLElement | null>(null);
-const search = ref("");
-const isOpen = ref(false);
+const popup = ref<HTMLElement | null>(null)
+const search = ref("")
+const isOpen = ref(false)
 
 const priorities = [
   { id: 0, name: "No priority", icon: "uil:ellipsis-h", count: 3 },
@@ -21,7 +21,7 @@ const priorities = [
   { id: 2, name: "High", icon: "uil:signal-alt-3", count: 10 },
   { id: 3, name: "Medium", icon: "uil:signal-alt", count: 6 },
   { id: 4, name: "Low", icon: "uil:signal-alt", count: 0 },
-];
+]
 
 const selected = ref(priorities[1]);
 
@@ -29,7 +29,7 @@ const filtered = computed(() =>
   priorities.filter((p) =>
     p.name.toLowerCase().includes(search.value.toLowerCase()),
   ),
-);
+)
 
 const selectLevel = (level: any) => {
   selected.value = level;
@@ -42,8 +42,8 @@ const selectLevel = (level: any) => {
       emit("update:modelValue", level);
       emit("close");
     },
-  });
-};
+  })
+}
 
 onMounted(() => {
   isOpen.value = true;
@@ -52,12 +52,12 @@ onMounted(() => {
     y: -10,
     duration: 0.2,
     ease: "power2.out",
-  });
-});
+  })
+})
 
 onClickOutside(popup, () => {
-  emit("close");
-});
+  emit("close")
+})
 </script>
 
 <template>
