@@ -37,13 +37,13 @@ export default defineNuxtConfig({
   },
   components: [
     {
-      path: '~/components',
+      path: "~/components",
       pathPrefix: false,
     },
     // Specifically for icons if they're in a subfolder
     {
-      path: '~/components/icons',
-      prefix: 'Icons'
-    }
-  ]
+      path: "~/components/icons",
+      prefix: "Icons",
+    },
+  ],
 });

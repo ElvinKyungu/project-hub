@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { gsap } from "gsap"
-import type { Task } from "@/types/tasks"
+import { gsap } from "gsap";
+import type { Task } from "@/types/tasks";
 
 defineProps({
   tasks: {
@@ -11,9 +11,9 @@ defineProps({
     type: Object as PropType<{ $el: HTMLElement }>,
     default: null,
   },
-})
+});
 
-const emit = defineEmits(["update:modelValue", "close"])
+const emit = defineEmits(["update:modelValue", "close"]);
 
 const popup = ref<HTMLElement | null>(null);
 const search = ref("");
@@ -25,13 +25,13 @@ const priorityMap = [
   { id: 2, name: "High", icon: resolveComponent("IconHigh") },
   { id: 3, name: "Medium", icon: resolveComponent("IconMedium") },
   { id: 4, name: "Low", icon: resolveComponent("IconLow") },
-]
+];
 
 const filtered = computed(() =>
   priorityMap.filter((p) =>
-    p.name.toLowerCase().includes(search.value.toLowerCase())
-  )
-)
+    p.name.toLowerCase().includes(search.value.toLowerCase()),
+  ),
+);
 const selectLevel = (level: any) => {
   gsap.to(popup.value, {
     opacity: 0,
@@ -43,7 +43,7 @@ const selectLevel = (level: any) => {
       emit("close");
     },
   });
-}
+};
 
 onMounted(() => {
   isOpen.value = true;
@@ -56,8 +56,8 @@ onMounted(() => {
 });
 
 onClickOutside(popup, () => {
-  emit("close")
-})
+  emit("close");
+});
 </script>
 
 <template>
@@ -84,10 +84,7 @@ onClickOutside(popup, () => {
         @click="selectLevel(item)"
       >
         <div class="flex items-center gap-3">
-          <UButton
-            variant="ghost"
-            class="cursor-pointer"
-          >
+          <UButton variant="ghost" class="cursor-pointer">
             <component :is="item.icon" />
           </UButton>
           <span>{{ item.name }}</span>

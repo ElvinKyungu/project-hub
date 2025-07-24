@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { gsap } from "gsap"
-import type { Task } from "@/types/tasks"
+import { gsap } from "gsap";
+import type { Task } from "@/types/tasks";
 const props = defineProps({
   modelValue: Object,
-   tasks: {
+  tasks: {
     type: Array as PropType<Task[]>,
     required: true,
   },
@@ -28,12 +28,9 @@ const priorities = computed(() =>
     { id: 4, name: "Low", icon: "uil:signal-alt" },
   ].map((p) => ({
     ...p,
-    count: props.tasks.filter(
-      (task: Task) => task.priority === p.name
-    ).length,
-  }))
-)
-
+    count: props.tasks.filter((task: Task) => task.priority === p.name).length,
+  })),
+);
 
 const selected = ref(priorities.value[1]);
 

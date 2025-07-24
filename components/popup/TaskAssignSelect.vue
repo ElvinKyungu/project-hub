@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { gsap } from "gsap"
-import type { User } from "@/types/users"
+import { gsap } from "gsap";
+import type { User } from "@/types/users";
 
 const usersStore = useUsersStore();
 
@@ -17,7 +17,7 @@ const props = defineProps({
     type: Array as PropType<User[]>,
     required: true,
   },
-})
+});
 
 const emit = defineEmits(["update:modelValue", "close"]);
 
@@ -39,7 +39,7 @@ onMounted(async () => {
   });
 });
 
-onClickOutside(popup, () => emit("close"))
+onClickOutside(popup, () => emit("close"));
 
 const filteredUsers = computed(() =>
   props.users.filter((u: User) =>
@@ -55,11 +55,11 @@ const selectUser = (user: User) => {
     duration: 0.2,
     ease: "power2.in",
     onComplete: () => {
-      emit("update:modelValue", user.id)
-      emit("close")
+      emit("update:modelValue", user.id);
+      emit("close");
     },
-  })
-}
+  });
+};
 </script>
 
 <template>
@@ -91,14 +91,14 @@ const selectUser = (user: User) => {
       >
         <div class="flex items-center gap-3">
           <UChip inset>
-          <UAvatar
-            ref="assigneeTrigger"
-            :src="user.avatarUrl"
-            :alt="user.name || 'default'"
-            size="sm"
-            class="cursor-pointer hover:ring-2 hover:ring-primary"
-          />
-         </UChip>
+            <UAvatar
+              ref="assigneeTrigger"
+              :src="user.avatarUrl"
+              :alt="user.name || 'default'"
+              size="sm"
+              class="cursor-pointer hover:ring-2 hover:ring-primary"
+            />
+          </UChip>
           <span>{{ user.name }} {{ user.last_name }}</span>
         </div>
         <UIcon

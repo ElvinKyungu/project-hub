@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { gsap } from "gsap"
+import { gsap } from "gsap";
 
 defineProps({
   triggerElement: {
     type: Object as PropType<{ $el: HTMLElement }>,
     default: null,
   },
-})
+});
 
 const emit = defineEmits(["update:modelValue", "close"]);
 

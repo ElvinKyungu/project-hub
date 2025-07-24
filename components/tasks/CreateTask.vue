@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import type { Task } from "@/types/tasks"
-import type { User } from "@/types/user"
-import type { Components } from "@/types/components"
+import type { Task } from "@/types/tasks";
+import type { User } from "@/types/user";
+import type { Components } from "@/types/components";
 
 const props = defineProps<{
   task: Task;
-  users: User[]
-  components: Components[]
-  displayMode: string
-  statusColor: string
-}>()
-const tasksStore = useTasksStore()
-const componentsStore = useComponentsStore()
+  users: User[];
+  components: Components[];
+  displayMode: string;
+  statusColor: string;
+}>();
+const tasksStore = useTasksStore();
+const componentsStore = useComponentsStore();
 
-const popupRef = ref<HTMLElement | null>(null)
-const wrapperRef = ref<HTMLElement | null>(null)
-const priorityTrigger = ref<HTMLElement | null>(null)
-const assigneeTrigger = ref<HTMLElement | null>(null)
+const popupRef = ref<HTMLElement | null>(null);
+const wrapperRef = ref<HTMLElement | null>(null);
+const priorityTrigger = ref<HTMLElement | null>(null);
+const assigneeTrigger = ref<HTMLElement | null>(null);
 
 const form = reactive({
   title: "",
@@ -27,17 +27,20 @@ const form = reactive({
   lead_id: null,
   progress: 0,
   target_date: "",
-})
-const { openPopup: openPopupAnimation, closePopup: closePopupAnimation } = usePopupAnimation(popupRef, () => {
-  emit("close")
-})
+});
+const { openPopup: openPopupAnimation, closePopup: closePopupAnimation } =
+  usePopupAnimation(popupRef, () => {
+    emit("close");
+  });
 
-const emit = defineEmits(["close"])
+const emit = defineEmits(["close"]);
 
-const popupData = ref<{ id: number; name: string; icon: any; count?: number }[]>([])
-const triggerElement = ref<HTMLElement | null>(null)
-const isAssigneePopupOpen = ref(false)
-const isOpenProjectPopup = ref(false)
+const popupData = ref<
+  { id: number; name: string; icon: any; count?: number }[]
+>([]);
+const triggerElement = ref<HTMLElement | null>(null);
+const isAssigneePopupOpen = ref(false);
+const isOpenProjectPopup = ref(false);
 
 const priorities = [
   { id: 0, name: "No priority", icon: resolveComponent("IconNoPriority") },
@@ -45,7 +48,7 @@ const priorities = [
   { id: 2, name: "High", icon: resolveComponent("IconHigh") },
   { id: 3, name: "Medium", icon: resolveComponent("IconMedium") },
   { id: 4, name: "Low", icon: resolveComponent("IconLow") },
-]
+];
 
 const statuses = [
   { id: 0, name: "In Progress", icon: resolveComponent("TaskStatus") },
@@ -54,36 +57,36 @@ const statuses = [
   { id: 3, name: "Backlog", icon: resolveComponent("TaskStatus") },
   { id: 5, name: "Technical Review", icon: resolveComponent("TaskStatus") },
   { id: 6, name: "Paused", icon: resolveComponent("TaskStatus") },
-]
+];
 
 const openPopup = (type: typeof activePopup.value, el: HTMLElement) => {
-  triggerElement.value = el
-  activePopup.value = type
-  if (type === "priority") popupData.value = priorities
-  else if (type === "status") popupData.value = statuses
+  triggerElement.value = el;
+  activePopup.value = type;
+  if (type === "priority") popupData.value = priorities;
+  else if (type === "status") popupData.value = statuses;
   // ... pareil pour project ou assignee
   else if (type === "project") {
     // Logique pour charger les projets
   } else if (type === "assignee") {
     // Logique pour charger les utilisateurs
   }
-}
+};
 
 const handleSubmit = async () => {
-  await tasksStore.addTask(form)
-}
+  await tasksStore.addTask(form);
+};
 
 const openAssigneePopup = () => {
-  isAssigneePopupOpen.value = true
-}
+  isAssigneePopupOpen.value = true;
+};
 
 const openProjectPopup = () => {
-  isOpenProjectPopup.value = true
-}
+  isOpenProjectPopup.value = true;
+};
 
 onMounted(() => {
-  openPopupAnimation()
-})
+  openPopupAnimation();
+});
 </script>
 <template>
   <div
@@ -95,8 +98,11 @@ onMounted(() => {
       ref="popupRef"
       class="container mx-auto bg-primary rounded-lg border border-bordercolor shadow-lg p-6 max-w-[40rem] w-full relative"
       @click.stop
+    >
+      <button
+        class="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+        @click="closePopupAnimation"
       >
-      <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700" @click="closePopupAnimation">
         <UIcon name="uil:times" size="24" />
       </button>
       <h1 class="text-2xl font-bold mb-4 text-white">Add New Task</h1>
@@ -150,11 +156,11 @@ onMounted(() => {
             /> -->
           </div>
           <div class="flex relative">
-            <UButton 
+            <UButton
               class="bg-black text-white border border-bordercolor rounded-full px-3 py-1"
               @click="openProjectPopup"
             >
-              <UIcon name="uil:folder" class="text-lg"/>
+              <UIcon name="uil:folder" class="text-lg" />
               <span class="text-[15px] font-medium">Project</span>
             </UButton>
             <TaskProjectSelector
@@ -176,7 +182,9 @@ onMounted(() => {
             <TaskAssignSelect
               v-if="isAssigneePopupOpen"
               :users="props.users"
-              :trigger-element="assigneeTrigger ? { $el: assigneeTrigger } : undefined"
+              :trigger-element="
+                assigneeTrigger ? { $el: assigneeTrigger } : undefined
+              "
               @close="isAssigneePopupOpen = false"
             />
           </div>

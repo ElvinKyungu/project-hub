@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import type { Task } from "@/types/tasks"
-import type { User } from "@/types/user"
-import type { Components } from "@/types/components"
+import type { Task } from "@/types/tasks";
+import type { User } from "@/types/user";
+import type { Components } from "@/types/components";
 
 const props = defineProps<{
   task: Task;
-  users: User[]
-  components: Components[]
-  displayMode: string
-  statusColor: string
-}>()
+  users: User[];
+  components: Components[];
+  displayMode: string;
+  statusColor: string;
+}>();
 const leadId = ref<string | null>(null);
 const emit = defineEmits(["open-assignee", "update-assignee"]);
 
@@ -17,23 +17,27 @@ const assigneeUser = computed(() => {
   if (!props.users || !props.task?.lead_id) return null;
   return (
     props.users.find((user: User) => user.id === props.task.lead_id) || null
-  )
-})
+  );
+});
 
 const taskComponent = computed(() => {
-  return props.components.find((c: Components) => c.id === props.task.component_id) || null
-})
+  return (
+    props.components.find(
+      (c: Components) => c.id === props.task.component_id,
+    ) || null
+  );
+});
 
-const isAssigneePopupOpen = ref(false)
-const assigneeTrigger = ref<HTMLElement | null>(null)
+const isAssigneePopupOpen = ref(false);
+const assigneeTrigger = ref<HTMLElement | null>(null);
 
 const openAssigneePopup = () => {
-  isAssigneePopupOpen.value = true
-}
+  isAssigneePopupOpen.value = true;
+};
 const handleAssigneeSelect = (assignee: User) => {
-  emit("update-assignee", { taskId: props.task?.id, assignee })
-  isAssigneePopupOpen.value = false
-}
+  emit("update-assignee", { taskId: props.task?.id, assignee });
+  isAssigneePopupOpen.value = false;
+};
 
 const isLevelSelectorOpen = ref(false);
 const triggerElementRef = ref<HTMLElement | null>(null);
@@ -44,7 +48,7 @@ const openLevelSelector = () => {
 
 const handleLevelSelect = () => {
   isLevelSelectorOpen.value = false;
-}
+};
 
 const priorityIcon = computed(() => {
   const priorityMap: Record<string, any> = {
@@ -53,9 +57,9 @@ const priorityIcon = computed(() => {
     Medium: resolveComponent("IconMedium"),
     High: resolveComponent("IconHigh"),
     Urgent: resolveComponent("IconUrgent"),
-  }
-  return priorityMap[props.task.priority] || resolveComponent("NoPriority")
-})
+  };
+  return priorityMap[props.task.priority] || resolveComponent("NoPriority");
+});
 const getTagBgClass = (tag: string) => {
   const tagColors: Record<string, string> = {
     Bug: "bg-testing",
@@ -116,7 +120,10 @@ const getTagBgClass = (tag: string) => {
           size="xs"
           class="border border-bordercolor bg-black flex items-center gap-2 px-3 text-xs py-1 rounded-full"
         >
-          <span class="w-2 h-2 rounded-full" :class="getTagBgClass(task.type)" />
+          <span
+            class="w-2 h-2 rounded-full"
+            :class="getTagBgClass(task.type)"
+          />
           {{ task.type }}
         </UBadge>
       </div>
@@ -138,16 +145,18 @@ const getTagBgClass = (tag: string) => {
       </div>
 
       <div class="hidden sm:block text-sm text-gray-500">
-        {{ task.target_date
-          ? new Date(task.target_date).toLocaleDateString("en-US", {
-              month: "short",
-              day: "numeric",
-            })
-          : "No due date" }}
+        {{
+          task.target_date
+            ? new Date(task.target_date).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+              })
+            : "No due date"
+        }}
       </div>
 
       <div class="flex justify-end relative">
-         <UChip inset>
+        <UChip inset>
           <UAvatar
             ref="assigneeTrigger"
             :src="assigneeUser?.avatarUrl"
@@ -164,12 +173,14 @@ const getTagBgClass = (tag: string) => {
               />
             </template>
           </UAvatar>
-         </UChip>
+        </UChip>
         <TaskAssignSelect
           v-if="isAssigneePopupOpen"
           :users="props.users"
           :model-value="leadId"
-          :trigger-element="assigneeTrigger ? { $el: assigneeTrigger } : undefined"
+          :trigger-element="
+            assigneeTrigger ? { $el: assigneeTrigger } : undefined
+          "
           @update:model-value="handleAssigneeSelect"
           @close="isAssigneePopupOpen = false"
         />

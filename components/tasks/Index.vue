@@ -1,29 +1,21 @@
 <script setup lang="ts">
-import type { Task } from "@/types/tasks"
+import type { Task } from "@/types/tasks";
 
-const tasksStore = useTasksStore()
-const usersStore = useUsersStore()
-const componentsStore = useComponentsStore()
+const tasksStore = useTasksStore();
+const usersStore = useUsersStore();
+const componentsStore = useComponentsStore();
 
-const displayMode = ref("list")
-const filterOpen = ref(false)
-const assigneeModalOpen = ref(false)
-const currentTask = ref<Task | null>(null)
+const displayMode = ref("list");
+const filterOpen = ref(false);
+const assigneeModalOpen = ref(false);
+const currentTask = ref<Task | null>(null);
 
-const showTaskPopup = ref(false)
+const showTaskPopup = ref(false);
 // 🏃‍♂️ Reactive store values
-const {
-  tasks,
-  loading: tasksLoading,
-} = storeToRefs(tasksStore);
-const {
-  users,
-  loading: usersLoading,
-} = storeToRefs(usersStore)
+const { tasks, loading: tasksLoading } = storeToRefs(tasksStore);
+const { users, loading: usersLoading } = storeToRefs(usersStore);
 
-const {
-  components,
-} = storeToRefs(componentsStore)
+const { components } = storeToRefs(componentsStore);
 
 const taskStatuses = [
   { key: "In progress", label: "In Progress", color: "#facc15" },
@@ -32,14 +24,14 @@ const taskStatuses = [
   { key: "Todo", label: "To Do", color: "#0ea5e9" },
   { key: "Backlog", label: "Backlog", color: "#f97316" },
   { key: "Paused", label: "Paused", color: "#e11d48" },
-]
+];
 
 const groupedTasks = computed(() =>
   taskStatuses.map((status) => ({
     ...status,
     tasks: tasks.value.filter((task: Task) => task.status === status.key),
   })),
-)
+);
 
 function openAssigneeModal(task: Task) {
   currentTask.value = task;
@@ -47,11 +39,11 @@ function openAssigneeModal(task: Task) {
 }
 
 onMounted(async () => {
-  await tasksStore.fetchTasks()
-  if (!tasks.value.length) await tasksStore.fetchTasks()
-  if (!users.value.length) await usersStore.fetchUsers()
-  if (!components.value.length) await componentsStore.fetchComponents()
-})
+  await tasksStore.fetchTasks();
+  if (!tasks.value.length) await tasksStore.fetchTasks();
+  if (!users.value.length) await usersStore.fetchUsers();
+  if (!components.value.length) await componentsStore.fetchComponents();
+});
 </script>
 
 <template>
@@ -117,7 +109,10 @@ onMounted(async () => {
                 :stroke-color="status.color"
                 transform-status="rotate(-90 7 7)"
               />
-              <span class="flex gap-4"><span>{{ status.label }}</span> <span>{{ status.tasks.length }}</span></span>
+              <span class="flex gap-4"
+                ><span>{{ status.label }}</span>
+                <span>{{ status.tasks.length }}</span></span
+              >
             </div>
           </h1>
 
