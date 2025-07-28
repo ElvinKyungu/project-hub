@@ -1,17 +1,12 @@
 <script setup lang="ts">
-import { gsap } from "gsap";
-import type { Task } from "@/types/tasks";
+import { gsap } from "gsap"
 
 defineProps({
-  tasks: {
-    type: Array as PropType<Task[]>,
-    required: true,
-  },
   triggerElement: {
     type: Object as PropType<{ $el: HTMLElement }>,
     default: null,
   },
-});
+})
 
 const emit = defineEmits(["update:modelValue", "close"]);
 
@@ -31,7 +26,7 @@ const filtered = computed(() =>
   priorityMap.filter((p) =>
     p.name.toLowerCase().includes(search.value.toLowerCase()),
   ),
-);
+)
 const selectLevel = (level: any) => {
   gsap.to(popup.value, {
     opacity: 0,
@@ -43,7 +38,7 @@ const selectLevel = (level: any) => {
       emit("close");
     },
   });
-};
+}
 
 onMounted(() => {
   isOpen.value = true;
@@ -52,18 +47,18 @@ onMounted(() => {
     y: -10,
     duration: 0.2,
     ease: "power2.out",
-  });
-});
+  })
+})
 
 onClickOutside(popup, () => {
-  emit("close");
-});
+  emit("close")
+})
 </script>
 
 <template>
   <div
     ref="popup"
-    class="absolute items-center gap-2 bg-primary border border-bordercolor rounded-lg shadow-lg p-3 z-[999] w-64 top-10"
+    class="absolute items-center gap-2 bg-primary border border-bordercolor text-white rounded-lg shadow-lg p-3 z-[999] w-64 top-10"
   >
     <div class="flex flex-col gap-2 mb-3">
       <h2 class="text-sm font-medium">Task Level</h2>

@@ -13,9 +13,9 @@ const props = defineProps<{
 const tasksStore = useTasksStore();
 const componentsStore = useComponentsStore();
 
-const popupRef = ref<HTMLElement | null>(null);
-const priorityTrigger = ref<HTMLElement | null>(null);
-const assigneeTrigger = ref<HTMLElement | null>(null);
+const popupRef = ref<HTMLElement | null>(null)
+const priorityTrigger = ref<HTMLElement | null>(null)
+const assigneeTrigger = ref<HTMLElement | null>(null)
 const statusTrigger = ref<HTMLElement | null>(null)
 const ProjectTriggerElement = ref<HTMLElement | null>(null)
 const form = reactive({
@@ -35,12 +35,10 @@ const { openPopup: openPopupAnimation, closePopup: closePopupAnimation } =
 
 const emit = defineEmits(["close"])
 
-const popupData = ref<
-  { id: number; name: string; icon: any; count?: number }[]
->([])
 const isAssigneePopupOpen = ref(false)
 const isOpenProjectPopup = ref(false)
 const isOpenStatusPopup = ref(false)
+const isOpenPriorityPopup = ref(false)
 
 const handleSubmit = async () => {
   await tasksStore.addTask(form)
@@ -56,7 +54,9 @@ const openAssigneePopup = () => {
 const openProjectPopup = () => {
   isOpenProjectPopup.value = true
 }
-
+const openPriorityPopup = () => {
+  isOpenPriorityPopup.value = true
+}
 onMounted(() => {
   openPopupAnimation()
 })
@@ -120,16 +120,15 @@ onMounted(() => {
             <UButton
               ref="priorityTrigger"
               class="bg-black text-white border border-bordercolor rounded-full px-3 py-1"
-              @click="(e) => openPopup('priority', e.currentTarget)"
+              @click="openPriorityPopup"
             >
               <IconNoPriority />
               <span class="text-[15px] font-medium">No priority</span>
             </UButton>
-            <PopupTaskPrioritySelector
-              v-if="activePopup === 'priority'"
-              :items="popupData"
+            <TaskPrioritySelector
+              v-if="isOpenPriorityPopup"
               :trigger-element="priorityTrigger"
-              @close="activePopup = null"
+              @close="isOpenPriorityPopup = false"
             />
           </div>
           <div class="flex relative">
