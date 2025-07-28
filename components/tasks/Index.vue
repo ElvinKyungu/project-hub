@@ -1,55 +1,53 @@
 <script setup lang="ts">
-import type { Task } from "@/types/tasks";
+import type { Task } from '@/types/tasks'
 
-const tasksStore = useTasksStore();
-const usersStore = useUsersStore();
-const componentsStore = useComponentsStore();
+const tasksStore = useTasksStore()
+const usersStore = useUsersStore()
+const componentsStore = useComponentsStore()
 
-const displayMode = ref("list");
-const filterOpen = ref(false);
-const assigneeModalOpen = ref(false);
-const currentTask = ref<Task | null>(null);
-const showTaskPopup = ref(false);
+const displayMode = ref('list')
+const filterOpen = ref(false)
+const assigneeModalOpen = ref(false)
+const currentTask = ref<Task | null>(null)
+const showTaskPopup = ref(false)
 // 🏃‍♂️ Reactive store values
-const { tasks, loading: tasksLoading } = storeToRefs(tasksStore);
-const { users, loading: usersLoading } = storeToRefs(usersStore);
+const { tasks, loading: tasksLoading } = storeToRefs(tasksStore)
+const { users, loading: usersLoading } = storeToRefs(usersStore)
 
-const { components } = storeToRefs(componentsStore);
+const { components } = storeToRefs(componentsStore)
 
 const taskStatuses = [
-  { key: "In progress", label: "In Progress", color: "#facc15" },
-  { key: "Technical Review", label: "Technical Review", color: "#22c55e" },
-  { key: "Completed", label: "Completed", color: "#8b5cf6" },
-  { key: "Todo", label: "To Do", color: "#0ea5e9" },
-  { key: "Backlog", label: "Backlog", color: "#f97316" },
-  { key: "Paused", label: "Paused", color: "#e11d48" },
-];
+  { key: 'In progress', label: 'In Progress', color: '#facc15' },
+  { key: 'Technical Review', label: 'Technical Review', color: '#22c55e' },
+  { key: 'Completed', label: 'Completed', color: '#8b5cf6' },
+  { key: 'Todo', label: 'To Do', color: '#0ea5e9' },
+  { key: 'Backlog', label: 'Backlog', color: '#f97316' },
+  { key: 'Paused', label: 'Paused', color: '#e11d48' },
+]
 
 const groupedTasks = computed(() =>
   taskStatuses.map((status) => ({
     ...status,
     tasks: tasks.value.filter((task: Task) => task.status === status.key),
-  })),
+  }))
 )
 
 function openAssigneeModal(task: Task) {
-  currentTask.value = task;
+  currentTask.value = task
   assigneeModalOpen.value = true
 }
 
 onMounted(async () => {
-  await tasksStore.fetchTasks();
-  if (!tasks.value.length) await tasksStore.fetchTasks();
-  if (!users.value.length) await usersStore.fetchUsers();
-  if (!components.value.length) await componentsStore.fetchComponents();
-});
+  await tasksStore.fetchTasks()
+  if (!tasks.value.length) await tasksStore.fetchTasks()
+  if (!users.value.length) await usersStore.fetchUsers()
+  if (!components.value.length) await componentsStore.fetchComponents()
+})
 </script>
 
 <template>
   <div class="task-management-app">
-    <header
-      class="flex justify-between items-center p-4 border-b border-bordercolor text-white"
-    >
+    <header class="flex justify-between items-center p-4 border-b border-bordercolor text-white">
       <div class="flex items-center gap-4">
         <UButton
           class="flex gap-3 cursor-pointer items-center"
@@ -77,10 +75,7 @@ onMounted(async () => {
     </header>
 
     <main class="p-4">
-      <div
-        v-if="tasksLoading || usersLoading"
-        class="text-center text-gray-400"
-      >
+      <div v-if="tasksLoading || usersLoading" class="text-center text-gray-400">
         Loading tasks and users...
       </div>
       <template v-else>
@@ -104,24 +99,15 @@ onMounted(async () => {
             :style="{ backgroundColor: status.color + '10' }"
           >
             <div class="flex items-center gap-4 relative">
-              <IconTaskStatus
-                :stroke-color="status.color"
-                transform-status="rotate(-90 7 7)"
-                
-              />
-              
+              <IconTaskStatus :stroke-color="status.color" transform-status="rotate(-90 7 7)" />
+
               <span class="flex gap-4"
-                ><span>{{ status.label }}</span>
-                <span>{{ status.tasks.length }}</span></span
+                ><span>{{ status.label }}</span> <span>{{ status.tasks.length }}</span></span
               >
             </div>
           </h1>
 
-          <CreateTask
-            v-if="showTaskPopup"
-            :users="users"
-            @close="showTaskPopup = false"
-          />
+          <CreateTask v-if="showTaskPopup" :users="users" @close="showTaskPopup = false" />
           <TaskItem
             v-for="task in status.tasks"
             :key="task.id"

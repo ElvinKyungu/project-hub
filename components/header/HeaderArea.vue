@@ -1,40 +1,40 @@
 <script setup lang="ts">
 const menuItems = [
   {
-    label: "Profile",
-    icon: "uil:user",
-    command: () => console.log("Profile Clicked"),
+    label: 'Profile',
+    icon: 'uil:user',
+    command: () => console.log('Profile Clicked'),
   },
   {
-    label: "Settings",
-    icon: "uil:cog",
-    command: () => console.log("Settings Clicked"),
+    label: 'Settings',
+    icon: 'uil:cog',
+    command: () => console.log('Settings Clicked'),
   },
   { separator: true },
   {
-    label: "Logout",
-    icon: "uil:sign-out-alt",
-    command: () => console.log("Logout Clicked"),
+    label: 'Logout',
+    icon: 'uil:sign-out-alt',
+    command: () => console.log('Logout Clicked'),
   },
-];
+]
 
 const notifications = [
-  { label: "New comment on your post", icon: "uil:comment-alt" },
-  { label: "New follower", icon: "uil:user-plus" },
-  { label: "System update available", icon: "uil:sync" },
-];
+  { label: 'New comment on your post', icon: 'uil:comment-alt' },
+  { label: 'New follower', icon: 'uil:user-plus' },
+  { label: 'System update available', icon: 'uil:sync' },
+]
 
-const isNotifOpen = ref(false);
-const isProfileOpen = ref(false);
+const isNotifOpen = ref(false)
+const isProfileOpen = ref(false)
 
-const notifRef = ref(null);
-const profileRef = ref(null);
+const notifRef = ref(null)
+const profileRef = ref(null)
 
-onClickOutside(notifRef, () => (isNotifOpen.value = false));
-onClickOutside(profileRef, () => (isProfileOpen.value = false));
+onClickOutside(notifRef, () => (isNotifOpen.value = false))
+onClickOutside(profileRef, () => (isProfileOpen.value = false))
 
-const toggleNotif = useToggle(isNotifOpen);
-const toggleProfile = useToggle(isProfileOpen);
+const toggleNotif = useToggle(isNotifOpen)
+const toggleProfile = useToggle(isProfileOpen)
 </script>
 
 <template>
@@ -93,10 +93,7 @@ const toggleProfile = useToggle(isProfileOpen);
             class="absolute right-0 mt-2 w-48 bg-primary shadow-bordercolor/20 border border-bordercolor shadow-lg rounded-lg"
           >
             <template v-for="(item, index) in menuItems" :key="index">
-              <div
-                v-if="item.separator"
-                class="border-t border-gray-600 my-2"
-              />
+              <div v-if="item.separator" class="border-t border-gray-600 my-2" />
               <UButton
                 v-else
                 variant="ghost"

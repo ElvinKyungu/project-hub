@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { gsap } from "gsap";
-import type { User } from "@/types/users";
+import { gsap } from 'gsap'
+import type { User } from '@/types/users'
 
-const usersStore = useUsersStore();
+const usersStore = useUsersStore()
 
 const props = defineProps({
   modelValue: {
@@ -17,49 +17,46 @@ const props = defineProps({
     type: Array as PropType<User[]>,
     required: true,
   },
-});
+})
 
-const emit = defineEmits(["update:modelValue", "close"]);
+const emit = defineEmits(['update:modelValue', 'close'])
 
-const popup = ref<HTMLElement | null>(null);
-const search = ref("");
-const selected = ref<User | null>(null);
+const popup = ref<HTMLElement | null>(null)
+const search = ref('')
+const selected = ref<User | null>(null)
 
 onMounted(async () => {
   if (usersStore.users.length === 0) {
-    await usersStore.fetchUsers();
+    await usersStore.fetchUsers()
   }
-  selected.value =
-    usersStore.users.find((u) => u.id === props.modelValue) || null;
+  selected.value = usersStore.users.find((u) => u.id === props.modelValue) || null
   gsap.from(popup.value, {
     opacity: 0,
     y: -10,
     duration: 0.2,
-    ease: "power2.out",
-  });
-});
+    ease: 'power2.out',
+  })
+})
 
-onClickOutside(popup, () => emit("close"));
+onClickOutside(popup, () => emit('close'))
 
 const filteredUsers = computed(() =>
-  props.users.filter((u: User) =>
-    u.name.toLowerCase().includes(search.value.toLowerCase()),
-  ),
-);
+  props.users.filter((u: User) => u.name.toLowerCase().includes(search.value.toLowerCase()))
+)
 
 const selectUser = (user: User) => {
-  selected.value = user;
+  selected.value = user
   gsap.to(popup.value, {
     opacity: 0,
     y: -10,
     duration: 0.2,
-    ease: "power2.in",
+    ease: 'power2.in',
     onComplete: () => {
-      emit("update:modelValue", user.id);
-      emit("close");
+      emit('update:modelValue', user.id)
+      emit('close')
     },
-  });
-};
+  })
+}
 </script>
 
 <template>
@@ -79,9 +76,7 @@ const selectUser = (user: User) => {
     </div>
 
     <div class="space-y-1 max-h-64 overflow-y-auto">
-      <div v-if="usersStore.loading" class="text-gray-500 text-center py-2">
-        Loading users...
-      </div>
+      <div v-if="usersStore.loading" class="text-gray-500 text-center py-2">Loading users...</div>
       <button
         v-for="user in filteredUsers"
         v-else
@@ -101,11 +96,7 @@ const selectUser = (user: User) => {
           </UChip>
           <span>{{ user.name }} {{ user.last_name }}</span>
         </div>
-        <UIcon
-          v-if="selected?.id === user.id"
-          name="uil:check"
-          class="text-green-500"
-        />
+        <UIcon v-if="selected?.id === user.id" name="uil:check" class="text-green-500" />
       </button>
     </div>
   </div>

@@ -2,9 +2,7 @@
 <template>
   <div class="flex h-screen overflow-hidden bg-primary">
     <SidebarArea />
-    <div
-      class="relative flex flex-1 justify-start flex-col overflow-y-auto overflow-x-hidden"
-    >
+    <div class="relative flex flex-1 justify-start flex-col overflow-y-auto overflow-x-hidden">
       <header class="">
         <HeaderArea />
       </header>

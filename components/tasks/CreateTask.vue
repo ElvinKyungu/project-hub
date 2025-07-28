@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import type { Task } from "@/types/tasks";
-import type { User } from "@/types/user";
-import type { Components } from "@/types/components";
+import type { Task } from '@/types/tasks'
+import type { User } from '@/types/user'
+import type { Components } from '@/types/components'
 
 const props = defineProps<{
-  task: Task;
-  users: User[];
-  components: Components[];
-  displayMode: string;
-  statusColor: string;
-}>();
-const tasksStore = useTasksStore();
-const componentsStore = useComponentsStore();
+  task: Task
+  users: User[]
+  components: Components[]
+  displayMode: string
+  statusColor: string
+}>()
+const tasksStore = useTasksStore()
+const componentsStore = useComponentsStore()
 
 const popupRef = ref<HTMLElement | null>(null)
 const priorityTrigger = ref<HTMLElement | null>(null)
@@ -19,21 +19,23 @@ const assigneeTrigger = ref<HTMLElement | null>(null)
 const statusTrigger = ref<HTMLElement | null>(null)
 const ProjectTriggerElement = ref<HTMLElement | null>(null)
 const form = reactive({
-  title: "",
-  description: "",
-  status: "Todo",
-  type: "Feature",
-  priority: "No priority",
+  title: '',
+  description: '',
+  status: 'Todo',
+  type: 'Feature',
+  priority: 'No priority',
   lead_id: null,
   progress: 0,
-  target_date: "",
+  target_date: '',
 })
-const { openPopup: openPopupAnimation, closePopup: closePopupAnimation } =
-  usePopupAnimation(popupRef, () => {
-    emit("close")
-  })
+const { openPopup: openPopupAnimation, closePopup: closePopupAnimation } = usePopupAnimation(
+  popupRef,
+  () => {
+    emit('close')
+  }
+)
 
-const emit = defineEmits(["close"])
+const emit = defineEmits(['close'])
 
 const isAssigneePopupOpen = ref(false)
 const isOpenProjectPopup = ref(false)
@@ -78,7 +80,7 @@ onMounted(() => {
         <UIcon name="uil:times" size="24" />
       </button>
       <h1 class="text-2xl font-bold mb-4 text-white">Add New Task</h1>
-    
+
       <form class="space-y-4 flex flex-col" @submit.prevent="handleSubmit">
         <UFormGroup label="Title" class="w-full">
           <UInput
@@ -158,9 +160,7 @@ onMounted(() => {
             <TaskAssignSelect
               v-if="isAssigneePopupOpen"
               :users="props.users"
-              :trigger-element="
-                assigneeTrigger ? { $el: assigneeTrigger } : undefined
-              "
+              :trigger-element="assigneeTrigger ? { $el: assigneeTrigger } : undefined"
               @close="isAssigneePopupOpen = false"
             />
           </div>

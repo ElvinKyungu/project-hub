@@ -1,21 +1,21 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import tailwindcss from "@tailwindcss/vite";
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineNuxtConfig({
-  compatibilityDate: "2024-11-01",
+  compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  css: ["~/assets/css/main.css"],
+  css: ['~/assets/css/main.css'],
   modules: [
-    "@vueuse/nuxt",
-    "@nuxt/content",
-    "@nuxt/eslint",
-    "@nuxt/fonts",
-    "@nuxt/icon",
-    "@nuxt/image",
-    "@nuxt/ui",
-    "@nuxt/test-utils",
-    "@pinia/nuxt",
-    "@nuxtjs/supabase",
+    '@vueuse/nuxt',
+    '@nuxt/content',
+    '@nuxt/eslint',
+    '@nuxt/fonts',
+    '@nuxt/icon',
+    '@nuxt/image',
+    '@nuxt/ui',
+    '@nuxt/test-utils',
+    '@pinia/nuxt',
+    '@nuxtjs/supabase',
   ],
   runtimeConfig: {
     public: {
@@ -25,10 +25,10 @@ export default defineNuxtConfig({
   },
   supabase: {
     redirectOptions: {
-      login: "/login",
-      callback: "/confirm",
+      login: '/login',
+      callback: '/confirm',
       include: [],
-      exclude: ["/signup"],
+      exclude: ['/signup'],
       saveRedirectToCookie: false,
     },
   },
@@ -37,13 +37,13 @@ export default defineNuxtConfig({
   },
   components: [
     {
-      path: "~/components",
+      path: '~/components',
       pathPrefix: false,
     },
     // Specifically for icons if they're in a subfolder
     {
-      path: "~/components/icons",
-      prefix: "Icons",
+      path: '~/components/icons',
+      prefix: 'Icons',
     },
   ],
-});
+})

@@ -1,7 +1,7 @@
-@import "./layout/layout.scss";
-@import "tailwindcss";
-@import "tailwindcss" theme(static);
-@import "@nuxt/ui";
+@import './layout/layout.scss';
+@import 'tailwindcss';
+@import 'tailwindcss' theme(static);
+@import '@nuxt/ui';
 
 @theme {
   --color-primary: #101828;

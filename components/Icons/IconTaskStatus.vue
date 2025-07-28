@@ -2,13 +2,13 @@
 defineProps({
   strokeColor: {
     type: String,
-    default: "#facc15",
+    default: '#facc15',
   },
   transformStatus: {
     type: String,
-    default: "rotate(-90 7 7)",
+    default: 'rotate(-90 7 7)',
   },
-});
+})
 </script>
 <template>
   <svg width="14" height="14" viewBox="0 0 14 14" fill="none">

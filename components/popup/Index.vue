@@ -1,65 +1,61 @@
 <script setup lang="ts">
-import { gsap } from "gsap";
+import { gsap } from 'gsap'
 
 const props = defineProps({
   items: {
-    type: Array as PropType<
-      { id: number; name: string; icon: any; count?: number }[]
-    >,
+    type: Array as PropType<{ id: number; name: string; icon: any; count?: number }[]>,
     required: true,
   },
   title: {
     type: String,
-    default: "Select Item",
+    default: 'Select Item',
   },
   searchPlaceholder: {
     type: String,
-    default: "Search...",
+    default: 'Search...',
   },
   triggerElement: {
     type: Object as PropType<{ $el: HTMLElement }>,
     default: null,
   },
-});
+})
 
-const emit = defineEmits(["update:modelValue", "close"]);
+const emit = defineEmits(['update:modelValue', 'close'])
 
-const popup = ref<HTMLElement | null>(null);
-const search = ref("");
-const isOpen = ref(false);
+const popup = ref<HTMLElement | null>(null)
+const search = ref('')
+const isOpen = ref(false)
 
 const filtered = computed(() =>
-  props.items.filter((item) =>
-    item.name.toLowerCase().includes(search.value.toLowerCase()),
-  ),
-);
+  props.items.filter((item) => item.name.toLowerCase().includes(search.value.toLowerCase()))
+)
 
 const selectItem = (item: any) => {
   gsap.to(popup.value, {
     opacity: 0,
     y: -10,
     duration: 0.2,
-    ease: "power2.in",
+    ease: 'power2.in',
     onComplete: () => {
-      emit("update:modelValue", item);
-      emit("close");
+      emit('update:modelValue', item)
+      emit('close')
     },
-  });
-};
+  })
+}
 
 onMounted(() => {
-  isOpen.value = true;
+  isOpen.value = true
   gsap.from(popup.value, {
     opacity: 0,
     y: -10,
     duration: 0.2,
-    ease: "power2.out",
-  });
-});
+    ease: 'power2.out',
+  })
+})
 
 onClickOutside(popup, () => {
-  emit("close");
-});
+  emit('close')
+})
 </script>
 
 <template>
