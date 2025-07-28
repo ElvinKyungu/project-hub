@@ -39,16 +39,18 @@ const handleAssigneeSelect = (assignee: User) => {
   isAssigneePopupOpen.value = false;
 };
 
-const isLevelSelectorOpen = ref(false);
-const triggerElementRef = ref<HTMLElement | null>(null);
+const isLevelSelectorOpen = ref(false)
+const isOpenStatusPopup = ref(false)
+const triggerElementRef = ref<HTMLElement | null>(null)
+const priorityTrigger = ref<HTMLElement | null>(null)
 
 const openLevelSelector = () => {
-  isLevelSelectorOpen.value = true;
-};
+  isLevelSelectorOpen.value = true
+}
 
 const handleLevelSelect = () => {
   isLevelSelectorOpen.value = false;
-};
+}
 
 const priorityIcon = computed(() => {
   const priorityMap: Record<string, any> = {
@@ -72,7 +74,10 @@ const getTagBgClass = (tag: string) => {
     Other: "bg-other",
   };
   return tagColors[tag] || "bg-other";
-};
+}
+const openStatusPopup = () => {
+  isOpenStatusPopup.value = true
+}
 </script>
 
 <template>
@@ -98,10 +103,12 @@ const getTagBgClass = (tag: string) => {
         />
         <span class="text-gray-500 hidden md:block">{{ task?.status }}</span>
       </div>
-      <div class="flex items-center gap-2 font-medium">
+      <div class="flex items-center gap-2 font-medium relative">
         <UButton
+          ref="priorityTrigger"
           variant="ghost"
           class="hover:bg-white/10 p-2 cursor-pointer rounded-xl"
+          @click="openStatusPopup"
         >
           <IconTaskStatus
             :stroke-color="statusColor"
@@ -109,6 +116,11 @@ const getTagBgClass = (tag: string) => {
           />
         </UButton>
         <span>{{ task?.title }}</span>
+        <TaskStatusSelector
+          v-if="isOpenStatusPopup"
+          :trigger-element="priorityTrigger"
+          @close="isOpenStatusPopup = false"
+        />
       </div>
     </div>
 

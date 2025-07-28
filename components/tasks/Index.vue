@@ -9,7 +9,6 @@ const displayMode = ref("list");
 const filterOpen = ref(false);
 const assigneeModalOpen = ref(false);
 const currentTask = ref<Task | null>(null);
-
 const showTaskPopup = ref(false);
 // 🏃‍♂️ Reactive store values
 const { tasks, loading: tasksLoading } = storeToRefs(tasksStore);
@@ -31,11 +30,11 @@ const groupedTasks = computed(() =>
     ...status,
     tasks: tasks.value.filter((task: Task) => task.status === status.key),
   })),
-);
+)
 
 function openAssigneeModal(task: Task) {
   currentTask.value = task;
-  assigneeModalOpen.value = true;
+  assigneeModalOpen.value = true
 }
 
 onMounted(async () => {
@@ -104,11 +103,13 @@ onMounted(async () => {
             class="text-xl text-white flex items-center justify-between gap-2 my-5 py-3 px-5 rounded"
             :style="{ backgroundColor: status.color + '10' }"
           >
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-4 relative">
               <IconTaskStatus
                 :stroke-color="status.color"
                 transform-status="rotate(-90 7 7)"
+                
               />
+              
               <span class="flex gap-4"
                 ><span>{{ status.label }}</span>
                 <span>{{ status.tasks.length }}</span></span
