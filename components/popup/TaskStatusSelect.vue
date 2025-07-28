@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { gsap } from "gsap";
+import { gsap } from "gsap"
 
 const props = defineProps({
   modelValue: Object,
@@ -7,21 +7,22 @@ const props = defineProps({
     type: Object as PropType<{ $el: HTMLElement }>,
     default: null,
   },
-});
+})
 
-const emit = defineEmits(["update:modelValue", "close"]);
+const emit = defineEmits(["update:modelValue", "close"])
 
 const popup = ref<HTMLElement | null>(null);
 const search = ref("");
 const isOpen = ref(false);
 
 const priorities = [
-  { id: 0, name: "No priority", icon: "uil:ellipsis-h", count: 3 },
-  { id: 1, name: "Urgent", icon: "uil:bolt-alt", count: 11 },
-  { id: 2, name: "High", icon: "uil:signal-alt-3", count: 10 },
-  { id: 3, name: "Medium", icon: "uil:signal-alt", count: 6 },
-  { id: 4, name: "Low", icon: "uil:signal-alt", count: 0 },
-];
+  { id: 0, name: "In progress", icon: resolveComponent("TaskStatus"), count: 3 },
+  { id: 1, name: "Technical Review", icon: resolveComponent("TaskStatus"), count: 11 },
+  { id: 2, name: "Completed", icon: resolveComponent("TaskStatus"), count: 10 },
+  { id: 3, name: "To Do", icon: resolveComponent("TaskStatus"), count: 6 },
+  { id: 4, name: "Backlog", icon: resolveComponent("TaskStatus"), count: 0 },
+  { id: 5, name: "Paused", icon: resolveComponent("TaskStatus"), count: 0 },
+]
 
 const selected = ref(priorities[1]);
 
@@ -39,12 +40,11 @@ const selectLevel = (level: any) => {
     duration: 0.2,
     ease: "power2.in",
     onComplete: () => {
-      emit("update:modelValue", level);
-      emit("close");
+      emit("update:modelValue", level)
+      emit("close")
     },
-  });
-};
-
+  })
+}
 onMounted(() => {
   isOpen.value = true;
   gsap.from(popup.value, {
@@ -52,12 +52,12 @@ onMounted(() => {
     y: -10,
     duration: 0.2,
     ease: "power2.out",
-  });
-});
+  })
+})
 
 onClickOutside(popup, () => {
-  emit("close");
-});
+  emit("close")
+})
 </script>
 
 <template>
@@ -66,7 +66,7 @@ onClickOutside(popup, () => {
     class="absolute items-center gap-2 bg-primary border border-b border-bordercolor rounded-lg shadow-lg p-3 z-[999] w-64 top-10"
   >
     <div class="flex flex-col gap-2 mb-3">
-      <h2 class="text-sm font-medium">Task Level</h2>
+      <h2 class="text-sm font-medium">Task Status</h2>
       <UInput
         v-model="search"
         trailing-icon="uil:search"
