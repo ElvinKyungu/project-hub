@@ -106,7 +106,7 @@ onMounted(() => {
         <UIcon name="uil:times" size="24" />
       </button>
       <h1 class="text-2xl font-bold mb-4 text-white">Add New Task</h1>
-
+    
       <form class="space-y-4 flex flex-col" @submit.prevent="handleSubmit">
         <UFormGroup label="Title" class="w-full">
           <UInput
@@ -148,12 +148,12 @@ onMounted(() => {
               <IconNoPriority />
               <span class="text-[15px] font-medium">No priority</span>
             </UButton>
-            <!-- <PopupTaskPrioritySelector
+            <PopupTaskPrioritySelector
               v-if="activePopup === 'priority'"
               :items="popupData"
               :trigger-element="priorityTrigger"
               @close="activePopup = null"
-            /> -->
+            />
           </div>
           <div class="flex relative">
             <UButton
