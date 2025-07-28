@@ -14,10 +14,10 @@ const tasksStore = useTasksStore();
 const componentsStore = useComponentsStore();
 
 const popupRef = ref<HTMLElement | null>(null);
-const wrapperRef = ref<HTMLElement | null>(null);
 const priorityTrigger = ref<HTMLElement | null>(null);
 const assigneeTrigger = ref<HTMLElement | null>(null);
 const statusTrigger = ref<HTMLElement | null>(null)
+const ProjectTriggerElement = ref<HTMLElement | null>(null)
 const form = reactive({
   title: "",
   description: "",
@@ -38,7 +38,6 @@ const emit = defineEmits(["close"])
 const popupData = ref<
   { id: number; name: string; icon: any; count?: number }[]
 >([])
-const triggerElement = ref<HTMLElement | null>(null)
 const isAssigneePopupOpen = ref(false)
 const isOpenProjectPopup = ref(false)
 const isOpenStatusPopup = ref(false)
@@ -64,7 +63,6 @@ onMounted(() => {
 </script>
 <template>
   <div
-    ref="wrapperRef"
     class="fixed inset-0 w-full h-screen flex items-center justify-center bg-black z-[9999]"
     @click="closePopupAnimation"
   >
@@ -145,7 +143,7 @@ onMounted(() => {
             <TaskProjectSelector
               v-if="isOpenProjectPopup"
               :component="componentsStore.components"
-              :trigger-element="triggerElement"
+              :trigger-element="ProjectTriggerElement"
               @close="isOpenProjectPopup = false"
             />
           </div>
