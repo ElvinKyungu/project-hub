@@ -103,7 +103,7 @@ const getTagBgClass = (tag: string) => {
           variant="ghost"
           class="hover:bg-white/10 p-2 cursor-pointer rounded-xl"
         >
-          <TaskStatus
+          <IconTaskStatus
             :stroke-color="statusColor"
             transform-status="rotate(-90 7 7)"
           />

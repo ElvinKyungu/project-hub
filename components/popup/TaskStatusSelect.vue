@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { gsap } from "gsap"
 
-const props = defineProps({
+defineProps({
   modelValue: Object,
   triggerElement: {
     type: Object as PropType<{ $el: HTMLElement }>,
@@ -16,21 +16,21 @@ const search = ref("");
 const isOpen = ref(false);
 
 const priorities = [
-  { id: 0, name: "In progress", icon: resolveComponent("TaskStatus"), count: 3 },
-  { id: 1, name: "Technical Review", icon: resolveComponent("TaskStatus"), count: 11 },
-  { id: 2, name: "Completed", icon: resolveComponent("TaskStatus"), count: 10 },
-  { id: 3, name: "To Do", icon: resolveComponent("TaskStatus"), count: 6 },
-  { id: 4, name: "Backlog", icon: resolveComponent("TaskStatus"), count: 0 },
-  { id: 5, name: "Paused", icon: resolveComponent("TaskStatus"), count: 0 },
+  { id: 0, name: "In progress", icon: resolveComponent("IconTaskStatus"), count: 3 },
+  { id: 1, name: "Technical Review", icon: resolveComponent("IconTaskStatus"), count: 11 },
+  { id: 2, name: "Completed", icon: resolveComponent("IconTaskStatus"), count: 10 },
+  { id: 3, name: "To Do", icon: resolveComponent("IconTaskStatus"), count: 6 },
+  { id: 4, name: "Backlog", icon: resolveComponent("IconTaskStatus"), count: 0 },
+  { id: 5, name: "Paused", icon: resolveComponent("IconTaskStatus"), count: 0 },
 ]
 
-const selected = ref(priorities[1]);
+const selected = ref(priorities[1])
 
 const filtered = computed(() =>
   priorities.filter((p) =>
     p.name.toLowerCase().includes(search.value.toLowerCase()),
   ),
-);
+)
 
 const selectLevel = (level: any) => {
   selected.value = level;
@@ -84,7 +84,7 @@ onClickOutside(popup, () => {
         @click="selectLevel(item)"
       >
         <div class="flex items-center gap-3">
-          <UIcon :name="item.icon" class="w-4 h-4" size="16" />
+          <component :is="item.icon" class="w-4 h-4" size="16" />
           <span>{{ item.name }}</span>
         </div>
         <div class="flex items-center gap-1">

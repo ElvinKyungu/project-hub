@@ -17,7 +17,7 @@ const popupRef = ref<HTMLElement | null>(null);
 const wrapperRef = ref<HTMLElement | null>(null);
 const priorityTrigger = ref<HTMLElement | null>(null);
 const assigneeTrigger = ref<HTMLElement | null>(null);
-
+const statusTrigger = ref<HTMLElement | null>(null)
 const form = reactive({
   title: "",
   description: "",
@@ -27,66 +27,40 @@ const form = reactive({
   lead_id: null,
   progress: 0,
   target_date: "",
-});
+})
 const { openPopup: openPopupAnimation, closePopup: closePopupAnimation } =
   usePopupAnimation(popupRef, () => {
-    emit("close");
-  });
+    emit("close")
+  })
 
-const emit = defineEmits(["close"]);
+const emit = defineEmits(["close"])
 
 const popupData = ref<
   { id: number; name: string; icon: any; count?: number }[]
->([]);
-const triggerElement = ref<HTMLElement | null>(null);
-const isAssigneePopupOpen = ref(false);
-const isOpenProjectPopup = ref(false);
-
-const priorities = [
-  { id: 0, name: "No priority", icon: resolveComponent("IconNoPriority") },
-  { id: 1, name: "Urgent", icon: resolveComponent("IconUrgent") },
-  { id: 2, name: "High", icon: resolveComponent("IconHigh") },
-  { id: 3, name: "Medium", icon: resolveComponent("IconMedium") },
-  { id: 4, name: "Low", icon: resolveComponent("IconLow") },
-];
-
-const statuses = [
-  { id: 0, name: "In Progress", icon: resolveComponent("TaskStatus") },
-  { id: 1, name: "Completed", icon: resolveComponent("TaskStatus") },
-  { id: 2, name: "Todo", icon: resolveComponent("TaskStatus") },
-  { id: 3, name: "Backlog", icon: resolveComponent("TaskStatus") },
-  { id: 5, name: "Technical Review", icon: resolveComponent("TaskStatus") },
-  { id: 6, name: "Paused", icon: resolveComponent("TaskStatus") },
-];
-
-const openPopup = (type: typeof activePopup.value, el: HTMLElement) => {
-  triggerElement.value = el;
-  activePopup.value = type;
-  if (type === "priority") popupData.value = priorities;
-  else if (type === "status") popupData.value = statuses;
-  // ... pareil pour project ou assignee
-  else if (type === "project") {
-    // Logique pour charger les projets
-  } else if (type === "assignee") {
-    // Logique pour charger les utilisateurs
-  }
-};
+>([])
+const triggerElement = ref<HTMLElement | null>(null)
+const isAssigneePopupOpen = ref(false)
+const isOpenProjectPopup = ref(false)
+const isOpenStatusPopup = ref(false)
 
 const handleSubmit = async () => {
-  await tasksStore.addTask(form);
-};
+  await tasksStore.addTask(form)
+}
 
+const openStatusPopup = () => {
+  isOpenStatusPopup.value = true
+}
 const openAssigneePopup = () => {
-  isAssigneePopupOpen.value = true;
-};
+  isAssigneePopupOpen.value = true
+}
 
 const openProjectPopup = () => {
-  isOpenProjectPopup.value = true;
-};
+  isOpenProjectPopup.value = true
+}
 
 onMounted(() => {
-  openPopupAnimation();
-});
+  openPopupAnimation()
+})
 </script>
 <template>
   <div
@@ -133,11 +107,16 @@ onMounted(() => {
             <UButton
               ref="statusTrigger"
               class="bg-black text-white border border-bordercolor rounded-full px-3 py-1"
-              @click="(e) => openPopup('status', e.currentTarget)"
+              @click="openStatusPopup"
             >
-              <TaskStatus />
+              <IconTaskStatus />
               <span class="text-[15px] font-medium">In progress</span>
             </UButton>
+            <TaskStatusSelector
+              v-if="isOpenStatusPopup"
+              :trigger-element="statusTrigger"
+              @close="isOpenStatusPopup = false"
+            />
           </div>
           <div class="flex relative">
             <UButton

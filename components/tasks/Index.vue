@@ -105,7 +105,7 @@ onMounted(async () => {
             :style="{ backgroundColor: status.color + '10' }"
           >
             <div class="flex items-center gap-4">
-              <TaskStatus
+              <IconTaskStatus
                 :stroke-color="status.color"
                 transform-status="rotate(-90 7 7)"
               />
