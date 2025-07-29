@@ -12,6 +12,13 @@ const assigneeModalOpen = ref(false)
 const currentTask = ref<Task | null>(null)
 const showTaskPopup = ref(false)
 const displayTriggerElement = ref<HTMLElement | null>(null)
+
+// États pour les popups globaux (mode grid)
+const prioritySelectorOpen = ref(false)
+const statusSelectorOpen = ref(false)
+const priorityTriggerElement = ref<HTMLElement | null>(null)
+const statusTriggerElement = ref<HTMLElement | null>(null)
+const popupTask = ref<Task | null>(null)
 // 🏃‍♂️ Reactive store values
 const { tasks, loading: tasksLoading } = storeToRefs(tasksStore)
 const { users, loading: usersLoading } = storeToRefs(usersStore)
@@ -37,6 +44,30 @@ const groupedTasks = computed(() =>
 function openAssigneeModal(task: Task) {
   currentTask.value = task
   assigneeModalOpen.value = true
+}
+
+function openPrioritySelector(data: { task: Task; triggerElement: HTMLElement }) {
+  popupTask.value = data.task
+  priorityTriggerElement.value = data.triggerElement
+  prioritySelectorOpen.value = true
+}
+
+function openStatusSelector(data: { task: Task; triggerElement: HTMLElement }) {
+  popupTask.value = data.task
+  statusTriggerElement.value = data.triggerElement
+  statusSelectorOpen.value = true
+}
+
+function closePrioritySelector() {
+  prioritySelectorOpen.value = false
+  popupTask.value = null
+  priorityTriggerElement.value = null
+}
+
+function closeStatusSelector() {
+  statusSelectorOpen.value = false
+  popupTask.value = null
+  statusTriggerElement.value = null
 }
 
 const openDisplayMode = () => {
@@ -125,7 +156,6 @@ onMounted(async () => {
               @open-assignee="openAssigneeModal(task)"
             />
           </div>
-          
           <CreateTask v-if="showTaskPopup" :users="users" @close="showTaskPopup = false" />
         </div>
 
@@ -186,7 +216,9 @@ onMounted(async () => {
                     :users="users"
                     :components="components"
                     :status-color="status.color"
-                    @open-assignee="openAssigneeModal(task)"
+                    @open-assignee="openAssigneeModal"
+                    @open-priority-selector="openPrioritySelector"
+                    @open-status-selector="openStatusSelector"
                   />
 
                   <div
@@ -200,16 +232,39 @@ onMounted(async () => {
             </div>
           </div>
 
-          <!-- Modal de création (position absolue pour ne pas affecter le layout) -->
-          <CreateTask 
-            v-if="showTaskPopup"
-            class="fixed inset-0 z-50"
-            :users="users" 
-            @close="showTaskPopup = false"
-          />
         </div>
       </template>
     </main>
+
+    <!-- Tous les popups/modals rendus à l'extérieur du conteneur de grille -->
+    <CreateTask 
+      v-if="showTaskPopup" 
+      :users="users" 
+      @close="showTaskPopup = false" 
+    />
+    
+    <!-- Modal d'assignation -->
+    <TaskAssignModal
+      v-if="assigneeModalOpen"
+      :task="currentTask"
+      :users="users"
+      @close="assigneeModalOpen = false"
+    />
+
+    <!-- Popups pour le mode grid (rendus au niveau global) -->
+    <TaskPrioritySelector
+      v-if="prioritySelectorOpen && popupTask"
+      :tasks="[popupTask]"
+      :trigger-element="priorityTriggerElement"
+      @update:model-value="closePrioritySelector"
+      @close="closePrioritySelector"
+    />
+    
+    <TaskStatusSelector
+      v-if="statusSelectorOpen && popupTask"
+      :trigger-element="statusTriggerElement"
+      @close="closeStatusSelector"
+    />
   </div>
 </template>
 

@@ -299,14 +299,16 @@ const getStatusColor = () => {
             />
           </template>
         </UAvatar>
-        <TaskAssignSelect
-          v-if="isAssigneePopupOpen"
-          :users="props.users"
-          :model-value="leadId"
-          :trigger-element="assigneeTrigger ? { $el: assigneeTrigger } : undefined"
-          @update:model-value="handleAssigneeSelect"
-          @close="isAssigneePopupOpen = false"
-        />
+        <Teleport to="body">
+          <TaskAssignSelect
+            v-if="isAssigneePopupOpen"
+            :users="props.users"
+            :model-value="leadId"
+            :trigger-element="assigneeTrigger ? { $el: assigneeTrigger } : undefined"
+            @update:model-value="handleAssigneeSelect"
+            @close="isAssigneePopupOpen = false"
+          />
+        </Teleport>
       </div>
     </div>
   </div>
