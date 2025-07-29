@@ -4,12 +4,12 @@ import type { Task } from '@/types/tasks'
 const tasksStore = useTasksStore()
 const usersStore = useUsersStore()
 const componentsStore = useComponentsStore()
-
-const displayMode = ref('list')
+const isdisplayModalOpen = ref(false)
 const filterOpen = ref(false)
 const assigneeModalOpen = ref(false)
 const currentTask = ref<Task | null>(null)
 const showTaskPopup = ref(false)
+const displayTriggerElement = ref<HTMLElement | null>(null)
 // 🏃‍♂️ Reactive store values
 const { tasks, loading: tasksLoading } = storeToRefs(tasksStore)
 const { users, loading: usersLoading } = storeToRefs(usersStore)
@@ -37,6 +37,10 @@ function openAssigneeModal(task: Task) {
   assigneeModalOpen.value = true
 }
 
+const displayMode = () => {
+  isdisplayModalOpen.value = true
+}
+
 onMounted(async () => {
   await tasksStore.fetchTasks()
   if (!tasks.value.length) await tasksStore.fetchTasks()
@@ -58,18 +62,22 @@ onMounted(async () => {
           <span class="text-base">Filter</span>
         </UButton>
       </div>
-      <div class="flex gap-3 items-center">
-        <UIcon
-          name="uil:grid"
-          class="text-2xl cursor-pointer text-gray-400"
-          :class="{ 'text-white': displayMode === 'grid' }"
-          @click="displayMode = 'grid'"
-        />
-        <UIcon
-          name="uil:list-ul"
-          class="text-2xl cursor-pointer text-gray-400"
-          :class="{ 'text-white': displayMode === 'list' }"
-          @click="displayMode = 'list'"
+      <div class="flex gap-3 items-center relative">
+        <!-- Button to open display mode (grid/list) -->
+        <UButton
+          ref="displayTriggerElement"
+          class="flex gap-1a cursor-pointer items-center"
+          variant="ghost"
+          @click="displayMode"
+        >
+          <UIcon name="uil:sliders-v" class="text-xl" />
+
+          <span class="text-base">Display</span>
+        </UButton>
+        <DisplayMode
+          v-if="isdisplayModalOpen"
+          :trigger-element="displayTriggerElement"
+          @close="isdisplayModalOpen = false"
         />
       </div>
     </header>
