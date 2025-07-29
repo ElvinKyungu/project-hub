@@ -4,7 +4,9 @@ import type { Task } from '@/types/tasks'
 const tasksStore = useTasksStore()
 const usersStore = useUsersStore()
 const componentsStore = useComponentsStore()
+
 const isdisplayModalOpen = ref(false)
+const displayMode = ref<'list' | 'grid'>('list')
 const filterOpen = ref(false)
 const assigneeModalOpen = ref(false)
 const currentTask = ref<Task | null>(null)
@@ -37,7 +39,7 @@ function openAssigneeModal(task: Task) {
   assigneeModalOpen.value = true
 }
 
-const displayMode = () => {
+const openDisplayMode = () => {
   isdisplayModalOpen.value = true
 }
 
@@ -68,7 +70,7 @@ onMounted(async () => {
           ref="displayTriggerElement"
           class="flex gap-1a cursor-pointer items-center"
           variant="ghost"
-          @click="displayMode"
+          @click="openDisplayMode"
         >
           <UIcon name="uil:sliders-v" class="text-xl" />
 
@@ -78,6 +80,7 @@ onMounted(async () => {
           v-if="isdisplayModalOpen"
           :trigger-element="displayTriggerElement"
           @close="isdisplayModalOpen = false"
+          @update:model-value="(val) => displayMode.value = val"
         />
       </div>
     </header>
