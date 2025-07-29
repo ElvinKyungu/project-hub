@@ -206,7 +206,7 @@ const getStatusColor = () => {
   >
     <!-- En-tête de la carte avec icône de statut et ID -->
     <div class="flex items-center justify-between mb-3">
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 relative">
         <UButton
           ref="priorityTrigger"
           variant="ghost"
@@ -215,7 +215,7 @@ const getStatusColor = () => {
         >
           <IconTaskStatus :stroke-color="getStatusColor()" transform-status="rotate(-90 7 7)" />
         </UButton>
-        <span class="text-gray-400 text-sm">{{ task.id || 'LNUI-XXX' }}</span>
+        <span class="text-gray-400 text-sm">{{ task.status }}</span>
       </div>
 
       <UButton
@@ -228,8 +228,7 @@ const getStatusColor = () => {
       </UButton>
     </div>
 
-    <!-- Titre de la tâche -->
-    <h3 class="text-white font-medium text-sm mb-3 line-clamp-2">
+    <h3 class="text-white font-medium mb-3 line-clamp-2">
       {{ task?.title }}
     </h3>
 
@@ -239,7 +238,7 @@ const getStatusColor = () => {
         color="neutral"
         variant="outline"
         size="xs"
-        class="border border-bordercolor bg-black flex items-center gap-1 px-2 text-xs py-1 rounded"
+        class="border border-bordercolor bg-black flex items-center gap-1 px-2 text-xs py-1 rounded-full"
       >
         <span class="w-2 h-2 rounded-full" :class="getTagBgClass(task.type)" />
         {{ task.type }}
@@ -250,7 +249,7 @@ const getStatusColor = () => {
         color="neutral"
         variant="outline"
         size="xs"
-        class="border flex items-center gap-1 px-2 text-xs py-1 border-bordercolor rounded bg-black"
+        class="border flex items-center gap-1 px-2 text-xs py-1 border-bordercolor rounded-full bg-black"
       >
         <UIcon name="i-heroicons-puzzle-piece" class="w-3 h-3" />
         {{ taskComponent?.name }}

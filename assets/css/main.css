@@ -6,7 +6,7 @@
 @theme {
   --color-primary: #101828;
   --color-secondary: #201828;
-  --color-bordercolor: #364153;
+  --color-bordercolor: #424347;
 }
 @layer base {
   body {
@@ -20,7 +20,7 @@
       focus:border-blue-500 focus:ring-2 focus:ring-blue-500;
   }
   .tag-border {
-    @apply bg-black text-white border border-bordercolor rounded-full px-3 py-1;
+    @apply bg-black text-white border-[0.5px] shrink-0 border-bordercolor rounded-full px-3 py-1;
   }
 }
 
