@@ -205,7 +205,7 @@ const getStatusColor = () => {
     class="bg-black/20 border border-gray-700 rounded-lg p-4 hover:bg-black/30 transition-colors cursor-pointer"
   >
     <!-- En-tête de la carte avec icône de statut et ID -->
-    <div class="flex items-center justify-between mb-3 relative">
+    <div class="flex items-center justify-between mb-3">
       <div class="flex items-center gap-2 relative">
         <UButton
           ref="priorityTrigger"

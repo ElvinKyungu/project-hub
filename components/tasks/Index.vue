@@ -202,10 +202,10 @@ onMounted(async () => {
 
           <!-- Modal de création (position absolue pour ne pas affecter le layout) -->
           <CreateTask 
-            v-if="showTaskPopup" 
-            :users="users" 
-            @close="showTaskPopup = false" 
+            v-if="showTaskPopup"
             class="fixed inset-0 z-50"
+            :users="users" 
+            @close="showTaskPopup = false"
           />
         </div>
       </template>
