@@ -8,7 +8,7 @@ const props = defineProps<{
   users: User[]
   components: Components[]
   displayMode: string
-  statusColor: string
+  statusColor?: string
 }>()
 const leadId = ref<string | null>(null)
 const emit = defineEmits(['open-assignee', 'update-assignee'])
@@ -56,6 +56,7 @@ const priorityIcon = computed(() => {
   }
   return priorityMap[props.task.priority] || resolveComponent('NoPriority')
 })
+
 const getTagBgClass = (tag: string) => {
   const tagColors: Record<string, string> = {
     Bug: 'bg-testing',
@@ -69,13 +70,31 @@ const getTagBgClass = (tag: string) => {
   }
   return tagColors[tag] || 'bg-other'
 }
+
 const openStatusPopup = () => {
   isOpenStatusPopup.value = true
+}
+
+// Fonction pour obtenir la couleur du statut
+const getStatusColor = () => {
+  const statusColors: Record<string, string> = {
+    'In progress': '#facc15',
+    'Technical Review': '#22c55e',
+    Completed: '#8b5cf6',
+    Todo: '#0ea5e9',
+    Backlog: '#f97316',
+    Paused: '#e11d48',
+  }
+  return statusColors[props.task.status] || '#6b7280'
 }
 </script>
 
 <template>
-  <div class="flex justify-between text-white hover:bg-white/5 rounded-md p-2 transition-colors">
+  <!-- Mode Liste -->
+  <div
+    v-if="displayMode === 'list'"
+    class="flex justify-between text-white hover:bg-white/5 rounded-md p-2 transition-colors"
+  >
     <div class="flex items-center gap-4">
       <div class="flex items-center gap-2 relative">
         <UButton
@@ -178,5 +197,121 @@ const openStatusPopup = () => {
         />
       </div>
     </div>
+  </div>
+
+  <!-- Mode Grille -->
+  <div
+    v-else-if="displayMode === 'grid'"
+    class="bg-gray-900 border border-gray-700 rounded-lg p-4 hover:bg-gray-800 transition-colors cursor-pointer"
+  >
+    <!-- En-tête de la carte avec icône de statut et ID -->
+    <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+        <UButton
+          ref="priorityTrigger"
+          variant="ghost"
+          class="hover:bg-white/10 p-1 cursor-pointer rounded"
+          @click="openStatusPopup"
+        >
+          <IconTaskStatus :stroke-color="getStatusColor()" transform-status="rotate(-90 7 7)" />
+        </UButton>
+        <span class="text-gray-400 text-sm">{{ task.id || 'LNUI-XXX' }}</span>
+      </div>
+
+      <UButton
+        ref="triggerElementRef"
+        variant="ghost"
+        class="hover:bg-white/10 p-1 cursor-pointer rounded"
+        @click="openLevelSelector"
+      >
+        <component :is="priorityIcon" />
+      </UButton>
+    </div>
+
+    <!-- Titre de la tâche -->
+    <h3 class="text-white font-medium text-sm mb-3 line-clamp-2">
+      {{ task?.title }}
+    </h3>
+
+    <!-- Tags et badges -->
+    <div class="flex flex-wrap gap-2 mb-3">
+      <UBadge
+        color="neutral"
+        variant="outline"
+        size="xs"
+        class="border border-bordercolor bg-black flex items-center gap-1 px-2 text-xs py-1 rounded"
+      >
+        <span class="w-2 h-2 rounded-full" :class="getTagBgClass(task.type)" />
+        {{ task.type }}
+      </UBadge>
+
+      <UBadge
+        v-if="taskComponent?.name"
+        color="neutral"
+        variant="outline"
+        size="xs"
+        class="border flex items-center gap-1 px-2 text-xs py-1 border-bordercolor rounded bg-black"
+      >
+        <UIcon name="i-heroicons-puzzle-piece" class="w-3 h-3" />
+        {{ taskComponent?.name }}
+      </UBadge>
+    </div>
+
+    <!-- Pied de carte avec date et assigné -->
+    <div class="flex items-center justify-between">
+      <div class="text-xs text-gray-400">
+        {{
+          task.target_date
+            ? new Date(task.target_date).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+              })
+            : 'No due date'
+        }}
+      </div>
+
+      <div class="relative">
+        <UAvatar
+          ref="assigneeTrigger"
+          :src="assigneeUser?.avatarUrl"
+          :alt="assigneeUser?.name || 'default'"
+          size="sm"
+          class="cursor-pointer hover:ring-2 hover:ring-primary"
+          @click="openAssigneePopup"
+        >
+          <template #badge>
+            <UIcon
+              v-if="task?.lead_id"
+              name="i-heroicons-check-circle-20-solid"
+              class="absolute -bottom-0.5 -right-0.5 w-4 h-4 text-primary"
+            />
+          </template>
+        </UAvatar>
+      </div>
+    </div>
+
+    <!-- Modals/Popups (partagés entre les deux modes) -->
+    <TaskPrioritySelector
+      v-if="isLevelSelectorOpen"
+      :tasks="[props.task]"
+      :trigger-element="triggerElementRef?.$el ?? triggerElementRef"
+      @update:model-value="handleLevelSelect"
+      @close="isLevelSelectorOpen = false"
+    />
+
+    <TaskStatusSelector
+      v-if="isOpenStatusPopup"
+      :trigger-element="priorityTrigger"
+      @close="isOpenStatusPopup = false"
+    />
+
+    <TaskAssignSelect
+      v-if="isAssigneePopupOpen"
+      :users="props.users"
+      :model-value="leadId"
+      :trigger-element="assigneeTrigger ? { $el: assigneeTrigger } : undefined"
+      @update:model-value="handleAssigneeSelect"
+      @close="isAssigneePopupOpen = false"
+    />
   </div>
 </template>
