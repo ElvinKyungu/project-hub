@@ -127,7 +127,7 @@ onMounted(async () => {
           </div>
         </div>
         <div v-if="displayMode === 'grid'">
-          <div class="flex gap-4 overflow-x-auto overflow-y-auto pb-4">
+          <div class="flex gap-4 overflow-x-auto overflow-y-auto pb-4 mt-3">
             <div v-for="status in groupedTasks" :key="status.key" class="min-w-80 flex-shrink-0">
               <div class="mb-4">
                 <div

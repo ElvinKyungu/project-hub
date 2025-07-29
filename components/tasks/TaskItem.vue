@@ -202,10 +202,10 @@ const getStatusColor = () => {
   <!-- Mode Grille -->
   <div
     v-else-if="displayMode === 'grid'"
-    class="bg-gray-900 border border-gray-700 rounded-lg p-4 hover:bg-gray-800 transition-colors cursor-pointer"
+    class="bg-black/20 border border-gray-700 rounded-lg p-4 hover:bg-black/30 transition-colors cursor-pointer"
   >
     <!-- En-tête de la carte avec icône de statut et ID -->
-    <div class="flex items-center justify-between mb-3">
+    <div class="flex items-center justify-between mb-3 relative">
       <div class="flex items-center gap-2 relative">
         <UButton
           ref="priorityTrigger"
@@ -216,18 +216,31 @@ const getStatusColor = () => {
           <IconTaskStatus :stroke-color="getStatusColor()" transform-status="rotate(-90 7 7)" />
         </UButton>
         <span class="text-gray-400 text-sm">{{ task.status }}</span>
+        <TaskStatusSelector
+          v-if="isOpenStatusPopup"
+          :trigger-element="priorityTrigger"
+          @close="isOpenStatusPopup = false"
+        />
       </div>
 
-      <UButton
-        ref="triggerElementRef"
-        variant="ghost"
-        class="hover:bg-white/10 p-1 cursor-pointer rounded"
-        @click="openLevelSelector"
-      >
+     <div class="relative">
+        <UButton
+          ref="triggerElementRef"
+          variant="ghost"
+          class="hover:bg-white/10 p-1 cursor-pointer rounded relative"
+          @click="openLevelSelector"
+        >
         <component :is="priorityIcon" />
-      </UButton>
+        </UButton>
+        <TaskPrioritySelector
+          v-if="isLevelSelectorOpen"
+          :tasks="[props.task]"
+          :trigger-element="triggerElementRef?.$el ?? triggerElementRef"
+          @update:model-value="handleLevelSelect"
+          @close="isLevelSelectorOpen = false"
+        />
+     </div>
     </div>
-
     <h3 class="text-white font-medium mb-3 line-clamp-2">
       {{ task?.title }}
     </h3>
@@ -286,31 +299,15 @@ const getStatusColor = () => {
             />
           </template>
         </UAvatar>
+        <TaskAssignSelect
+          v-if="isAssigneePopupOpen"
+          :users="props.users"
+          :model-value="leadId"
+          :trigger-element="assigneeTrigger ? { $el: assigneeTrigger } : undefined"
+          @update:model-value="handleAssigneeSelect"
+          @close="isAssigneePopupOpen = false"
+        />
       </div>
     </div>
-
-    <!-- Modals/Popups (partagés entre les deux modes) -->
-    <TaskPrioritySelector
-      v-if="isLevelSelectorOpen"
-      :tasks="[props.task]"
-      :trigger-element="triggerElementRef?.$el ?? triggerElementRef"
-      @update:model-value="handleLevelSelect"
-      @close="isLevelSelectorOpen = false"
-    />
-
-    <TaskStatusSelector
-      v-if="isOpenStatusPopup"
-      :trigger-element="priorityTrigger"
-      @close="isOpenStatusPopup = false"
-    />
-
-    <TaskAssignSelect
-      v-if="isAssigneePopupOpen"
-      :users="props.users"
-      :model-value="leadId"
-      :trigger-element="assigneeTrigger ? { $el: assigneeTrigger } : undefined"
-      @update:model-value="handleAssigneeSelect"
-      @close="isAssigneePopupOpen = false"
-    />
   </div>
 </template>
