@@ -259,7 +259,6 @@ onMounted(async () => {
       @update:model-value="closePrioritySelector"
       @close="closePrioritySelector"
     />
-    
     <TaskStatusSelector
       v-if="statusSelectorOpen && popupTask"
       :trigger-element="statusTriggerElement"
