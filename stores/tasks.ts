@@ -71,6 +71,18 @@ export const useTasksStore = defineStore('tasks', () => {
       loading.value = false
     }
   }
-
-  return { tasks, loading, fetchTasks, addTask, updateTask, deleteTask }
+  const updateTaskOptimized = async (id: string, updates: Partial<Task>) => {
+    try {
+      const { error } = await client.from('tasks').update(updates).eq('id', id)
+      if (error) throw error
+      
+      // Pas de fetchTasks() ici - les optimistic updates gèrent l'UI
+      // Le cache Nuxt sera mis à jour par refreshTasks() si nécessaire
+      return true
+    } catch (err) {
+      handleError(err)
+      throw err // Important pour déclencher le rollback
+    }
+  }
+  return { tasks, loading, fetchTasks, addTask, updateTask, deleteTask, updateTaskOptimized }
 })

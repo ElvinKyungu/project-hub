@@ -21,22 +21,25 @@ const priorityTriggerElement = ref<HTMLElement | null>(null)
 const statusTriggerElement = ref<HTMLElement | null>(null)
 const popupTask = ref<Task | null>(null)
 
-// État local des tâches pour mise à jour optimiste
-const localTasks = ref<Task[]>([])
 const isDragging = ref(false)
 
-// 🏃‍♂️ Reactive store values
+// 🏃‍♂️ Utiliser les stores directement + cache intelligent
 const { tasks: storeTasks, loading: tasksLoading } = storeToRefs(tasksStore)
-const { users, loading: usersLoading } = storeToRefs(usersStore)
-const { components } = storeToRefs(componentsStore)
+const { users: storeUsers, loading: usersLoading } = storeToRefs(usersStore)
+const { components: storeComponents, loading: componentsLoading } = storeToRefs(componentsStore)
 
-// Utiliser les tâches locales ou du store
-const tasks = computed(() => localTasks.value.length > 0 ? localTasks.value : storeTasks.value)
+// Cache local pour les optimistic updates
+const optimisticTasks = ref<Task[]>([])
 
-// Synchroniser les tâches locales avec le store
+// Utiliser les tâches optimistes si disponibles, sinon le store
+const tasks = computed(() => optimisticTasks.value.length > 0 ? optimisticTasks.value : storeTasks.value)
+const users = computed(() => storeUsers.value)
+const components = computed(() => storeComponents.value)
+
+// Synchroniser les tâches optimistes avec le store
 watch(storeTasks, (newTasks) => {
-  if (!isDragging.value) {
-    localTasks.value = [...newTasks]
+  if (!isDragging.value && newTasks.length > 0) {
+    optimisticTasks.value = [...newTasks]
   }
 }, { immediate: true, deep: true })
 
@@ -57,24 +60,50 @@ const groupedTasks = computed(() =>
   }))
 )
 
-// Fonction de mise à jour optimiste
+// Fonction de mise à jour optimiste simple
 function updateTaskOptimistically(taskId: string, updates: Partial<Task>) {
-  const taskIndex = localTasks.value.findIndex(t => t.id === taskId)
+  const taskIndex = optimisticTasks.value.findIndex((t: Task) => t.id === taskId)
   if (taskIndex !== -1) {
-    localTasks.value[taskIndex] = { ...localTasks.value[taskIndex], ...updates }
+    // Créer une nouvelle référence pour déclencher la réactivité
+    const updatedTask = { 
+      ...optimisticTasks.value[taskIndex], 
+      ...updates,
+      // Re-enrichir avec assignee si nécessaire
+      assignee: updates.lead_id 
+        ? users.value.find(u => u.id === updates.lead_id) || null
+        : optimisticTasks.value[taskIndex].assignee
+    }
+    
+    optimisticTasks.value = [
+      ...optimisticTasks.value.slice(0, taskIndex),
+      updatedTask,
+      ...optimisticTasks.value.slice(taskIndex + 1)
+    ]
   }
 }
 
-// Fonction de synchronisation en arrière-plan
+// Fonction de rollback en cas d'erreur
+async function rollbackTask(taskId: string) {
+  try {
+    // Recharger les données depuis le serveur
+    await tasksStore.fetchTasks()
+    // Réinitialiser le cache optimiste
+    optimisticTasks.value = [...storeTasks.value]
+  } catch (error) {
+    console.error('Error during rollback:', error)
+  }
+}
+
+// Fonction de synchronisation en arrière-plan avec rollback
 async function syncTaskUpdate(taskId: string, updates: Partial<Task>) {
   try {
     await tasksStore.updateTask(taskId, updates)
     console.log('✅ Task synced successfully')
   } catch (error) {
     console.error('❌ Error syncing task:', error)
-    // En cas d'erreur, on recharge pour revenir à l'état cohérent
-    await tasksStore.fetchTasks()
-    // Optionnel: afficher une notification d'erreur
+    // Rollback optimiste en cas d'erreur
+    await rollbackTask(taskId)
+    useToast().error('Failed to update task')
   }
 }
 
@@ -103,45 +132,44 @@ function handleDragEnd() {
   isDragging.value = false
 }
 
-// Computed pour chaque colonne avec v-model
+// Computed pour chaque colonne avec v-model optimisé
 const todoTasks = computed({
-  get: () => tasks.value.filter(task => task.status === 'Todo'),
-  set: (newTasks) => {
-    // Mise à jour de la liste locale
-    const otherTasks = tasks.value.filter(task => task.status !== 'Todo')
-    localTasks.value = [...otherTasks, ...newTasks.map(task => ({ ...task, status: 'Todo' }))]
+  get: () => tasks.value.filter((task: Task) => task.status === 'Todo'),
+  set: (newTasks: Task[]) => {
+    const otherTasks = tasks.value.filter((task: Task) => task.status !== 'Todo')
+    optimisticTasks.value = [...otherTasks, ...newTasks.map(task => ({ ...task, status: 'Todo' }))]
   }
 })
 
 const inProgressTasks = computed({
-  get: () => tasks.value.filter(task => task.status === 'In progress'),
-  set: (newTasks) => {
-    const otherTasks = tasks.value.filter(task => task.status !== 'In progress')
-    localTasks.value = [...otherTasks, ...newTasks.map(task => ({ ...task, status: 'In progress' }))]
+  get: () => tasks.value.filter((task: Task) => task.status === 'In progress'),
+  set: (newTasks: Task[]) => {
+    const otherTasks = tasks.value.filter((task: Task) => task.status !== 'In progress')
+    optimisticTasks.value = [...otherTasks, ...newTasks.map(task => ({ ...task, status: 'In progress' }))]
   }
 })
 
 const technicalReviewTasks = computed({
-  get: () => tasks.value.filter(task => task.status === 'Technical Review'),
-  set: (newTasks) => {
-    const otherTasks = tasks.value.filter(task => task.status !== 'Technical Review')
-    localTasks.value = [...otherTasks, ...newTasks.map(task => ({ ...task, status: 'Technical Review' }))]
+  get: () => tasks.value.filter((task: Task) => task.status === 'Technical Review'),
+  set: (newTasks: Task[]) => {
+    const otherTasks = tasks.value.filter((task: Task) => task.status !== 'Technical Review')
+    optimisticTasks.value = [...otherTasks, ...newTasks.map(task => ({ ...task, status: 'Technical Review' }))]
   }
 })
 
 const completedTasks = computed({
-  get: () => tasks.value.filter(task => task.status === 'Completed'),
-  set: (newTasks) => {
-    const otherTasks = tasks.value.filter(task => task.status !== 'Completed')
-    localTasks.value = [...otherTasks, ...newTasks.map(task => ({ ...task, status: 'Completed' }))]
+  get: () => tasks.value.filter((task: Task) => task.status === 'Completed'),
+  set: (newTasks: Task[]) => {
+    const otherTasks = tasks.value.filter((task: Task) => task.status !== 'Completed')
+    optimisticTasks.value = [...otherTasks, ...newTasks.map(task => ({ ...task, status: 'Completed' }))]
   }
 })
 
 const backlogTasks = computed({
-  get: () => tasks.value.filter(task => task.status === 'Backlog'),
-  set: (newTasks) => {
-    const otherTasks = tasks.value.filter(task => task.status !== 'Backlog')
-    localTasks.value = [...otherTasks, ...newTasks.map(task => ({ ...task, status: 'Backlog' }))]
+  get: () => tasks.value.filter((task: Task) => task.status === 'Backlog'),
+  set: (newTasks: Task[]) => {
+    const otherTasks = tasks.value.filter((task: Task) => task.status !== 'Backlog')
+    optimisticTasks.value = [...otherTasks, ...newTasks.map(task => ({ ...task, status: 'Backlog' }))]
   }
 })
 
@@ -149,10 +177,11 @@ const pausedTasks = computed({
   get: () => tasks.value.filter((task: Task) => task.status === 'Paused'),
   set: (newTasks: Task[]) => {
     const otherTasks = tasks.value.filter((task: Task) => task.status !== 'Paused')
-    localTasks.value = [...otherTasks, ...newTasks.map(task => ({ ...task, status: 'Paused' }))]
+    optimisticTasks.value = [...otherTasks, ...newTasks.map(task => ({ ...task, status: 'Paused' }))]
   }
 })
 
+// Map pour accéder facilement aux listes
 const taskLists = {
   'Todo': todoTasks,
   'In progress': inProgressTasks,
@@ -161,10 +190,12 @@ const taskLists = {
   'Backlog': backlogTasks,
   'Paused': pausedTasks,
 }
+
 function openAssigneeModal(task: Task) {
   currentTask.value = task
   assigneeModalOpen.value = true
 }
+
 function openPrioritySelector(data: { task: Task; triggerElement: HTMLElement }) {
   popupTask.value = data.task
   priorityTriggerElement.value = data.triggerElement
@@ -194,10 +225,9 @@ const openDisplayMode = () => {
 }
 
 onMounted(async () => {
-  await tasksStore.fetchTasks()
-  if (!tasks.value.length) await tasksStore.fetchTasks()
-  if (!users.value.length) await usersStore.fetchUsers()
-  if (!components.value.length) await componentsStore.fetchComponents()
+  if (!storeTasks.value.length) await tasksStore.fetchTasks()
+  if (!storeUsers.value.length) await usersStore.fetchUsers()
+  if (!storeComponents.value.length) await componentsStore.fetchComponents()
 })
 </script>
 
@@ -234,7 +264,8 @@ onMounted(async () => {
     </header>
 
     <main class="flex-1 overflow-hidden">
-      <div v-if="tasksLoading || usersLoading" class="text-center text-gray-400 p-4">
+      <!-- Loading uniquement au premier chargement -->
+      <div v-if="tasksLoading && !tasks.length" class="text-center text-gray-400 p-4">
         Loading tasks and users...
       </div>
       <template v-else>
