@@ -23,10 +23,9 @@ const popupTask = ref<Task | null>(null)
 
 const isDragging = ref(false)
 
-// 🏃‍♂️ Utiliser les stores directement + cache intelligent
 const { tasks: storeTasks, loading: tasksLoading } = storeToRefs(tasksStore)
-const { users: storeUsers, loading: usersLoading } = storeToRefs(usersStore)
-const { components: storeComponents, loading: componentsLoading } = storeToRefs(componentsStore)
+const { users: storeUsers } = storeToRefs(usersStore)
+const { components: storeComponents } = storeToRefs(componentsStore)
 
 // Cache local pour les optimistic updates
 const optimisticTasks = ref<Task[]>([])
@@ -37,7 +36,7 @@ const users = computed(() => storeUsers.value)
 const components = computed(() => storeComponents.value)
 
 // Synchroniser les tâches optimistes avec le store
-watch(storeTasks, (newTasks) => {
+watch(storeTasks, (newTasks: Task[]) => {
   if (!isDragging.value && newTasks.length > 0) {
     optimisticTasks.value = [...newTasks]
   }
