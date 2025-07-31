@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Task } from '@/types/tasks'
+import draggable from 'vuedraggable'
 
 const tasksStore = useTasksStore()
 const usersStore = useUsersStore()
@@ -19,27 +20,80 @@ const statusSelectorOpen = ref(false)
 const priorityTriggerElement = ref<HTMLElement | null>(null)
 const statusTriggerElement = ref<HTMLElement | null>(null)
 const popupTask = ref<Task | null>(null)
+
 // 🏃‍♂️ Reactive store values
 const { tasks, loading: tasksLoading } = storeToRefs(tasksStore)
 const { users, loading: usersLoading } = storeToRefs(usersStore)
-
 const { components } = storeToRefs(componentsStore)
 
 const taskStatuses = [
+  { key: 'Todo', label: 'To Do', color: '#0ea5e9' },
   { key: 'In progress', label: 'In Progress', color: '#facc15' },
   { key: 'Technical Review', label: 'Technical Review', color: '#22c55e' },
   { key: 'Completed', label: 'Completed', color: '#8b5cf6' },
-  { key: 'Todo', label: 'To Do', color: '#0ea5e9' },
   { key: 'Backlog', label: 'Backlog', color: '#f97316' },
   { key: 'Paused', label: 'Paused', color: '#e11d48' },
 ]
 
+// Computed pour les tâches groupées
 const groupedTasks = computed(() =>
   taskStatuses.map((status) => ({
     ...status,
     tasks: tasks.value.filter((task: Task) => task.status === status.key),
   }))
 )
+
+// Fonction pour gérer les changements de drag and drop
+async function handleTaskChange(evt: any, targetStatus: string) {
+  try {
+    // Cas où une tâche est ajoutée dans une nouvelle colonne
+    if (evt.added) {
+      const task = evt.added.element as Task
+      if (task.status !== targetStatus) {
+        await tasksStore.updateTask(task.id, { status: targetStatus })
+      }
+    }
+    
+    // Cas où une tâche est déplacée dans la même colonne
+    if (evt.moved) {
+      // Optionnel: gérer l'ordre des tâches si nécessaire
+      console.log('Task moved within same column:', evt.moved)
+    }
+  } catch (error) {
+    console.error('Error updating task status:', error)
+    // Recharger les tâches en cas d'erreur pour revenir à l'état cohérent
+    await tasksStore.fetchTasks()
+  }
+}
+
+// Fonction pour créer des listes réactives pour chaque statut
+function createTaskList(statusKey: string) {
+  return computed({
+    get: () => tasks.value.filter((task: Task) => task.status === statusKey),
+    set: (newValue: Task[]) => {
+      // Cette fonction est appelée automatiquement par vue-draggable
+      // On ne fait rien ici car on gère les changements dans handleTaskChange
+    }
+  })
+}
+
+// Créer les listes pour chaque statut
+const todoTasks = createTaskList('Todo')
+const inProgressTasks = createTaskList('In progress')
+const technicalReviewTasks = createTaskList('Technical Review')
+const completedTasks = createTaskList('Completed')
+const backlogTasks = createTaskList('Backlog')
+const pausedTasks = createTaskList('Paused')
+
+// Map pour accéder facilement aux listes
+const taskLists = {
+  'Todo': todoTasks,
+  'In progress': inProgressTasks,
+  'Technical Review': technicalReviewTasks,
+  'Completed': completedTasks,
+  'Backlog': backlogTasks,
+  'Paused': pausedTasks,
+}
 
 function openAssigneeModal(task: Task) {
   currentTask.value = task
@@ -131,7 +185,8 @@ onMounted(async () => {
             </UButton>
           </div>
           
-          <div v-for="status in groupedTasks" :key="status.key" :title="status.label">
+          <!-- Mode liste avec drag and drop -->
+          <div v-for="status in groupedTasks" :key="status.key">
             <h1
               class="text-xl text-white flex items-center justify-between gap-2 my-5 py-3 px-5 rounded"
               :style="{ backgroundColor: status.color + '10' }"
@@ -145,18 +200,30 @@ onMounted(async () => {
               </div>
             </h1>
 
-            <TaskItem
-              v-for="task in status.tasks"
-              :key="task.id"
-              :task="task"
-              :display-mode="displayMode"
-              :users="users"
-              :components="components"
-              :status-color="status.color"
-              @open-assignee="openAssigneeModal(task)"
-            />
+            <draggable
+              v-model="taskLists[status.key].value"
+              group="tasks"
+              item-key="id"
+              class="min-h-[50px] pb-4"
+              ghost-class="ghost-task"
+              chosen-class="chosen-task"
+              drag-class="drag-task"
+              @change="(evt) => handleTaskChange(evt, status.key)"
+            >
+              <template #item="{ element: task }">
+                <div class="mb-3">
+                  <TaskItem
+                    :task="task"
+                    :display-mode="displayMode"
+                    :users="users"
+                    :components="components"
+                    :status-color="status.color"
+                    @open-assignee="openAssigneeModal(task)"
+                  />
+                </div>
+              </template>
+            </draggable>
           </div>
-          <CreateTask v-if="showTaskPopup" :users="users" @close="showTaskPopup = false" />
         </div>
 
         <!-- Mode Grille -->
@@ -206,61 +273,64 @@ onMounted(async () => {
                   </div>
                 </div>
 
-                <!-- Zone des tâches (scroll vertical) -->
-                <div class="flex-1 overflow-y-auto space-y-3 pr-2">
-                  <TaskItem
-                    v-for="task in status.tasks"
-                    :key="task.id"
-                    :task="task"
-                    :display-mode="displayMode"
-                    :users="users"
-                    :components="components"
-                    :status-color="status.color"
-                    @open-assignee="openAssigneeModal"
-                    @open-priority-selector="openPrioritySelector"
-                    @open-status-selector="openStatusSelector"
-                  />
-
+                <!-- Zone des tâches avec drag and drop -->
+                <div class="flex-1 overflow-y-auto pr-2">
+                  <draggable
+                    v-model="taskLists[status.key].value"
+                    group="tasks"
+                    item-key="id"
+                    class="space-y-3 min-h-[200px]"
+                    ghost-class="ghost-task"
+                    chosen-class="chosen-task"
+                    drag-class="drag-task"
+                    @change="(evt) => handleTaskChange(evt, status.key)"
+                  >
+                    <template #item="{ element: task }">
+                      <TaskItem
+                        :task="task"
+                        :display-mode="displayMode"
+                        :users="users"
+                        :components="components"
+                        :status-color="status.color"
+                        @open-assignee="openAssigneeModal"
+                        @open-priority-selector="openPrioritySelector"
+                        @open-status-selector="openStatusSelector"
+                      />
+                    </template>
+                  </draggable>
+                  
+                  <!-- Zone de drop vide -->
                   <div
                     v-if="status.tasks.length === 0"
-                    class="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center text-gray-400 mt-4"
+                    class="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center text-gray-400 mt-4 min-h-[200px] flex items-center justify-center"
                   >
-                    No tasks in {{ status.label }}
+                    <span class="text-sm">Drop tasks here<br>{{ status.label }} is empty</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
         </div>
       </template>
     </main>
-
-    <!-- Tous les popups/modals rendus à l'extérieur du conteneur de grille -->
+    
     <CreateTask 
       v-if="showTaskPopup" 
       :users="users" 
       @close="showTaskPopup = false" 
     />
-    
-    <!-- Modal d'assignation -->
-    <TaskAssignModal
-      v-if="assigneeModalOpen"
-      :task="currentTask"
-      :users="users"
-      @close="assigneeModalOpen = false"
-    />
 
-    <!-- Popups pour le mode grid (rendus au niveau global) -->
-    <TaskPrioritySelector
+    <!-- Popups globaux -->
+    <PrioritySelector
       v-if="prioritySelectorOpen && popupTask"
-      :tasks="[popupTask]"
+      :task="popupTask"
       :trigger-element="priorityTriggerElement"
-      @update:model-value="closePrioritySelector"
       @close="closePrioritySelector"
     />
-    <TaskStatusSelector
+    
+    <StatusSelector
       v-if="statusSelectorOpen && popupTask"
+      :task="popupTask"
       :trigger-element="statusTriggerElement"
       @close="closeStatusSelector"
     />
@@ -302,5 +372,38 @@ onMounted(async () => {
 
 .overflow-x-auto::-webkit-scrollbar-thumb:hover {
   background: rgba(156, 163, 175, 0.5);
+}
+
+/* Styles pour le drag and drop */
+.ghost-task {
+  opacity: 0.5;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px dashed #4f46e5;
+  border-radius: 8px;
+}
+
+.chosen-task {
+  cursor: grabbing !important;
+  transform: rotate(2deg);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
+.drag-task {
+  cursor: grabbing !important;
+  opacity: 0.8;
+}
+
+/* Animation smooth pour les déplacements */
+.sortable-drag {
+  transition: transform 0.2s ease;
+}
+
+/* Assurer une hauteur minimale pour les zones de drop */
+.min-h-[50px] {
+  min-height: 50px;
+}
+.min-h-[200px] {
+  min-height: 200px;
 }
 </style>
