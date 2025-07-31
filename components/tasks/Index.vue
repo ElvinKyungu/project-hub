@@ -146,14 +146,13 @@ const backlogTasks = computed({
 })
 
 const pausedTasks = computed({
-  get: () => tasks.value.filter(task => task.status === 'Paused'),
-  set: (newTasks) => {
-    const otherTasks = tasks.value.filter(task => task.status !== 'Paused')
+  get: () => tasks.value.filter((task: Task) => task.status === 'Paused'),
+  set: (newTasks: Task[]) => {
+    const otherTasks = tasks.value.filter((task: Task) => task.status !== 'Paused')
     localTasks.value = [...otherTasks, ...newTasks.map(task => ({ ...task, status: 'Paused' }))]
   }
 })
 
-// Map pour accéder facilement aux listes
 const taskLists = {
   'Todo': todoTasks,
   'In progress': inProgressTasks,
@@ -162,12 +161,10 @@ const taskLists = {
   'Backlog': backlogTasks,
   'Paused': pausedTasks,
 }
-
 function openAssigneeModal(task: Task) {
   currentTask.value = task
   assigneeModalOpen.value = true
 }
-
 function openPrioritySelector(data: { task: Task; triggerElement: HTMLElement }) {
   popupTask.value = data.task
   priorityTriggerElement.value = data.triggerElement
