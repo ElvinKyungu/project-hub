@@ -1,56 +1,93 @@
 <script setup lang="ts">
-const tasksStore = useTasksStore();
+import type { Task } from '@/types/tasks'
+import type { User } from '@/types/user'
+import type { Components } from '@/types/components'
 
-const activePopup = ref<null | "assign" | "level" | "priority" | "project">(
-  null,
-);
+const props = defineProps<{
+  task: Task
+  users: User[]
+  components: Components[]
+  displayMode: string
+  statusColor: string
+}>()
+const tasksStore = useTasksStore()
+const componentsStore = useComponentsStore()
 
-const openPopup = (popup: typeof activePopup.value) => {
-  activePopup.value = popup;
-};
-
-const closePopup = () => {
-  activePopup.value = null;
-};
-
+const popupRef = ref<HTMLElement | null>(null)
+const priorityTrigger = ref<HTMLElement | null>(null)
+const assigneeTrigger = ref<HTMLElement | null>(null)
+const statusTrigger = ref<HTMLElement | null>(null)
+const ProjectTriggerElement = ref<HTMLElement | null>(null)
 const form = reactive({
-  title: "",
-  description: "",
-  status: "Todo",
-  type: "Feature",
-  priority: "No priority",
+  title: '',
+  description: '',
+  status: 'Todo',
+  type: 'Feature',
+  priority: 'No priority',
   lead_id: null,
   progress: 0,
-  target_date: "",
-});
+  target_date: '',
+})
+const { openPopup: openPopupAnimation, closePopup: closePopupAnimation } = usePopupAnimation(
+  popupRef,
+  () => {
+    emit('close')
+  }
+)
+
+const emit = defineEmits(['close'])
+
+const isAssigneePopupOpen = ref(false)
+const isOpenProjectPopup = ref(false)
+const isOpenStatusPopup = ref(false)
+const isOpenPriorityPopup = ref(false)
 
 const handleSubmit = async () => {
-  await tasksStore.addTask(form);
-  if (!tasksStore.error) {
-    await navigateTo("/tasks");
-  }
-};
+  await tasksStore.addTask(form)
+}
+
+const openStatusPopup = () => {
+  isOpenStatusPopup.value = true
+}
+const openAssigneePopup = () => {
+  isAssigneePopupOpen.value = true
+}
+
+const openProjectPopup = () => {
+  isOpenProjectPopup.value = true
+}
+const openPriorityPopup = () => {
+  isOpenPriorityPopup.value = true
+}
+onMounted(() => {
+  openPopupAnimation()
+})
 </script>
 <template>
   <div
-    class="fixed inset-0 w-full h-screen flex items-center justify-center bg-black/80 z-[9999]"
+    class="fixed inset-0 w-full h-screen flex items-center justify-center bg-black z-[9999]"
+    @click="closePopupAnimation"
   >
     <div
-      class="container mx-auto bg-white rounded-lg shadow-lg p-6 max-w-lg w-full relative"
+      ref="popupRef"
+      class="container mx-auto bg-primary rounded-lg border border-bordercolor shadow-lg p-6 max-w-[40rem] w-full relative"
+      @click.stop
     >
-      <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+      <button
+        class="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+        @click="closePopupAnimation"
+      >
         <UIcon name="uil:times" size="24" />
       </button>
-      <h1 class="text-2xl font-bold mb-4">Add New Task</h1>
+      <h1 class="text-2xl font-bold mb-4 text-white">Add New Task</h1>
 
       <form class="space-y-4 flex flex-col" @submit.prevent="handleSubmit">
         <UFormGroup label="Title" class="w-full">
           <UInput
             v-model="form.title"
-            class="u-input"
+            class="u-input border border-bordercolor"
             placeholder="Task title"
             size="xl"
-            icon="uil:lock"
             variant="none"
             required
           />
@@ -59,58 +96,78 @@ const handleSubmit = async () => {
         <UFormGroup label="Description">
           <UTextarea
             v-model="form.description"
-            class="u-input"
+            class="u-input border border-bordercolor"
             placeholder="Task description"
             size="xl"
             variant="none"
           />
         </UFormGroup>
         <UFormGroup label="actions" class="flex flex-wrap gap-2">
-          <UButton class="bg-gray-100" @click="openPopup('level')">
-            <UIcon name="uil:plus" />
-            <span>In progress</span>
-          </UButton>
-          <PopupTaskLevelSelector
-            v-if="activePopup === 'level'"
-            :close="closePopup"
-          />
-          <UButton class="bg-gray-100" @click="openPopup('priority')">
-            <UIcon name="uil:flags" />
-            <span>No priority</span>
-          </UButton>
-          <PopupTaskPrioritySelector
-            v-if="activePopup === 'priority'"
-            :close="closePopup"
-          />
-          <UButton class="bg-gray-100" @click="openPopup('project')">
-            <UIcon name="uil:check" />
-            <span>Project</span>
-          </UButton>
-          <PopupTaskProjectSelector
-            v-if="activePopup === 'project'"
-            :close="closePopup"
-          />
-          <UButton class="bg-gray-100" @click="openPopup('assign')">
-            <UIcon name="uil:user" />
-            <span>Unassigned</span>
-          </UButton>
-          <PopupTaskAssignSelect
-            v-if="activePopup === 'assign'"
-            :close="closePopup"
-          />
+          <div class="flex relative">
+            <UButton
+              ref="statusTrigger"
+              class="bg-black text-white border border-bordercolor rounded-full px-3 py-1"
+              @click="openStatusPopup"
+            >
+              <IconTaskStatus />
+              <span class="text-[15px] font-medium">In progress</span>
+            </UButton>
+            <TaskStatusSelector
+              v-if="isOpenStatusPopup"
+              :trigger-element="statusTrigger"
+              @close="isOpenStatusPopup = false"
+            />
+          </div>
+          <div class="flex relative">
+            <UButton
+              ref="priorityTrigger"
+              class="bg-black text-white border border-bordercolor rounded-full px-3 py-1"
+              @click="openPriorityPopup"
+            >
+              <IconNoPriority />
+              <span class="text-[15px] font-medium">No priority</span>
+            </UButton>
+            <TaskPrioritySelector
+              v-if="isOpenPriorityPopup"
+              :trigger-element="priorityTrigger"
+              @close="isOpenPriorityPopup = false"
+            />
+          </div>
+          <div class="flex relative">
+            <UButton
+              class="bg-black text-white border border-bordercolor rounded-full px-3 py-1"
+              @click="openProjectPopup"
+            >
+              <UIcon name="uil:folder" class="text-lg" />
+              <span class="text-[15px] font-medium">Project</span>
+            </UButton>
+            <TaskProjectSelector
+              v-if="isOpenProjectPopup"
+              :component="componentsStore.components"
+              :trigger-element="ProjectTriggerElement"
+              @close="isOpenProjectPopup = false"
+            />
+          </div>
+          <div class="flex relative">
+            <UButton
+              ref="assigneeTrigger"
+              class="bg-black text-white border border-bordercolor rounded-full px-3 py-1"
+              @click="openAssigneePopup"
+            >
+              <UIcon name="uil:user" class="text-lg" />
+              <span class="text-[15px] font-medium">Unassigned</span>
+            </UButton>
+            <TaskAssignSelect
+              v-if="isAssigneePopupOpen"
+              :users="props.users"
+              :trigger-element="assigneeTrigger ? { $el: assigneeTrigger } : undefined"
+              @close="isAssigneePopupOpen = false"
+            />
+          </div>
         </UFormGroup>
-
-        <!-- <UFormGroup label="Target Date">
-          <UInput v-model="form.target_date" type="date" class="u-input" variant="none" />
-        </UFormGroup> -->
-
         <div class="flex justify-end">
           <UButton type="submit" color="secondary">Add Task</UButton>
         </div>
-
-        <p v-if="tasksStore.error" class="text-red-500 mt-2">
-          {{ tasksStore.error }}
-        </p>
       </form>
     </div>
   </div>
@@ -118,6 +175,6 @@ const handleSubmit = async () => {
 
 <style scoped>
 :deep(.u-input input, .u-input textarea, .u-input select) {
-  color: #000 !important;
+  color: #fff !important;
 }
 </style>

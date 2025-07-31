@@ -1,12 +1,12 @@
-@import "./layout/layout.scss";
-@import "tailwindcss";
-@import "tailwindcss" theme(static);
-@import "@nuxt/ui";
+@import './layout/layout.scss';
+@import 'tailwindcss';
+@import 'tailwindcss' theme(static);
+@import '@nuxt/ui';
 
 @theme {
   --color-primary: #101828;
   --color-secondary: #201828;
-  --color-bordercolor: #364153;
+  --color-bordercolor: #424347;
 }
 @layer base {
   body {
@@ -18,6 +18,9 @@
   .u-input {
     @apply w-full bg-transparent text-black placeholder:text-gray-400 border border-gray-300 rounded-lg
       focus:border-blue-500 focus:ring-2 focus:ring-blue-500;
+  }
+  .tag-border {
+    @apply bg-black text-white border-[0.5px] shrink-0 border-bordercolor rounded-full px-3 py-1;
   }
 }
 

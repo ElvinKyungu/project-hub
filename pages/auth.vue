@@ -1,16 +1,16 @@
 <script setup lang="ts">
-const auth = useAuthStore();
+const auth = useAuthStore()
 
-const email = ref("");
-const password = ref("");
-const rememberMe = ref(false);
+const email = ref('')
+const password = ref('')
+const rememberMe = ref(false)
 
 const handleLogin = async () => {
-  await auth.login(email.value, password.value);
+  await auth.login(email.value, password.value)
   if (!auth.error) {
-    await navigateTo("/");
+    await navigateTo('/')
   }
-};
+}
 </script>
 <template>
   <div class="min-h-screen flex">
@@ -21,10 +21,7 @@ const handleLogin = async () => {
 
         <UButton block size="lg" color="secondary" variant="outline">
           <template #leading>
-            <img
-              src="https://www.svgrepo.com/show/475656/google-color.svg"
-              class="w-5 h-5"
-            />
+            <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" />
           </template>
           Sign in with Google
         </UButton>
@@ -67,21 +64,13 @@ const handleLogin = async () => {
 
           <div class="flex items-center justify-between text-sm mt-5">
             <label class="flex items-center space-x-2">
-              <UCheckbox
-                v-model="rememberMe"
-                color="secondary"
-                class="text-white"
-              />
+              <UCheckbox v-model="rememberMe" color="secondary" class="text-white" />
               <span>Remember me</span>
             </label>
-            <a href="#" class="text-secondary hover:underline"
-              >Forgot Password?</a
-            >
+            <a href="#" class="text-secondary hover:underline">Forgot Password?</a>
           </div>
 
-          <UButton block size="lg" color="secondary" class="mt-5 text-white"
-            >Sign in</UButton
-          >
+          <UButton block size="lg" color="secondary" class="mt-5 text-white">Sign in</UButton>
         </form>
 
         <p class="text-sm text-center">
@@ -109,8 +98,7 @@ const handleLogin = async () => {
 
         <div class="bg-white text-gray-900 p-4 rounded-xl">
           <p class="text-sm">
-            “Project-Hub UI is surprisingly handy for keeping all my business
-            stuff in one place”
+            “Project-Hub UI is surprisingly handy for keeping all my business stuff in one place”
           </p>
           <div class="mt-2 flex items-center space-x-2">
             <UAvatar src="/images/gab.jpg" />

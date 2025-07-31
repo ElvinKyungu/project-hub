@@ -1,53 +1,43 @@
 <script setup lang="ts">
-import { useAuthStore } from "@/stores/auth";
-import { validateSignup } from "@/utils/authFormValidation";
+import { useAuthStore } from '@/stores/auth'
+import { validateSignup } from '@/utils/authFormValidation'
 
-const auth = useAuthStore();
+const auth = useAuthStore()
 
-const name = ref("");
-const lastName = ref("");
-const email = ref("");
-const password = ref("");
-const confirmPassword = ref("");
+const name = ref('')
+const lastName = ref('')
+const email = ref('')
+const password = ref('')
+const confirmPassword = ref('')
 
-const errorMessage = ref<string | null>(null);
-const successMessage = ref<string | null>(null);
+const errorMessage = ref<string | null>(null)
+const successMessage = ref<string | null>(null)
 
 const handleSignup = async () => {
-  errorMessage.value = null;
-  successMessage.value = null;
+  errorMessage.value = null
+  successMessage.value = null
 
   // Vérifie la correspondance des mots de passe
   if (password.value !== confirmPassword.value) {
-    errorMessage.value = "Les mots de passe ne correspondent pas.";
-    return;
+    errorMessage.value = 'Les mots de passe ne correspondent pas.'
+    return
   }
 
-  const validationError = validateSignup(
-    email.value,
-    password.value,
-    name.value,
-    lastName.value,
-  );
+  const validationError = validateSignup(email.value, password.value, name.value, lastName.value)
   if (validationError) {
-    errorMessage.value = validationError;
-    return;
+    errorMessage.value = validationError
+    return
   }
 
-  const success = await auth.signup(
-    email.value,
-    password.value,
-    name.value,
-    lastName.value,
-  );
+  const success = await auth.signup(email.value, password.value, name.value, lastName.value)
 
   if (success) {
-    successMessage.value = "Inscription réussie ! Vérifiez votre boîte mail.";
-    await navigateTo("/login");
+    successMessage.value = 'Inscription réussie ! Vérifiez votre boîte mail.'
+    await navigateTo('/login')
   } else {
-    errorMessage.value = auth.error;
+    errorMessage.value = auth.error
   }
-};
+}
 </script>
 
 <template>
@@ -115,13 +105,7 @@ const handleSignup = async () => {
         </UFormGroup>
       </div>
 
-      <UButton
-        type="submit"
-        block
-        size="lg"
-        color="secondary"
-        class="mt-5 text-white"
-      >
+      <UButton type="submit" block size="lg" color="secondary" class="mt-5 text-white">
         Create Account
       </UButton>
 
@@ -135,9 +119,7 @@ const handleSignup = async () => {
 
     <p class="text-sm text-center">
       Already have an account?
-      <NuxtLink to="/login" class="text-blue-500 hover:underline"
-        >Sign in here</NuxtLink
-      >
+      <NuxtLink to="/login" class="text-blue-500 hover:underline">Sign in here</NuxtLink>
     </p>
   </div>
 </template>

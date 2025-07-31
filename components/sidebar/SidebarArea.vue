@@ -1,42 +1,61 @@
 <script setup lang="ts">
-import { useSidebarStore } from "@/stores/sidebar";
+import { useSidebarStore } from '@/stores/sidebar'
 
-const target = ref(null);
-const sidebarStore = useSidebarStore();
+const target = ref(null)
+const sidebarStore = useSidebarStore()
 
 onClickOutside(target, () => {
-  sidebarStore.isSidebarOpen = false;
-});
+  sidebarStore.isSidebarOpen = false
+})
+
+const themeIcon = computed(() => {
+  switch (theme.value) {
+    case 'light':
+      return 'uil:sun'
+    case 'dark':
+      return 'uil:moon'
+    case 'ghibli':
+      return 'uil:film'
+    default:
+      return 'uil:desktop'
+  }
+})
+
+function setTheme(value: 'light' | 'dark' | 'system' | 'ghibli') {
+  theme.value = value
+  isThemeModalOpen.value = false
+  // ici tu peux aussi persister ce choix dans localStorage ou useColorMode
+}
 
 const menuGroups = ref([
   {
-    label: "Home",
-    items: [{ label: "Dashboard", icon: "uil:home", to: "/" }],
+    label: 'Home',
+    items: [{ label: 'Dashboard', icon: 'uil:home', to: '/' }],
   },
   {
-    label: "Pages",
-    icon: "uil:briefcase",
-    to: "/pages",
+    label: 'Pages',
+    icon: 'uil:briefcase',
+    to: '/pages',
     items: [
-      { label: "Landing", icon: "uil:globe", to: "/" },
+      { label: 'Landing', icon: 'uil:globe', to: '/' },
       {
-        label: "Auth",
-        icon: "uil:user",
+        label: 'Auth',
+        icon: 'uil:user',
         items: [
-          { label: "Login", icon: "uil:sign-in-alt", to: "/" },
-          { label: "Profile", icon: "uil:user", to: "/" },
-          { label: "Access Denied", icon: "uil:lock", to: "/" },
-          { label: "List", icon: "uil:list-ul", to: "/" },
+          { label: 'Login', icon: 'uil:sign-in-alt', to: '/' },
+          { label: 'Profile', icon: 'uil:user', to: '/' },
+          { label: 'Access Denied', icon: 'uil:lock', to: '/' },
+          { label: 'List', icon: 'uil:list-ul', to: '/' },
         ],
       },
-      { label: "Crud", icon: "uil:edit", to: "/" },
-      { label: "Not Found", icon: "uil:exclamation-circle", to: "/" },
-      { label: "Table", icon: "uil:table", to: "/" },
-      { label: "Images", icon: "uil:image", to: "/" },
-      { label: "File", icon: "uil:file-alt", to: "/" },
+      { label: 'Crud', icon: 'uil:edit', to: '/' },
+      { label: 'Not Found', icon: 'uil:exclamation-circle', to: '/' },
+      { label: 'Table', icon: 'uil:table', to: '/' },
+      { label: 'Images', icon: 'uil:image', to: '/' },
+      { label: 'File', icon: 'uil:file-alt', to: '/' },
     ],
   },
-]);
+])
 </script>
 
 <template>
@@ -66,6 +85,7 @@ const menuGroups = ref([
         @click="sidebarStore.isSidebarOpen = false"
       />
     </div>
+
     <div class="flex flex-col px-5 overflow-y-auto">
       <nav>
         <ul>
@@ -80,9 +100,7 @@ const menuGroups = ref([
                 class="py-2 flex items-center gap-3 cursor-pointer hover:bg-gray-800 rounded px-3"
               >
                 <UIcon :name="item.icon" class="w-5 h-5" />
-                <NuxtLink :to="item.to" class="flex-1">{{
-                  item.label
-                }}</NuxtLink>
+                <NuxtLink :to="item.to" class="flex-1">{{ item.label }}</NuxtLink>
               </li>
             </ul>
           </li>
@@ -94,6 +112,6 @@ const menuGroups = ref([
 
 <style>
 .z-sidebar {
-  z-index: 999;
+  z-index: 99;
 }
 </style>
