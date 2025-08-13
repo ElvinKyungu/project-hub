@@ -1,4 +1,5 @@
 // stores/user.ts
+
 import { defineStore } from 'pinia'
 import { useSupabaseClient } from '#imports'
 import { useErrorHandler } from '@/composables/useErrorHandler'
