@@ -34,6 +34,11 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+  nitro: {
+    prerender: {
+      autoSubfolderIndex: false
+    }
+  },
   components: [
     {
       path: '~/components',

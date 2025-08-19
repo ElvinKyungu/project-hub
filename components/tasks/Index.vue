@@ -487,12 +487,10 @@ onMounted(async () => {
   background: rgba(79, 70, 229, 0.2);
   border: 2px dashed #4f46e5;
   border-radius: 8px;
-  transform: rotate(5deg);
 }
 
 .chosen-task {
   cursor: grabbing !important;
-  transform: rotate(3deg) scale(1.05);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
   z-index: 9999;
   transition: all 0.2s ease;
@@ -501,7 +499,6 @@ onMounted(async () => {
 .drag-task {
   cursor: grabbing !important;
   opacity: 0.9;
-  transform: rotate(3deg);
 }
 
 /* Améliorer la zone de grab */
