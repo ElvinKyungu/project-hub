@@ -1,10 +1,10 @@
 # Top-level configuration
 name = "my-worker"
-main = "src/index.js"
+main = ".output/server/index.mjs"
 compatibility_date = "2022-07-12"
 
 workers_dev = false
-route = { pattern = "example.org/*", zone_name = "example.org" }
+route = { pattern = "https://project-hub-88w.pages.dev/*", zone_name = "https://project-hub-88w.pages.dev/" }
 
 kv_namespaces = [
   { binding = "<MY_NAMESPACE>", id = "<KV_ID>" }
@@ -12,7 +12,7 @@ kv_namespaces = [
 
 [env.staging]
 name = "my-worker-staging"
-route = { pattern = "staging.example.org/*", zone_name = "example.org" }
+route = { pattern = "staging.https://project-hub-88w.pages.dev/*", zone_name = "https://project-hub-88w.pages.dev/" }
 
 kv_namespaces = [
   { binding = "<MY_NAMESPACE>", id = "<STAGING_KV_ID>" }

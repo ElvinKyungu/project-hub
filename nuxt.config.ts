@@ -35,9 +35,7 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()],
   },
   nitro: {
-    prerender: {
-      autoSubfolderIndex: false
-    }
+    preset: "cloudflare"
   },
   components: [
     {
