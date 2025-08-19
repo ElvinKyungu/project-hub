@@ -4,16 +4,4 @@ main = ".output/server/index.mjs"
 compatibility_date = "2022-07-12"
 
 workers_dev = false
-route = { pattern = "https://project-hub-88w.pages.dev/*", zone_name = "https://project-hub-88w.pages.dev/" }
 
-kv_namespaces = [
-  { binding = "<MY_NAMESPACE>", id = "<KV_ID>" }
-]
-
-[env.staging]
-name = "my-worker-staging"
-route = { pattern = "staging.https://project-hub-88w.pages.dev/*", zone_name = "https://project-hub-88w.pages.dev/" }
-
-kv_namespaces = [
-  { binding = "<MY_NAMESPACE>", id = "<STAGING_KV_ID>" }
-]
